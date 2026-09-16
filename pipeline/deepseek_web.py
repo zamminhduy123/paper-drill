@@ -10,7 +10,10 @@ TEXTBOX_CSS = 'textarea[placeholder^="Message"]'
 async def launch(headless=True):
     """Start zendriver browser on DeepSeek chat, best-effort CF bypass."""
     import zendriver
-    browser = await zendriver.start(headless=headless)
+    kwargs = {"headless": headless}
+    if os.environ.get("BROWSER_PATH"):
+        kwargs["browser_executable_path"] = os.environ["BROWSER_PATH"]
+    browser = await zendriver.start(**kwargs)
     await browser.get(LOGIN_URL)
     try:
         await browser.main_tab.verify_cf()

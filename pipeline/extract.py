@@ -1,6 +1,9 @@
 """Extract: novelty, method, limitations, future work, concept hubs via Qwen (v2 locked)."""
 import os
+from pathlib import Path
 import requests
+from dotenv import load_dotenv
+load_dotenv(Path(__file__).resolve().parent.parent / ".env")
 
 PROMPT = """You extract structured research info. Return Markdown with exactly these headings.
 Thesis: {thesis}
@@ -16,23 +19,47 @@ Output:
 ## Relevance Score (0-10 + reason; 0-3 off-topic, 4-6 tangential, 7-8 related, 9-10 direct; be strict)
 """
 
-def chat(prompt: str, base_url: str | None = None, model: str | None = None) -> str:
+def chat(
+    prompt: str, 
+    base_url: str | None = None, 
+    model: str | None = None,
+    api_key: str | None = None,
+    temperature: float = 0.2,
+    max_tokens: int | None = None,
+    timeout: int = 300
+) -> str:
     """POST one chat completion to llama.cpp OpenAI-compatible endpoint."""
-    base_url = base_url or os.environ.get("LLAMA_BASE_URL", "http://localhost:8080/v1")
-    headers = {"ngrok-skip-browser-warning": "true"}
-    if os.environ.get("LLAMA_API_KEY"):
-        headers["Authorization"] = f"Bearer {os.environ['LLAMA_API_KEY']}"
-    model = model or os.environ.get("LLAMA_MODEL", "Swift-Qwen3.8-27B-Q4_K_M")
-    r = requests.post(
+    base_url = (base_url or os.environ.get("LLAMA_BASE_URL", "http://localhost:8080/v1")).rstrip("/")
+    api_key = api_key or os.environ.get("LLAMA_API_KEY")
+    model = model or os.environ.get("LLAMA_MODEL", "ukisai/Swift-Qwen3.8-27B-GGUF")
+    headers = {
+        "Content-Type": "application/json",
+        "ngrok-skip-browser-warning": "true"
+    }
+    if api_key:
+        headers["Authorization"] = f"Bearer {api_key}"
+    payload = {
+        "model": model,
+        "messages": [{"role": "user", "content": prompt}],
+        "temperature": temperature,
+    }
+    if max_tokens is not None:
+        payload["max_tokens"] = max_tokens
+    response = requests.post(
         f"{base_url}/chat/completions",
         headers=headers,
-        json={"model": model, "messages": [{"role": "user", "content": prompt}],
-              "temperature": 0.2, "max_tokens": 1200},
-        timeout=300,
+        json=payload,
+        timeout=timeout,
     )
-    r.raise_for_status()
-    return r.json()["choices"][0]["message"]["content"]
+    response.raise_for_status()
+    message = response.json()["choices"][0]["message"]
+    # Return content, or fallback to reasoning_content if content is empty/None
+    return message.get("content") or message.get("reasoning_content") or ""
 
 def extract(thesis: str, title: str, abstract: str) -> str:
     """Run locked v2 prompt, return structured Markdown block."""
     return chat(PROMPT.format(thesis=thesis, title=title, abstract=abstract))
+
+
+if __name__ == "__main__":
+    print(chat("test"))

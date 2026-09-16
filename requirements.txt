@@ -3,3 +3,4 @@ pyyaml
 sentence-transformers
 numpy
 arxiv
+python-dotenv

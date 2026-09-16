@@ -19,9 +19,13 @@ Output:
 def chat(prompt: str, base_url: str | None = None, model: str | None = None) -> str:
     """POST one chat completion to llama.cpp OpenAI-compatible endpoint."""
     base_url = base_url or os.environ.get("LLAMA_BASE_URL", "http://localhost:8080/v1")
+    headers = {"ngrok-skip-browser-warning": "true"}
+    if os.environ.get("LLAMA_API_KEY"):
+        headers["Authorization"] = f"Bearer {os.environ['LLAMA_API_KEY']}"
     model = model or os.environ.get("LLAMA_MODEL", "Swift-Qwen3.8-27B-Q4_K_M")
     r = requests.post(
         f"{base_url}/chat/completions",
+        headers=headers,
         json={"model": model, "messages": [{"role": "user", "content": prompt}],
               "temperature": 0.2, "max_tokens": 1200},
         timeout=300,

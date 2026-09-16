@@ -11,12 +11,13 @@ Title: {title}
 Abstract: {abstract}
 
 Output:
-## Novelty (2 bullets)
-## Methodology (3 bullets)
-## Explicit Limitations (bullets, quote if stated)
-## Future Work (bullets)
-## Concept Hubs (exactly 3-5, each MUST match [[Concept - <2-4 word noun>]], reuse existing names verbatim when possible, no other prefix)
-## Relevance Score (0-10 + reason; 0-3 off-topic, 4-6 tangential, 7-8 related, 9-10 direct; be strict)
+## Novelty
+## Methodology
+## Explicit Limitations
+## Future Work
+## Concept Hubs
+## Relevance Score
+3-5 hubs as [[Concept - Name]], 2-4 word noun, reuse names, never output angle brackets.
 """
 
 def chat(

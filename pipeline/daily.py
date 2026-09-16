@@ -3,13 +3,16 @@ import re
 
 from . import extract, ingest, rank, writer
 
-REL_RE = re.compile(r"(\d+(?:\.\d+)?)")
+REL_RE = re.compile(r"^\s*-\s*(\d+(?:\.\d+)?)")
 
 
 def parse_relevance(body, fallback):
     """Parse 0-10 relevance from extract body, fallback to rank score."""
-    m = REL_RE.search(body.split("## Relevance Score")[-1])
-    return float(m.group(1)) if m else fallback
+    for line in body.split("## Relevance Score")[-1].splitlines():
+        m = REL_RE.match(line)
+        if m:
+            return float(m.group(1))
+    return fallback
 
 
 def run():

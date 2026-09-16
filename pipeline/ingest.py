@@ -28,6 +28,12 @@ def fetch(params, timeout=30):
         r.raise_for_status()
         return r.json()
 
+def inv_to_text(inv):
+    """Join OpenAlex abstract_inverted_index to plain text."""
+    pos = {i: tok for tok, idxs in (inv or {}).items() for i in idxs}
+    return " ".join(pos[i] for i in sorted(pos))
+
+
 def ingest(limit=50, per_page=50):
     """Fetch newest OpenAlex works, dedupe on openalex_id."""
     cfg = load_cfg()
@@ -46,7 +52,7 @@ def ingest(limit=50, per_page=50):
         if oid in seen:
             continue
         seen.add(oid)
-        out.append({"openalex_id": oid, "title": w.get("title"), "year": w.get("publication_year"), "doi": w.get("doi")})
+        out.append({"openalex_id": oid, "title": w.get("title"), "year": w.get("publication_year"), "doi": w.get("doi"), "abstract": inv_to_text(w.get("abstract_inverted_index")) or w.get("title")})
     return out
 
 

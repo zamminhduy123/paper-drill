@@ -17,7 +17,7 @@ async def launch(headless=True):
     import zendriver
     kwargs = {"headless": headless}
     browser_bin = os.environ.get("BROWSER_PATH")
-    if not browser_bin and DEFAULT_CHROME.is_file():
+    if (not browser_bin or "chrome-headless-shell" in browser_bin) and DEFAULT_CHROME.is_file():
         browser_bin = str(DEFAULT_CHROME)
     if browser_bin:
         kwargs["browser_executable_path"] = browser_bin

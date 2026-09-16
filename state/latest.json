@@ -1,0 +1,32 @@
+[
+  {
+    "openalex_id": "https://openalex.org/W7212456881",
+    "title": "A Study on TSC (Technical Safety Concept) Design and Verification in EMB (Brake by Wire) Systems",
+    "year": 2026,
+    "doi": "https://doi.org/10.4271/2026-01-0801"
+  },
+  {
+    "openalex_id": "https://openalex.org/W7212440760",
+    "title": "Deep Learning-Based Intrusion Detection Models for Controller Area Networks in Intelligent Connected Vehicles",
+    "year": 2026,
+    "doi": "https://doi.org/10.1007/978-981-92-3570-4_46"
+  },
+  {
+    "openalex_id": "https://openalex.org/W7212015745",
+    "title": "An intelligent analysis model for detecting anomalies in autonomous vehicle networks with enhanced edge computing",
+    "year": 2026,
+    "doi": "https://doi.org/10.1117/12.3129891"
+  },
+  {
+    "openalex_id": "https://openalex.org/W7211955521",
+    "title": "A diffusion-based anomaly detection framework for securing in-vehicle CAN networks",
+    "year": 2026,
+    "doi": "https://doi.org/10.1016/j.sysarc.2026.103985"
+  },
+  {
+    "openalex_id": "https://openalex.org/W7208833418",
+    "title": "An AI-Ready Real-Time Multi-agent Attack-and-Defense Framework for In-Vehicle Network Security Evaluation",
+    "year": 2026,
+    "doi": "https://doi.org/10.1007/978-3-032-29561-3_13"
+  }
+]

@@ -17,6 +17,7 @@ Output:
 """
 
 def chat(prompt: str, base_url: str | None = None, model: str | None = None) -> str:
+    """POST one chat completion to llama.cpp OpenAI-compatible endpoint."""
     base_url = base_url or os.environ.get("LLAMA_BASE_URL", "http://localhost:8080/v1")
     model = model or os.environ.get("LLAMA_MODEL", "Swift-Qwen3.8-27B-Q4_K_M")
     r = requests.post(
@@ -29,4 +30,5 @@ def chat(prompt: str, base_url: str | None = None, model: str | None = None) -> 
     return r.json()["choices"][0]["message"]["content"]
 
 def extract(thesis: str, title: str, abstract: str) -> str:
+    """Run locked v2 prompt, return structured Markdown block."""
     return chat(PROMPT.format(thesis=thesis, title=title, abstract=abstract))

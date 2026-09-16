@@ -31,5 +31,5 @@ sources:
 models:
   llm_base_url: "http://SERVER:11434/v1"
   llm_model: "qwen3-27b-q8"
-  embed_model: "bge-m3"
+  embed_model: "zeroentropy/zembed-1-embedding"
   reranker: "bge-reranker-v2-m3"

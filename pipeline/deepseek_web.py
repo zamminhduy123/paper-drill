@@ -1,22 +1,33 @@
 """DeepSeek-web minimal client (fresh 2026 selectors, token-only)."""
 import os
 from asyncio import sleep
+from pathlib import Path
 from time import time
+from dotenv import load_dotenv
+
+load_dotenv(Path(__file__).resolve().parent.parent / ".env")
 
 LOGIN_URL = "https://chat.deepseek.com/"
 TEXTBOX_CSS = 'textarea[placeholder^="Message"]'
+DEFAULT_CHROME = Path(__file__).resolve().parent.parent / ".browsers" / "chrome-linux64" / "chrome"
 
 
 async def launch(headless=True):
     """Start zendriver browser on DeepSeek chat, best-effort CF bypass."""
     import zendriver
     kwargs = {"headless": headless}
-    if os.environ.get("BROWSER_PATH"):
-        kwargs["browser_executable_path"] = os.environ["BROWSER_PATH"]
+    browser_bin = os.environ.get("BROWSER_PATH")
+    if not browser_bin and DEFAULT_CHROME.is_file():
+        browser_bin = str(DEFAULT_CHROME)
+    if browser_bin:
+        kwargs["browser_executable_path"] = browser_bin
+
     browser = await zendriver.start(**kwargs)
     await browser.get(LOGIN_URL)
     try:
-        await browser.main_tab.verify_cf()
+        cf_box = await browser.main_tab.query_selector("#cf-turnstile")
+        if cf_box:
+            await browser.main_tab.verify_cf(timeout=5)
     except Exception:
         pass  # no challenge presented
     return browser
@@ -31,14 +42,19 @@ async def login_token(browser, token=None):
         await_promise=True, return_by_value=True,
     )
     await browser.main_tab.reload()
-    await sleep(4)
+    await sleep(3)
     await browser.main_tab.select(TEXTBOX_CSS, timeout=15)
 
 
 async def _click_send(browser):
-    """Click icon button nearest after textarea (no stable hook)."""
+    """Click circular send button next to textarea or closest button."""
     await browser.main_tab.evaluate(
         """(() => {
+          const btn = document.querySelector('div[role="button"].ds-button--circle');
+          if (btn) {
+            btn.click();
+            return;
+          }
           const ta = document.querySelector('textarea[placeholder^="Message"]');
           const btns = [...document.querySelectorAll('[role="button"]')];
           const r = ta.getBoundingClientRect();
@@ -78,7 +94,7 @@ async def send_message(browser, message, timeout=180):
         text = _scrape(html)
         if text and text != last:
             last, stable_since = text, time()
-        if last and time() - stable_since > 9:
+        if last and time() - stable_since > 6:
             if last.strip().lower() == "the server is busy. please try again later.":
                 raise RuntimeError("DeepSeek server busy")
             return last
@@ -93,6 +109,6 @@ async def ask(message, token=None, timeout=180):
         return await send_message(browser, message, timeout)
     finally:
         try:
-            browser.stop()
+            await browser.stop()
         except Exception:
             pass

@@ -3,7 +3,7 @@ import re
 
 from . import extract, ingest, rank, writer
 
-REL_RE = re.compile(r"^\s*-\s*(\d+(?:\.\d+)?)")
+REL_RE = re.compile(r"^\s*(?:-\s*)?(\d+(?:\.\d+)?)\s*(?:/10)?\s*(?:—|-|:)?")
 
 
 def parse_relevance(body, fallback):

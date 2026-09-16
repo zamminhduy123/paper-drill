@@ -2,33 +2,28 @@
 title: "An AI-Ready Real-Time Multi-agent Attack-and-Defense Framework for In-Vehicle Network Security Evaluation"
 year: 2026
 doi: "https://doi.org/10.1007/978-3-032-29561-3_13"
-relevance_score: 0.0
+relevance_score: 4.346
 type: paper
 ---
 # An AI-Ready Real-Time Multi-agent Attack-and-Defense Framework for In-Vehicle Network Security Evaluation
 
-## Novelty (2 bullets)
-- Proposes an AI-ready real-time multi-agent framework for evaluating in-vehicle network security.
-- Combines attack and defense agents in a real-time setting to support AI-driven security evaluation.
+## Novelty
+The work proposes an AI-ready, real-time multi-agent attack-and-defense framework for evaluating in-vehicle network security.
 
-## Methodology (3 bullets)
-- Uses a multi-agent architecture with distinct attack and defense roles.
-- Frames security evaluation as a real-time interaction process for in-vehicle networks.
-- Designs the framework to be AI-ready, suggesting compatibility with machine learning or deep learning components.
+## Methodology
+The abstract does not provide detailed methodological information. Based on the title, the approach likely uses a multi-agent framework to simulate or evaluate attack and defense interactions in real time within an in-vehicle network.
 
-## Explicit Limitations (bullets, quote if stated)
-- No explicit limitations are stated in the provided title/abstract.
+## Explicit Limitations
+No explicit limitations are stated in the provided abstract.
 
-## Future Work (bullets)
-- Integrate deep learning models into the attack and defense agents.
-- Validate the framework on real in-vehicle network data or testbeds.
-- Extend the framework to broader threat models and defense strategies.
+## Future Work
+No explicit future work is stated in the provided abstract.
 
-## Concept Hubs (exactly 3-5, each MUST match [[Concept - <2-4 word noun>]], reuse existing names verbatim when possible, no other prefix)
-- [[Concept - In-Vehicle Network Security]]
-- [[Concept - Multi-Agent Framework]]
-- [[Concept - Attack-Defense Evaluation]]
-- [[Concept - Real-Time Security]]
+## Concept Hubs
+[[Concept - Vehicle Network Security]]
+[[Concept - Multi Agent Framework]]
+[[Concept - Real Time Attack]]
+[[Concept - Defense Evaluation]]
 
-## Relevance Score (0-10 + reason; 0-3 off-topic, 4-6 tangential, 7-8 related, 9-10 direct; be strict)
-- 8: Directly related to in-vehicle network security and AI-ready evaluation, but deep learning is not explicitly stated in the provided text.
+## Relevance Score
+7/10

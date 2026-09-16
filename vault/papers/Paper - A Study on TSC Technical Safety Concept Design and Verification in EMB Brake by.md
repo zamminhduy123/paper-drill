@@ -2,30 +2,34 @@
 title: "A Study on TSC (Technical Safety Concept) Design and Verification in EMB (Brake by Wire) Systems"
 year: 2026
 doi: "https://doi.org/10.4271/2026-01-0801"
-relevance_score: 0.0
+relevance_score: 3.775
 type: paper
 ---
 # A Study on TSC (Technical Safety Concept) Design and Verification in EMB (Brake by Wire) Systems
 
-## Novelty (2 bullets)
-- Presents a study of Technical Safety Concept (TSC) design for EMB (Brake by Wire) systems.
-- Addresses verification of the TSC in the context of brake-by-wire safety.
+## Novelty
+- Proposes an ISO 26262-based Technical Safety Concept for an Electro-Mechanical Brake system.
+- Evaluates redundancy, fault tolerance, FTTI behavior, and control handover in a brake-by-wire architecture.
 
-## Methodology (3 bullets)
-- The provided abstract does not specify the exact methodology.
-- The title indicates a study-oriented approach to TSC design.
-- The title indicates a verification component for the proposed safety concept.
+## Methodology
+- Derives safety goals and functional safety requirements from HARA.
+- Designs a modular, redundant, fail-safe EMB architecture using Main, Backup, and Wheel Control Units.
+- Verifies the system using EILS, HILS, real-vehicle tests, and LabVIEW-based fault injection.
 
-## Explicit Limitations (bullets, quote if stated)
-- No explicit limitations are stated in the provided title/abstract.
+## Explicit Limitations
+- No explicit limitations are stated in the abstract.
+- The study focuses on functional safety and fault tolerance rather than deep learning.
 
-## Future Work (bullets)
-- No future work is stated in the provided title/abstract.
+## Future Work
+- Develop prognostics and maintenance strategies.
+- Support safe deployment in autonomous and electric vehicles.
 
-## Concept Hubs (exactly 3-5, each MUST match [[Concept - <2-4 word noun>]], reuse existing names verbatim when possible, no other prefix)
-- [[Concept - Technical Safety Concept]]
-- [[Concept - Brake by Wire System]]
-- [[Concept - In-Vehicle Network]]
+## Concept Hubs
+[[EMB System]]
+[[CAN FD Communication]]
+[[ISO 26262 Safety]]
+[[Fault Injection Verification]]
+[[Control Handover]]
 
-## Relevance Score (0-10 + reason; 0-3 off-topic, 4-6 tangential, 7-8 related, 9-10 direct; be strict)
-4 - The paper is tangential: it concerns brake-by-wire safety design and verification, which may involve in-vehicle networks, but it does not explicitly address deep learning methods.
+## Relevance Score
+2/10

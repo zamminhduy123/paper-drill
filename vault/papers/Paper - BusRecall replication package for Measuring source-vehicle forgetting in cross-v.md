@@ -2,31 +2,28 @@
 title: "BusRecall: replication package for "Measuring source-vehicle forgetting in cross-vehicle CAN intrusion detection""
 year: 2026
 doi: "https://doi.org/10.5281/zenodo.22228087"
-relevance_score: 0.0
+relevance_score: 4.663
 type: paper
 ---
 # BusRecall: replication package for "Measuring source-vehicle forgetting in cross-vehicle CAN intrusion detection"
 
-## Novelty (2 bullets)
-- Provides a replication package for measuring source-vehicle forgetting in cross-vehicle CAN intrusion detection.
-- Focuses on how vehicle-specific source information affects intrusion detection performance across vehicles.
+## Novelty
+Replication package for measuring source-vehicle forgetting in cross-vehicle CAN intrusion detection, reproducing the paper’s tables and figures, including cross-vehicle collapse controls, continual-learning comparisons, distillation-teacher diagnostics, and memory-budget results.
 
-## Methodology (3 bullets)
-- Uses a replication package to support reproduction of the cross-vehicle CAN intrusion detection study.
-- Measures source-vehicle forgetting, i.e., performance degradation when source-vehicle identity is not retained.
-- Applies deep learning methods to in-vehicle network/CAN traffic analysis.
+## Methodology
+The package provides code and result files that reproduce the paper’s experiments on two public corpora, can-train-and-test and ORNL ROAD. It evaluates cross-vehicle performance, three controls, continual learning over all 24 task orders, distillation-teacher diagnostics on the target vehicle, and memory-budget curves. The README documents dataset DOIs and the cache-building pipeline.
 
-## Explicit Limitations (bullets, quote if stated)
-- No explicit limitations are stated in the provided title and abstract.
+## Explicit Limitations
+The package is a replication resource and does not redistribute the datasets. Its scope is limited to reproducing the paper’s reported tables and figures on the two public corpora.
 
-## Future Work (bullets)
-- No future work is stated in the provided title and abstract.
+## Future Work
+Not stated in the abstract.
 
-## Concept Hubs (exactly 3-5, each MUST match [[Concept - <2-4 word noun>]], reuse existing names verbatim when possible, no other prefix)
-- [[Concept - In-Vehicle Network]]
-- [[Concept - CAN Intrusion Detection]]
-- [[Concept - Deep Learning Methods]]
-- [[Concept - Source-Vehicle Forgetting]]
+## Concept Hubs
+[[CAN Intrusion Detection]]
+[[Cross-Vehicle Adaptation]]
+[[Continual Learning]]
+[[Source-Vehicle Forgetting]]
 
-## Relevance Score (0-10 + reason; 0-3 off-topic, 4-6 tangential, 7-8 related, 9-10 direct; be strict)
-- 9/10: Directly addresses deep learning for in-vehicle network security, specifically CAN intrusion detection and cross-vehicle generalization.
+## Relevance Score
+9/10

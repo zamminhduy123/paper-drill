@@ -8,6 +8,19 @@ ROOT = Path(__file__).resolve().parent.parent
 PAPERS = ROOT / "vault" / "papers"
 CONCEPTS = ROOT / "vault" / "concepts"
 HUB_RE = re.compile(r"\[\[Concept - (.+?)\]\]")
+LINK_RE = re.compile(r"\[\[([^\]]+?)\]\]")
+DATE_RE = re.compile(r"20\d\d-")
+
+
+def normalize_hubs(body: str) -> str:
+    """Rewrite bare [[X]] links to [[Concept - X]], keep prefixed/Paper/date links."""
+    def _fix(m):
+        """Prefix one bare link, pass through prefixed/date links."""
+        t = m.group(1).strip()
+        if " - " in t or DATE_RE.match(t) or not t:
+            return m.group(0)
+        return f"[[Concept - {t}]]"
+    return LINK_RE.sub(_fix, body)
 
 
 def slugify(title: str) -> str:
@@ -22,6 +35,7 @@ def write_paper(title, year, doi, relevance, body, force=False) -> Path:
     """Write paper note + missing concept stubs, return path."""
     PAPERS.mkdir(parents=True, exist_ok=True)
     CONCEPTS.mkdir(parents=True, exist_ok=True)
+    body = normalize_hubs(body)
     dest = PAPERS / f"Paper - {slugify(title)}.md"
     if dest.exists() and not force:
         raise FileExistsError(f"{dest} exists (use force=True to overwrite)")

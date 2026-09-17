@@ -31,8 +31,10 @@ async def run(limitations, thesis=None, datasets=None):
         return extract.chat(prompt, timeout=300)
 
 
-def save(text, path=None):
+def save(text, path=None, papers=None, concepts=None):
     """Write ideas note, return path."""
+    papers = list(dict.fromkeys(papers or []))
+    concepts = list(dict.fromkeys(concepts or []))
     text = textwrap.dedent(text)
     lines = [ln.rstrip() for ln in text.splitlines()]
     lines = [ln.lstrip() if ln.strip() else "" for ln in lines]
@@ -48,6 +50,11 @@ def save(text, path=None):
             keep.append(ln)
         text = head + "Summary of Splits" + "\n".join(keep)
     text = re.sub(r"\n{4,}", "\n\n\n", text)
+    text = text.strip()
+    if papers:
+        text += "\n\n## Linked Papers\n" + "\n".join(f"[[Paper - {p}]]" for p in papers)
+    if concepts:
+        text += "\n\n## Linked Concepts\n" + "\n".join(f"[[Concept - {c}]]" for c in concepts)
     dest = Path(path) if path else Path(__file__).resolve().parent.parent / "vault" / "ideas" / f"{date.today().isoformat()}.md"
     dest.parent.mkdir(parents=True, exist_ok=True)
     dest.write_text(text.strip() + "\n")

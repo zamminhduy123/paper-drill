@@ -57,9 +57,19 @@ def chat(
     # Return content, or fallback to reasoning_content if content is empty/None
     return message.get("content") or message.get("reasoning_content") or ""
 
+def existing_hubs() -> list:
+    """List existing concept hub names from vault stems."""
+    d = Path(__file__).resolve().parent.parent / "vault" / "concepts"
+    if not d.exists():
+        return []
+    return sorted(h for p in d.glob("Concept - *.md") for h in [p.name[len("Concept - "):-len(".md")]] if "<" not in h and ">" not in h)
+
+
 def extract(thesis: str, title: str, abstract: str) -> str:
     """Run locked v2 prompt, return structured Markdown block."""
-    return chat(PROMPT.format(thesis=thesis, title=title, abstract=abstract))
+    hubs = existing_hubs()
+    extra = f"\nExisting hubs: {', '.join(hubs)}\nReuse an existing hub verbatim when it fits; create a new one only when nothing fits.\n"
+    return chat(PROMPT.format(thesis=thesis, title=title, abstract=abstract) + extra)
 
 
 if __name__ == "__main__":

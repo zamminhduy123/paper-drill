@@ -42,7 +42,9 @@ def run():
         try:  # ponytail: 1 gap call/day, never break daily on failure
             lims = [m.group(1).strip() for b in bodies for m in re.finditer(r"## Explicit Limitations\s*(.*?)(?=\n## |\Z)", b, re.S) if m.group(1).strip()]
             ideas = asyncio.run(gap.run(lims, thesis, cfg["seeds"]["datasets"]))
-            print(gap.save(ideas))
+            papers = [writer.slugify(it["title"]) for it in ranked[:5]]
+            concepts = list(dict.fromkeys(h for b in bodies for h in writer.HUB_RE.findall(b)))
+            print(gap.save(ideas, papers=papers, concepts=concepts))
         except Exception:
             pass
     return paths

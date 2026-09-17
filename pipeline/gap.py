@@ -1,4 +1,6 @@
 """Gap: DeepSeek-web ideas with Qwen fallback (1 call/day)."""
+import re
+import textwrap
 from datetime import date
 from pathlib import Path
 
@@ -31,6 +33,21 @@ async def run(limitations, thesis=None, datasets=None):
 
 def save(text, path=None):
     """Write ideas note, return path."""
+    text = textwrap.dedent(text)
+    lines = [ln.rstrip() for ln in text.splitlines()]
+    lines = [ln.lstrip() if ln.strip() else "" for ln in lines]
+    lines = [ln for ln in lines if not re.match(r"^\s*-\s*\d+\s*$", ln)]
+    text = "\n".join(lines)
+    if "Summary of Splits" in text:
+        head, tail = text.split("Summary of Splits", 1)
+        keep = []
+        for ln in tail.splitlines():
+            s = ln.strip()
+            if s.startswith("Based on ") or s.startswith("Datasets:"):
+                break
+            keep.append(ln)
+        text = head + "Summary of Splits" + "\n".join(keep)
+    text = re.sub(r"\n{4,}", "\n\n\n", text)
     dest = Path(path) if path else Path(__file__).resolve().parent.parent / "vault" / "ideas" / f"{date.today().isoformat()}.md"
     dest.parent.mkdir(parents=True, exist_ok=True)
     dest.write_text(text.strip() + "\n")

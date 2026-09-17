@@ -2,3 +2,4 @@
 pipeline/__pycache__/**
 
 .env
+.browsers/

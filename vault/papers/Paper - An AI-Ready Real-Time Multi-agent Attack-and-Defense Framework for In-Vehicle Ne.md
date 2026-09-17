@@ -2,28 +2,28 @@
 title: "An AI-Ready Real-Time Multi-agent Attack-and-Defense Framework for In-Vehicle Network Security Evaluation"
 year: 2026
 doi: "https://doi.org/10.1007/978-3-032-29561-3_13"
-relevance_score: 8.0
+relevance_score: 7.0
 type: paper
 ---
 # An AI-Ready Real-Time Multi-agent Attack-and-Defense Framework for In-Vehicle Network Security Evaluation
 
 ## Novelty
-The work proposes an AI-ready, real-time multi-agent attack-and-defense framework for evaluating In-Vehicle Network security.
+The work proposes an AI-ready, real-time multi-agent attack-and-defense framework for evaluating in-vehicle network security, positioning the framework as a foundation for future AI-driven security analysis.
 
 ## Methodology
-The title indicates a multi-agent framework that models attack and defense interactions in real time for In-Vehicle Network security evaluation.
+The implied methodology uses a multi-agent simulation environment in which attack and defense agents interact in real time to evaluate in-vehicle network security behavior. The framework is described as AI-ready, suggesting it is designed to support data collection, agent learning, or downstream deep learning integration.
 
 ## Explicit Limitations
-No explicit limitations are provided in the supplied text.
+The provided abstract does not specify concrete limitations. Likely limitations include lack of reported empirical validation, unclear integration with real vehicle hardware, and limited detail on scalability, attack coverage, or defense effectiveness.
 
 ## Future Work
-No explicit future work is provided in the supplied text.
+Future work likely involves integrating deep learning methods into the multi-agent framework, validating the system on real in-vehicle networks, expanding attack and defense scenarios, and benchmarking the framework for real-time security evaluation.
 
 ## Concept Hubs
 [[In-Vehicle Network Security]]
-[[Multi-Agent Attack Defense]]
-[[Real-Time Security Evaluation]]
+[[Multi-Agent Framework]]
+[[Real-Time Evaluation]]
 [[Deep Learning Methods]]
 
 ## Relevance Score
-8
+7/10

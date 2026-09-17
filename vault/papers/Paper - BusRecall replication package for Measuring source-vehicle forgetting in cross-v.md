@@ -8,23 +8,23 @@ type: paper
 # BusRecall: replication package for "Measuring source-vehicle forgetting in cross-vehicle CAN intrusion detection"
 
 ## Novelty
-Provides a replication package for measuring source-vehicle forgetting in cross-vehicle CAN intrusion detection, reproducing cross-vehicle collapse, controls, continual-learning comparisons, distillation-teacher diagnostics, and memory-budget results.
+Replication package for measuring source-vehicle forgetting in cross-vehicle CAN intrusion detection, reproducing cross-vehicle collapse, controls, continual-learning task-order comparisons, distillation teacher diagnostics, and memory-budget curves.
 
 ## Methodology
-Uses two public CAN corpora, builds cached datasets, evaluates cross-vehicle intrusion detection under continual learning across 24 task orders, and analyzes distillation-teacher performance and memory-budget effects.
+Uses public can-train-and-test and ORNL ROAD corpora, builds caches, evaluates cross-vehicle adaptation, continual learning over 24 task orders, diagnostic distillation teacher on the target vehicle, and memory-budget analysis.
 
 ## Explicit Limitations
-The datasets are public and not redistributed in the package; the package depends on external data availability and the documented pipeline.
+The two datasets are public and not redistributed; reproduction depends on external DOIs and the README pipeline.
 
 ## Future Work
-Extend cross-vehicle CAN intrusion detection to more vehicle models, datasets, and continual-learning settings to reduce source-vehicle forgetting.
+Not stated in the provided abstract.
 
 ## Concept Hubs
-[[CAN Intrusion Detection]]
-[[Cross-Vehicle Forgetting]]
-[[Continual Learning]]
-[[In-Vehicle Network]]
-[[Deep Learning Methods]]
+[[In-Vehicle Network - CAN Intrusion]]
+[[CAN Intrusion - Forgetting]]
+[[Continual Learning - Task Orders]]
+[[Distillation Teacher - Target Vehicle]]
+[[Memory Budget - Curve]]
 
 ## Relevance Score
-9
+9/10

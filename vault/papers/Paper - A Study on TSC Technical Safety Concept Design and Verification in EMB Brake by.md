@@ -2,28 +2,28 @@
 title: "A Study on TSC (Technical Safety Concept) Design and Verification in EMB (Brake by Wire) Systems"
 year: 2026
 doi: "https://doi.org/10.4271/2026-01-0801"
-relevance_score: 2.0
+relevance_score: 3.0
 type: paper
 ---
 # A Study on TSC (Technical Safety Concept) Design and Verification in EMB (Brake by Wire) Systems
 
 ## Novelty
-The paper proposes an ISO 26262-based Technical Safety Concept for an Electro-Mechanical Brake system, emphasizing redundancy, fault detection, fail-safe operation, and control handover under hardware and CAN communication faults.
+Proposes an ISO 26262-based Technical Safety Concept for EMB systems, with redundancy, fault detection, fail-safe operation, and custom LabVIEW fault injection to evaluate FTTI and control handover.
 
 ## Methodology
-The study follows ISO 26262 concept, system, and software phases, derives safety goals and functional safety requirements from HARA, designs a redundant EMB architecture using CAN FD, and verifies it with ECU-in-the-Loop, Hardware-in-the-Loop, and real-vehicle tests. Fault scenarios are injected using a LabVIEW-based tool to evaluate FTTI, error handling, and control transfer.
+Derives safety goals and functional safety requirements from HARA, designs system architecture and TSC, then verifies using ECU-in-the-Loop, Hardware-in-the-Loop, and real-vehicle tests with injected Main Center Control Unit and CAN communication faults.
 
 ## Explicit Limitations
-None explicitly stated in the abstract.
+Not explicitly stated in the abstract.
 
 ## Future Work
-Future work will focus on prognostics and maintenance strategies to support safe deployment in autonomous and electric vehicles.
+Develop prognostics and maintenance strategies to support safe deployment in autonomous and electric vehicles.
 
 ## Concept Hubs
-[[Concept - In-Vehicle Network]]
-[[Concept - Brake-by-Wire System]]
-[[Concept - Functional Safety]]
-[[Concept - Fault Injection]]
+[[EMB System]]
+[[Functional Safety]]
+[[Fault Injection]]
+[[In-Vehicle Network]]
 
 ## Relevance Score
-2/10
+3/10

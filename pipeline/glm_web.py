@@ -1,26 +1,48 @@
 """GLM-web minimal client (chat.z.ai, stable semantic hooks, token-only)."""
+import json
 import os
 from asyncio import sleep
+from pathlib import Path
 from time import time
+from dotenv import load_dotenv
+
+load_dotenv(Path(__file__).resolve().parent.parent / ".env")
 
 LOGIN_URL = "https://chat.z.ai/"
-TEXTBOX_CSS = '.messageInputContainer textarea'
-SEND_CSS = '.sendMessageButton'
+DEFAULT_CHROME = Path(__file__).resolve().parent.parent / ".browsers" / "chrome-linux64" / "chrome"
 
 
 async def launch(headless=True):
     """Start zendriver browser on Z.ai chat, best-effort CF bypass."""
     import zendriver
     kwargs = {"headless": headless}
-    if os.environ.get("BROWSER_PATH"):
-        kwargs["browser_executable_path"] = os.environ["BROWSER_PATH"]
+    browser_bin = os.environ.get("BROWSER_PATH")
+    if (not browser_bin or "chrome-headless-shell" in browser_bin) and DEFAULT_CHROME.is_file():
+        browser_bin = str(DEFAULT_CHROME)
+    if browser_bin:
+        kwargs["browser_executable_path"] = browser_bin
+
     browser = await zendriver.start(**kwargs)
     await browser.get(LOGIN_URL)
     try:
-        await browser.main_tab.verify_cf()
+        cf_box = await browser.main_tab.query_selector("#cf-turnstile")
+        if cf_box:
+            await browser.main_tab.verify_cf(timeout=5)
     except Exception:
         pass  # no challenge presented
     return browser
+
+
+async def _dismiss_modal(browser):
+    """Dismiss promotional modal dialogs if present."""
+    await browser.main_tab.evaluate(
+        """(() => {
+          const btns = Array.from(document.querySelectorAll('button'));
+          const maybeLater = btns.find(b => b.innerText && b.innerText.includes('Maybe Later'));
+          if (maybeLater) maybeLater.click();
+        })()""",
+        await_promise=True, return_by_value=True,
+    )
 
 
 async def login_token(browser, token=None):
@@ -33,26 +55,58 @@ async def login_token(browser, token=None):
     )
     await browser.main_tab.reload()
     await sleep(4)
-    await browser.main_tab.select(TEXTBOX_CSS, timeout=15)
+    await _dismiss_modal(browser)
+    await browser.main_tab.select("textarea", timeout=15)
 
 
 def _scrape(html):
-    """Extract markdown-ish assistant blocks as text."""
+    """Extract assistant response text from HTML."""
     from bs4 import BeautifulSoup
     from inscriptis import get_text
     soup = BeautifulSoup(html, "html.parser")
-    blocks = soup.find_all(class_=lambda c: c and "markdown" in c.lower())
-    if blocks:
-        return "\n\n".join(get_text(str(b)).strip() for b in blocks)
-    return ""
+    assts = soup.find_all(class_=lambda c: c and "chat-assistant" in c)
+    if not assts:
+        return ""
+    latest = assts[-1]
+    # Remove thinking chain block if final answer exists
+    cleaned = BeautifulSoup(str(latest), "html.parser")
+    for tc in cleaned.find_all(class_=lambda c: c and "thinking-chain-container" in c):
+        tc.decompose()
+    text = get_text(str(cleaned)).strip()
+    return text if text else get_text(str(latest)).strip()
 
 
 async def send_message(browser, message, timeout=180):
     """Send message, wait for stable response text, return it."""
-    box = await browser.main_tab.select(TEXTBOX_CSS, timeout=15)
-    await box.send_keys(message)
-    send = await browser.main_tab.select(SEND_CSS, timeout=15)
-    await send.click()
+    await _dismiss_modal(browser)
+    msg_json = json.dumps(message)
+    await browser.main_tab.evaluate(
+        f"""(() => {{
+          const ta = document.querySelector('textarea');
+          if (!ta) throw new Error('textarea not found');
+          ta.focus();
+          ta.value = {msg_json};
+          ta.dispatchEvent(new Event('input', {{ bubbles: true }}));
+          ta.dispatchEvent(new Event('change', {{ bubbles: true }}));
+        }})()""",
+        await_promise=True, return_by_value=True,
+    )
+    await sleep(1)
+    await browser.main_tab.evaluate(
+        """(() => {
+          const sendBtn = document.querySelector('.sendMessageButton');
+          if (sendBtn && !sendBtn.disabled) {
+            sendBtn.click();
+            return;
+          }
+          const ta = document.querySelector('textarea');
+          if (ta) {
+            const ev = new KeyboardEvent('keydown', { key: 'Enter', code: 'Enter', keyCode: 13, which: 13, bubbles: true });
+            ta.dispatchEvent(ev);
+          }
+        })()""",
+        await_promise=True, return_by_value=True,
+    )
     end, last, stable_since = time() + timeout, "", time()
     while time() < end:
         await sleep(3)
@@ -62,7 +116,7 @@ async def send_message(browser, message, timeout=180):
         text = _scrape(html)
         if text and text != last:
             last, stable_since = text, time()
-        if last and time() - stable_since > 9:
+        if last and time() - stable_since > 6:
             return last
     raise TimeoutError("no stable response in timeout")
 
@@ -75,6 +129,6 @@ async def ask(message, token=None, timeout=180):
         return await send_message(browser, message, timeout)
     finally:
         try:
-            browser.stop()
+            await browser.stop()
         except Exception:
             pass

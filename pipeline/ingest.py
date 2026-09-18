@@ -1,6 +1,5 @@
 """Ingest: OpenAlex /works newest-first, dedupe on openalex_id."""
 import json
-import sys
 import time
 from datetime import date
 from pathlib import Path
@@ -9,15 +8,18 @@ import requests
 import yaml
 
 ROOT = Path(__file__).resolve().parent.parent
-CFG = ROOT / "config" / "scope.yaml"
-OUT = ROOT / "state" / "latest.json"
-SEEN = ROOT / "state" / "seen.json"
-CURSOR = ROOT / "state" / "cursor.txt"
+SCOPES = ROOT / "config" / "scopes"
+STATE = ROOT / "state"
 API = "https://api.openalex.org/works"
 
-def load_cfg():
-    """Load scope.yaml (keywords, dates, limits)."""
-    return yaml.safe_load(CFG.read_text())
+def cfg_path(scope="ivn"):
+    """Resolve config/scopes/<scope>.yaml path."""
+    return SCOPES / f"{scope}.yaml"
+
+
+def load_cfg(scope="ivn"):
+    """Load scope yaml (keywords, dates, limits)."""
+    return yaml.safe_load(cfg_path(scope).read_text())
 
 def fetch(params, timeout=30):
     """GET OpenAlex with 3 retries, backoff honoring Retry-After."""
@@ -46,15 +48,22 @@ def inv_to_text(inv):
     return " ".join(pos[i] for i in sorted(pos))
 
 
-def load_seen():
+def state_paths(scope="ivn"):
+    """Resolve per-scope (latest, seen, cursor) state paths."""
+    return (STATE / f"{scope}-latest.json", STATE / f"{scope}-seen.json", STATE / f"{scope}-cursor.txt")
+
+
+def load_seen(scope="ivn"):
     """Load seen {id: date} map, empty dict when missing."""
-    return json.loads(SEEN.read_text()) if SEEN.exists() else {}
+    seen = state_paths(scope)[1]
+    return json.loads(seen.read_text()) if seen.exists() else {}
 
 
-def save_seen(seen):
-    """Persist seen {id: date} map to state/seen.json."""
-    SEEN.parent.mkdir(exist_ok=True)
-    SEEN.write_text(json.dumps(seen, indent=2))
+def save_seen(seen, scope="ivn"):
+    """Persist seen {id: date} map to state/<scope>-seen.json."""
+    dest = state_paths(scope)[1]
+    dest.parent.mkdir(exist_ok=True)
+    dest.write_text(json.dumps(seen, indent=2))
 
 
 def keys_of(item):
@@ -73,15 +82,16 @@ def keys_of(item):
     return keys
 
 
-def ingest(limit=50, per_page=50, mode="new", frm=None, to=None):
+def ingest(limit=50, per_page=50, mode="new", frm=None, to=None, scope="ivn"):
     """Fetch OpenAlex window, drop seen IDs, save seen, advance cursor."""
-    cfg = load_cfg()
+    cfg = load_cfg(scope)
+    out_path, _, cursor_path = state_paths(scope)
     ox = cfg["sources"]["openalex"]
     q = "|".join(f'"{k}"' for k in cfg["seeds"]["keywords"])
     if mode == "backfill":
         filt = f"from_publication_date:{frm},to_publication_date:{to},title-and-abstract.search:{q}"
     else:
-        start = CURSOR.read_text().strip() if CURSOR.exists() else ox["from_publication_date"]
+        start = cursor_path.read_text().strip() if cursor_path.exists() else ox["from_publication_date"]
         filt = f"from_publication_date:{start},title-and-abstract.search:{q}"
     params = {"filter": filt, "sort": "publication_date:desc", "per-page": per_page, "mailto": ox["mailto"]}
     data = fetch(params).get("results", [])[:limit]
@@ -92,7 +102,7 @@ def ingest(limit=50, per_page=50, mode="new", frm=None, to=None):
             continue
         seen.add(oid)
         out.append({"openalex_id": oid, "title": w.get("title"), "year": w.get("publication_year"), "doi": w.get("doi"), "abstract": inv_to_text(w.get("abstract_inverted_index")) or w.get("title")})
-    store = load_seen()
+    store = load_seen(scope)
     today = date.today().isoformat()
     fresh = []
     for it in out:
@@ -102,21 +112,27 @@ def ingest(limit=50, per_page=50, mode="new", frm=None, to=None):
         fresh.append(it)
         for k in keys:
             store[k] = today
-    save_seen(store)
+    save_seen(store, scope)
     if mode == "new":
-        CURSOR.parent.mkdir(exist_ok=True)
-        CURSOR.write_text(today)
+        cursor_path.parent.mkdir(exist_ok=True)
+        cursor_path.write_text(today)
     return fresh
 
 
 if __name__ == "__main__":
-    n = int(sys.argv[1]) if len(sys.argv) > 1 else load_cfg()["limits"]["per_run"]
+    import argparse
+    p = argparse.ArgumentParser()
+    p.add_argument("limit", nargs="?", type=int, default=None)
+    p.add_argument("--scope", default="ivn")
+    a = p.parse_args()
+    n = a.limit or load_cfg(a.scope)["limits"]["per_run"]
     assert n > 0, "limit must be positive"
-    items = ingest(limit=n)
+    items = ingest(limit=n, scope=a.scope)
     assert isinstance(items, list), "ingest must return list"
     assert len(items) == len({i["openalex_id"] for i in items}), "dedupe broken"
     for w in items[:5]:  # eyeball check
         print(f"{w['year']} | {w['title']}")
-    OUT.parent.mkdir(exist_ok=True)
-    OUT.write_text(json.dumps(items, indent=2))
+    out_path = state_paths(a.scope)[0]
+    out_path.parent.mkdir(exist_ok=True)
+    out_path.write_text(json.dumps(items, indent=2))
     # TODO: publisher_fetch hook (config sources.publisher_fetch)

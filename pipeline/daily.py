@@ -1,8 +1,12 @@
 """Daily: ingest -> rank -> extract -> writer."""
 import asyncio
 import re
+from datetime import date
+from pathlib import Path
 
 from . import extract, gap, ingest, rank, writer
+
+ROOT = Path(__file__).resolve().parent.parent
 
 REL_RE = re.compile(r"^\s*(?:-\s*)?(\d+(?:\.\d+)?)\s*(?:/10)?\s*(?:—|-|:)?")
 
@@ -16,12 +20,12 @@ def parse_relevance(body, fallback):
     return fallback
 
 
-def run(backfill=False, frm=None, to=None):
+def run(scope="ivn", backfill=False, frm=None, to=None):
     """Run ingest-rank-extract-write for top-5, return written paths."""
-    cfg = rank.load_cfg()
+    cfg = rank.load_cfg(scope)
     thesis = cfg["seeds"]["thesis_statements"][0]
-    items = ingest.ingest(limit=cfg["limits"]["per_run"], mode="backfill" if backfill else "new", frm=frm, to=to)
-    model = rank.load_model()
+    items = ingest.ingest(limit=cfg["limits"]["per_run"], mode="backfill" if backfill else "new", frm=frm, to=to, scope=scope)
+    model = rank.load_model(scope=scope)
     ranked = rank.rank(items, thesis, model, threshold=cfg["thresholds"]["semantic_edge"], keep=cfg["limits"]["keep"])
     paths, seen, bodies = [], set(), []
     for it in ranked:
@@ -47,7 +51,7 @@ def run(backfill=False, frm=None, to=None):
             ideas = asyncio.run(gap.run(lims, thesis, cfg["seeds"]["datasets"]))
             papers = [writer.slugify(it["title"]) for it in ranked[:5]]
             concepts = list(dict.fromkeys(h for b in bodies for h in writer.HUB_RE.findall(b)))
-            print(gap.save(ideas, papers=papers, concepts=concepts))
+            print(gap.save(ideas, path=ROOT / "vault" / "ideas" / f"{scope}-{date.today().isoformat()}.md", papers=papers, concepts=concepts))
         except Exception:
             pass
     return paths
@@ -56,9 +60,10 @@ def run(backfill=False, frm=None, to=None):
 if __name__ == "__main__":
     import argparse
     p = argparse.ArgumentParser()
+    p.add_argument("--scope", default="ivn")
     p.add_argument("--backfill", action="store_true")
     p.add_argument("--from", dest="frm", default=None)
     p.add_argument("--to", dest="to", default=None)
     a = p.parse_args()
-    for pth in run(backfill=a.backfill, frm=a.frm, to=a.to):
+    for pth in run(scope=a.scope, backfill=a.backfill, frm=a.frm, to=a.to):
         print(pth)

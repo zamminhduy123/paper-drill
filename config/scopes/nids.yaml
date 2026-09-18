@@ -1,0 +1,35 @@
+seeds:
+  keywords:
+    - "network intrusion detection"
+    - "CIC-IDS-2017"
+    - "UNSW-NB15"
+    - "DDoS detection"
+    - "encrypted traffic classification"
+  datasets:
+    - "CIC-IDS-2017"
+    - "UNSW-NB15"
+    - "CIC-DDoS-2019"
+  thesis_statements:
+    - "We study the application of deep learning methods into areas of enterprise/internet network intrusion detection"
+  arxiv_categories: ["cs.AI", "cs.LG", "cs.CL", "cs.CV", "stat.ML"]
+  exclude_keywords: ["survey-only"]
+
+limits:
+  per_run: 50
+  keep: 20
+
+thresholds:
+  semantic_edge: 0.80
+
+sources:
+  openalex:
+    mailto: "you@soonchunhyang.ac.kr"
+    from_publication_date: "2026-08-15"
+  semantic_scholar: {}
+  publisher_fetch: true  # verified campus IP: Soonchunhyang Univ inst 44445
+
+models:
+  llm_base_url: "http://SERVER:11434/v1"
+  llm_model: "qwen3-27b-q8"
+  embed_model: "zeroentropy/zembed-1-embedding"
+  reranker: "bge-reranker-v2-m3"

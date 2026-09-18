@@ -8,7 +8,9 @@ LOG=cron.log
 {
 echo "=== $(date -Is) start ==="
 git pull --ff-only
-.venv/bin/python -m pipeline.daily
+for scope in ivn iot-ids nids edge-ai; do
+  .venv/bin/python -m pipeline.daily --scope "$scope"
+done
 git add vault/
 git diff --cached --quiet || git commit -m "daily $(date +%F)"
 git push

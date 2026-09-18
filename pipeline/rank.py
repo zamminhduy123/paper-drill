@@ -6,9 +6,8 @@ from pathlib import Path
 import yaml
 
 ROOT = Path(__file__).resolve().parent.parent
-CFG = ROOT / "config" / "scope.yaml"
-IN = ROOT / "state" / "latest.json"
-OUT = ROOT / "state" / "ranked.json"
+SCOPES = ROOT / "config" / "scopes"
+STATE = ROOT / "state"
 
 # ponytail: 4 pos + 3 neg from notebooks/02-shootout.ipynb, enough to judge separation
 POS = ["Knowledge distillation GNN Transformer to tiny ECU student <10K params for CAN IDS",
@@ -21,15 +20,25 @@ NEG = ["HairCLIP text image hair editing StyleGAN",
 CHECK_THESIS = "deep learning for in-vehicle CAN intrusion detection"
 
 
-def load_cfg():
-    """Load scope.yaml (model, thresholds, keep)."""
-    return yaml.safe_load(CFG.read_text())
+def cfg_path(scope="ivn"):
+    """Resolve config/scopes/<scope>.yaml path."""
+    return SCOPES / f"{scope}.yaml"
 
 
-def load_model(name=None):
+def load_cfg(scope="ivn"):
+    """Load scope yaml (model, thresholds, keep)."""
+    return yaml.safe_load(cfg_path(scope).read_text())
+
+
+def state_paths(scope="ivn"):
+    """Resolve per-scope (latest, ranked) state paths."""
+    return (STATE / f"{scope}-latest.json", STATE / f"{scope}-ranked.json")
+
+
+def load_model(name=None, scope="ivn"):
     """Load zembed model on CPU (never touch driver)."""
     from sentence_transformers import SentenceTransformer
-    name = name or load_cfg()["models"]["embed_model"]
+    name = name or load_cfg(scope)["models"]["embed_model"]
     return SentenceTransformer(name, trust_remote_code=True, device="cpu")  # CPU-safe, never touch driver
 
 
@@ -54,14 +63,19 @@ def rank(items, thesis, model, threshold=0.80, keep=20):
 
 
 if __name__ == "__main__":
-    m = load_model()
+    import argparse
+    p = argparse.ArgumentParser()
+    p.add_argument("--scope", default="ivn")
+    a = p.parse_args()
+    m = load_model(scope=a.scope)
     g = gap(score(CHECK_THESIS, POS, m), score(CHECK_THESIS, NEG, m))
     assert g > 0.05, f"separation collapsed: gap={g:.3f}"
     print(f"self-check gap={g:.3f} ok")
-    cfg = load_cfg()
+    cfg = load_cfg(a.scope)
     thesis = cfg["seeds"]["thesis_statements"][0]
-    items = json.loads(IN.read_text())
+    in_path, out_path = state_paths(a.scope)
+    items = json.loads(in_path.read_text())
     ranked = rank(items, thesis, m, threshold=cfg["thresholds"]["semantic_edge"], keep=cfg["limits"]["keep"])
-    OUT.write_text(json.dumps(ranked, indent=2))
+    out_path.write_text(json.dumps(ranked, indent=2))
     for r in ranked[:5]:
         print(f"{r['score']:.3f} | {r.get('title')}")

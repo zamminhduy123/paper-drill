@@ -16,11 +16,11 @@ def parse_relevance(body, fallback):
     return fallback
 
 
-def run():
+def run(backfill=False, frm=None, to=None):
     """Run ingest-rank-extract-write for top-5, return written paths."""
     cfg = rank.load_cfg()
     thesis = cfg["seeds"]["thesis_statements"][0]
-    items = ingest.ingest(limit=cfg["limits"]["per_run"])
+    items = ingest.ingest(limit=cfg["limits"]["per_run"], mode="backfill" if backfill else "new", frm=frm, to=to)
     model = rank.load_model()
     ranked = rank.rank(items, thesis, model, threshold=cfg["thresholds"]["semantic_edge"], keep=cfg["limits"]["keep"])
     paths, seen, bodies = [], set(), []
@@ -31,13 +31,15 @@ def run():
         if slug in seen:  # ponytail: OpenAlex double-indexes same title, backfill from ranked
             continue
         seen.add(slug)
+        if backfill and (writer.PAPERS / f"Paper - {slug}.md").exists():
+            continue
         abstract = it.get("abstract") or it["title"]  # ponytail: title-only, full abstract when OpenAlex abstract_inverted_index wired
         try:
             body = extract.extract(thesis, it["title"], abstract)
         except Exception as e:  # ponytail: skip paper, never overwrite good note with stub
             print(f"skip {slug}: extract failed: {e}")
             continue
-        paths.append(writer.write_paper(it["title"], it.get("year"), it.get("doi") or "", parse_relevance(body, it["score"] * 10), body, force=True))
+        paths.append(writer.write_paper(it["title"], it.get("year"), it.get("doi") or "", parse_relevance(body, it["score"] * 10), body, force=not backfill))
         bodies.append(body)
     if paths:
         try:  # ponytail: 1 gap call/day, never break daily on failure
@@ -52,5 +54,11 @@ def run():
 
 
 if __name__ == "__main__":
-    for p in run():
-        print(p)
+    import argparse
+    p = argparse.ArgumentParser()
+    p.add_argument("--backfill", action="store_true")
+    p.add_argument("--from", dest="frm", default=None)
+    p.add_argument("--to", dest="to", default=None)
+    a = p.parse_args()
+    for pth in run(backfill=a.backfill, frm=a.frm, to=a.to):
+        print(pth)

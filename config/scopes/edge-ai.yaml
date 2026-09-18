@@ -24,13 +24,13 @@ thresholds:
 
 sources:
   openalex:
-    mailto: "you@soonchunhyang.ac.kr"
+    mailto: "ntminhduy123@gmail.com"
     from_publication_date: "2026-08-15"
   semantic_scholar: {}
   publisher_fetch: true  # verified campus IP: Soonchunhyang Univ inst 44445
 
 models:
-  llm_base_url: "http://SERVER:11434/v1"
+  llm_base_url: "http://127.0.0.1:8080/v1"
   llm_model: "qwen3-27b-q8"
   embed_model: "zeroentropy/zembed-1-embedding"
   reranker: "bge-reranker-v2-m3"

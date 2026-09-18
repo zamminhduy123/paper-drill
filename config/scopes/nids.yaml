@@ -23,7 +23,7 @@ thresholds:
 
 sources:
   openalex:
-    mailto: "you@soonchunhyang.ac.kr"
+    mailto: "ntminhduy123@gmail.com"
     from_publication_date: "2026-08-15"
   semantic_scholar: {}
   publisher_fetch: true  # verified campus IP: Soonchunhyang Univ inst 44445

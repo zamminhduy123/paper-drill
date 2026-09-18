@@ -20,9 +20,9 @@ No explicit limitations are stated in the abstract.
 Future work will focus on prognostics and maintenance strategies to support safe deployment of EMB systems in autonomous and electric vehicles.
 
 ## Concept Hubs
-[[CAN Network Anomaly Detection]]
-[[EMB Fault Tolerance]]
-[[Functional Safety Verification]]
+[[Concept - CAN Network Anomaly Detection]]
+[[Concept - EMB Fault Tolerance]]
+[[Concept - Functional Safety Verification]]
 
 ## Relevance Score
 2/5

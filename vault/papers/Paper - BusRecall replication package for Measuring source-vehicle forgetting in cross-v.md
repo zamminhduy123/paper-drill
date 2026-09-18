@@ -20,9 +20,9 @@ The two datasets are public and are not redistributed in the package; the README
 Not stated in the provided abstract.
 
 ## Concept Hubs
-[[CAN Network Anomaly Detection]]
-[[In-Vehicle Network Security]]
-[[Cross-Vehicle Transfer Learning]]
+[[Concept - CAN Network Anomaly Detection]]
+[[Concept - In-Vehicle Network Security]]
+[[Concept - Cross-Vehicle Transfer Learning]]
 
 ## Relevance Score
 9/10

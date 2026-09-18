@@ -4,7 +4,7 @@ import textwrap
 from datetime import date
 from pathlib import Path
 
-from . import deepseek_web, extract, rank
+from . import deepseek_web, extract, glm_web, rank
 
 
 def build_prompt(thesis, limitations, datasets):
@@ -19,16 +19,19 @@ def build_prompt(thesis, limitations, datasets):
 
 
 async def run(limitations, thesis=None, datasets=None):
-    """Ask DeepSeek-web, fall back to Qwen on any failure."""
+    """Ask GLM-web, fall back to DeepSeek-web, then Qwen."""
     if thesis is None or datasets is None:
         cfg = rank.load_cfg()
         thesis = thesis or cfg["seeds"]["thesis_statements"][0]
         datasets = datasets or cfg["seeds"]["datasets"]
     prompt = build_prompt(thesis, limitations, datasets)
     try:
-        return await deepseek_web.ask(prompt, timeout=300)
+        return await glm_web.ask(prompt, timeout=300)
     except Exception:
-        return extract.chat(prompt, timeout=300)
+        try:
+            return await deepseek_web.ask(prompt, timeout=300)
+        except Exception:
+            return extract.chat(prompt, timeout=300)
 
 
 def save(text, path=None, papers=None, concepts=None):

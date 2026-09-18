@@ -20,10 +20,10 @@ No explicit limitations are provided in the supplied abstract.
 No explicit future work is provided in the supplied abstract.
 
 ## Concept Hubs
-[[In-Vehicle Network Security]]
-[[Multi-Agent Security Evaluation]]
-[[Real-Time Attack Defense]]
-[[AI-Ready Security Framework]]
+[[Concept - In-Vehicle Network Security]]
+[[Concept - Multi-Agent Security Evaluation]]
+[[Concept - Real-Time Attack Defense]]
+[[Concept - AI-Ready Security Framework]]
 
 ## Relevance Score
 0.9

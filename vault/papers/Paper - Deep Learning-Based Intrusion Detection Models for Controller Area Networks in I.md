@@ -20,9 +20,9 @@ Not stated in the provided abstract.
 Not stated in the provided abstract.
 
 ## Concept Hubs
-[[CAN Network Anomaly Detection]]
-[[In-Vehicle Network Security]]
-[[Deep Learning Intrusion Detection]]
+[[Concept - CAN Network Anomaly Detection]]
+[[Concept - In-Vehicle Network Security]]
+[[Concept - Deep Learning Intrusion Detection]]
 
 ## Relevance Score
 9/10

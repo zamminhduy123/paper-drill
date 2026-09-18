@@ -64,6 +64,10 @@ if __name__ == "__main__":
     p.add_argument("--backfill", action="store_true")
     p.add_argument("--from", dest="frm", default=None)
     p.add_argument("--to", dest="to", default=None)
+    p.add_argument("--cross", action="store_true")
     a = p.parse_args()
-    for pth in run(scope=a.scope, backfill=a.backfill, frm=a.frm, to=a.to):
-        print(pth)
+    if a.cross:
+        print(asyncio.run(gap.cross_run()))
+    else:
+        for pth in run(scope=a.scope, backfill=a.backfill, frm=a.frm, to=a.to):
+            print(pth)

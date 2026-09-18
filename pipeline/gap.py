@@ -1,10 +1,15 @@
 """Gap: DeepSeek-web ideas with Qwen fallback (1 call/day)."""
+import json
 import re
 import textwrap
 from datetime import date
 from pathlib import Path
 
-from . import deepseek_web, extract, glm_web, rank
+from . import deepseek_web, extract, glm_web, rank, writer
+
+ROOT = Path(__file__).resolve().parent.parent
+
+LIM_RE = re.compile(r"## Explicit Limitations\s*(.*?)(?=\n## |\Z)", re.S)
 
 
 def build_prompt(thesis, limitations, datasets):
@@ -32,6 +37,49 @@ async def run(limitations, thesis=None, datasets=None):
             return await deepseek_web.ask(prompt, timeout=300)
         except Exception:
             return extract.chat(prompt, timeout=300)
+
+
+def build_cross_prompt(sections, thesis, datasets):
+    """Build one cross-scope gap prompt with scope-labeled limitations."""
+    parts = [f"Thesis: {thesis}"]
+    for scope, lims in sections.items():
+        parts.append(f"Scope {scope} limitations:\n" + "\n".join(f"- {x}" for x in lims))
+    names = ", ".join(datasets)
+    parts.append("Propose concrete ideas shaped as `Method X from Scope A -> Problem Y in Scope B`.")
+    parts.append(f"Propose concrete research splits using only these datasets: {names}.\nUse no other dataset names.")
+    return "\n".join(parts)
+
+
+async def cross_run(scopes=("ivn", "iot-ids", "nids")):
+    """Run one cross-scope gap prompt and save ideas note, return path."""
+    sections, datasets, papers, concepts = {}, [], [], []
+    for scope in scopes:
+        try:
+            items = json.loads(rank.state_paths(scope)[1].read_text())[:5]
+        except (OSError, ValueError):
+            continue  # ponytail: missing/corrupt ranked state, skip scope
+        datasets.extend(rank.load_cfg(scope)["seeds"]["datasets"])
+        lims = []
+        for it in items:
+            slug = writer.slugify(it["title"])
+            papers.append(slug)
+            note = ROOT / "vault" / "papers" / f"Paper - {slug}.md"
+            if not note.exists():
+                continue
+            body = note.read_text()
+            lims.extend(m.group(1).strip() for m in LIM_RE.finditer(body) if m.group(1).strip())
+            concepts.extend(writer.HUB_RE.findall(body))
+        sections[scope] = lims
+    thesis = "Transfer proven methods across network intrusion domains (ivn, iot-ids, nids): apply Method X from one domain to Problem Y in another."
+    prompt = build_cross_prompt(sections, thesis, list(dict.fromkeys(datasets)))
+    try:  # ponytail: chain duplicated from run(), spec forbids touching single-scope path
+        ideas = await glm_web.ask(prompt, timeout=300)
+    except Exception:
+        try:
+            ideas = await deepseek_web.ask(prompt, timeout=300)
+        except Exception:
+            ideas = extract.chat(prompt, timeout=300)
+    return save(ideas, path=ROOT / "vault" / "ideas" / f"cross-{date.today().isoformat()}.md", papers=papers, concepts=concepts)
 
 
 def save(text, path=None, papers=None, concepts=None):

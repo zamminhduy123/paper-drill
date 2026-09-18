@@ -11,6 +11,7 @@ git pull --ff-only
 for scope in ivn iot-ids nids edge-ai; do
   .venv/bin/python -m pipeline.daily --scope "$scope"
 done
+.venv/bin/python -m pipeline.daily --cross
 git add vault/
 git diff --cached --quiet || git commit -m "daily $(date +%F)"
 git push

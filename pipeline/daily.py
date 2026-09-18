@@ -34,8 +34,9 @@ def run():
         abstract = it.get("abstract") or it["title"]  # ponytail: title-only, full abstract when OpenAlex abstract_inverted_index wired
         try:
             body = extract.extract(thesis, it["title"], abstract)
-        except Exception as e:  # ponytail: offline stub, drop when LLM server guaranteed
-            body = f"## Novelty\n- {it['title']}\n## Relevance Score\n{it['score'] * 10:.1f} extract failed: {e}"
+        except Exception as e:  # ponytail: skip paper, never overwrite good note with stub
+            print(f"skip {slug}: extract failed: {e}")
+            continue
         paths.append(writer.write_paper(it["title"], it.get("year"), it.get("doi") or "", parse_relevance(body, it["score"] * 10), body, force=True))
         bodies.append(body)
     if paths:

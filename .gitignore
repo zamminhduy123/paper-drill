@@ -2,4 +2,6 @@
 pipeline/__pycache__/**
 
 .env
-.browsers/
+.browsers/cron.log
+cron.lock
+__pycache__/

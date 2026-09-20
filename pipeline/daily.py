@@ -4,7 +4,7 @@ import re
 from datetime import date
 from pathlib import Path
 
-from . import extract, gap, ingest, rank, writer
+from . import dashboard, extract, gap, ingest, rank, writer
 
 ROOT = Path(__file__).resolve().parent.parent
 
@@ -54,6 +54,10 @@ def run(scope="ivn", backfill=False, frm=None, to=None):
             print(gap.save(ideas, path=ROOT / "vault" / "ideas" / f"{scope}-{date.today().isoformat()}.md", papers=papers, concepts=concepts))
         except Exception:
             pass
+    try:  # ponytail: dashboard never breaks daily
+        dashboard.build()
+    except Exception:
+        pass
     return paths
 
 
@@ -68,6 +72,10 @@ if __name__ == "__main__":
     a = p.parse_args()
     if a.cross:
         print(asyncio.run(gap.cross_run()))
+        try:  # ponytail: dashboard never breaks daily
+            dashboard.build()
+        except Exception:
+            pass
     else:
         for pth in run(scope=a.scope, backfill=a.backfill, frm=a.frm, to=a.to):
             print(pth)

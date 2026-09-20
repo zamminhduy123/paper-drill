@@ -5,7 +5,7 @@ import textwrap
 from datetime import date
 from pathlib import Path
 
-from . import deepseek_web, extract, glm_web, rank, writer
+from . import llm, rank, writer
 
 ROOT = Path(__file__).resolve().parent.parent
 
@@ -30,13 +30,7 @@ async def run(limitations, thesis=None, datasets=None):
         thesis = thesis or cfg["seeds"]["thesis_statements"][0]
         datasets = datasets or cfg["seeds"]["datasets"]
     prompt = build_prompt(thesis, limitations, datasets)
-    try:
-        return await glm_web.ask(prompt, timeout=300)
-    except Exception:
-        try:
-            return await deepseek_web.ask(prompt, timeout=300)
-        except Exception:
-            return extract.chat(prompt, timeout=300)
+    return await llm.arun(prompt, timeout=300)
 
 
 def build_cross_prompt(sections, thesis, datasets):
@@ -72,13 +66,7 @@ async def cross_run(scopes=("ivn", "iot-ids", "nids")):
         sections[scope] = lims
     thesis = "Transfer proven methods across network intrusion domains (ivn, iot-ids, nids): apply Method X from one domain to Problem Y in another."
     prompt = build_cross_prompt(sections, thesis, list(dict.fromkeys(datasets)))
-    try:  # ponytail: chain duplicated from run(), spec forbids touching single-scope path
-        ideas = await glm_web.ask(prompt, timeout=300)
-    except Exception:
-        try:
-            ideas = await deepseek_web.ask(prompt, timeout=300)
-        except Exception:
-            ideas = extract.chat(prompt, timeout=300)
+    ideas = await llm.arun(prompt, timeout=300)
     return save(ideas, path=ROOT / "vault" / "ideas" / f"cross-{date.today().isoformat()}.md", papers=papers, concepts=concepts)
 
 

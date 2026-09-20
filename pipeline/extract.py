@@ -1,11 +1,10 @@
 """Extract: novelty, method, limitations, future work, concept hubs via Qwen (v2 locked)."""
-import asyncio
 import os
 from pathlib import Path
 import requests
 from dotenv import load_dotenv
 
-from . import deepseek_web, glm_web
+from . import llm
 
 load_dotenv(Path(__file__).resolve().parent.parent / ".env")
 
@@ -74,13 +73,7 @@ def extract(thesis: str, title: str, abstract: str) -> str:
     hubs = existing_hubs()
     extra = f"\nExisting hubs: {', '.join(hubs)}\nReuse an existing hub verbatim when it fits; create a new one only when nothing fits.\n"
     prompt = PROMPT.format(thesis=thesis, title=title, abstract=abstract) + extra
-    try:
-        return asyncio.run(glm_web.ask(prompt, timeout=300))
-    except Exception:
-        try:
-            return asyncio.run(deepseek_web.ask(prompt, timeout=300))
-        except Exception:
-            return chat(prompt, timeout=300)
+    return llm.run(prompt, timeout=300)
 
 
 if __name__ == "__main__":

@@ -1,0 +1,101 @@
+[
+  {
+    "openalex_id": "https://openalex.org/W7213450869",
+    "title": "BAsyncFed-IDS: A buffered asynchronous federated learning-based intrusion detection system for in-vehicle networks",
+    "year": 2026,
+    "doi": "https://doi.org/10.1016/j.jisa.2026.104647",
+    "abstract": "The Controller Area Network (CAN) is highly susceptible to malicious attacks due to its lack of encryption and authentication mechanisms, leading to the necessity of intrusion detection systems (IDS). However, centralized data processing not only incurs high storage costs and bandwidth overhead but also aggravates privacy risks. This context makes federated learning (FL) a more feasible alternative. Most existing FL-based IDSs rely on synchronous aggregation methods, which overlook real-world factors such as the significant disparity in computing resources among vehicle clients, unstable vehicle network communication, and non-independent and identically distributed (non-IID) data samples. This oversight results in reduced model training speed and detection accuracy. To address the limitations of existing methods, this paper proposes BAsyncFed-IDS, a novel buffered asynchronous federated learning-based intrusion detection system. Specifically, the framework stores completed local updates in a buffer, selects models according to weight divergence, and uses mixing weights determined by staleness to reduce the influence of delayed updates. For local detection, we employ Lite-MobileNet, a lightweight detector suitable for resource-constrained in-vehicle devices. A unified image representation is used to standardize CAN traffic from different vehicles, thereby supporting intrusion detection across multiple vehicle models. Comprehensive experiments on three public datasets demonstrate that BAsyncFed-IDS can train a global model under heterogeneous vehicle data and delayed client updates, achieving favorable convergence and detection performance. It outperforms various baseline methods in convergence speed and generalization ability, thus providing a novel, accurate, and efficient intrusion detection solution for in-vehicle network security.",
+    "score": 0.8754,
+    "above_edge": true
+  },
+  {
+    "openalex_id": "https://openalex.org/W7211955521",
+    "title": "A diffusion-based anomaly detection framework for securing in-vehicle CAN networks",
+    "year": 2026,
+    "doi": "https://doi.org/10.1016/j.sysarc.2026.103985",
+    "abstract": "A diffusion-based anomaly detection framework for securing in-vehicle CAN networks",
+    "score": 0.8104,
+    "above_edge": true
+  },
+  {
+    "openalex_id": "https://openalex.org/W7212440760",
+    "title": "Deep Learning-Based Intrusion Detection Models for Controller Area Networks in Intelligent Connected Vehicles",
+    "year": 2026,
+    "doi": "https://doi.org/10.1007/978-981-92-3570-4_46",
+    "abstract": "Deep Learning-Based Intrusion Detection Models for Controller Area Networks in Intelligent Connected Vehicles",
+    "score": 0.6339,
+    "above_edge": false
+  },
+  {
+    "openalex_id": "https://openalex.org/W7202203573",
+    "title": "BusRecall: replication package for \"Measuring source-vehicle forgetting in cross-vehicle CAN intrusion detection\"",
+    "year": 2026,
+    "doi": "https://doi.org/10.5281/zenodo.21889098",
+    "abstract": "Code and result files for the paper \"What adaptation costs: source-vehicle forgetting in cross-vehicle CAN intrusion detection\". The package reproduces every table and figure in the paper: the cross-vehicle collapse and its three controls, the continual-learning comparison over all 24 task orders on two independent corpora (can-train-and-test and the ORNL ROAD dataset), the diagnostic measurement of the distillation teacher on the target vehicle, and the memory-budget curve. The two datasets are public and are not redistributed here; the README gives their DOIs and the pipeline that builds the caches.",
+    "score": 0.4662,
+    "above_edge": false
+  },
+  {
+    "openalex_id": "https://openalex.org/W7204948795",
+    "title": "BusRecall: replication package for \"Measuring source-vehicle forgetting in cross-vehicle CAN intrusion detection\"",
+    "year": 2026,
+    "doi": "https://doi.org/10.5281/zenodo.22228087",
+    "abstract": "Code and result files for the paper \"What adaptation costs: source-vehicle forgetting in cross-vehicle CAN intrusion detection\". The package reproduces every table and figure in the paper: the cross-vehicle collapse and its three controls, the continual-learning comparison over all 24 task orders on two independent corpora (can-train-and-test and the ORNL ROAD dataset), the diagnostic measurement of the distillation teacher on the target vehicle, and the memory-budget curve. The two datasets are public and are not redistributed here; the README gives their DOIs and the pipeline that builds the caches.",
+    "score": 0.4648,
+    "above_edge": false
+  },
+  {
+    "openalex_id": "https://openalex.org/W7208833418",
+    "title": "An AI-Ready Real-Time Multi-agent Attack-and-Defense Framework for In-Vehicle Network Security Evaluation",
+    "year": 2026,
+    "doi": "https://doi.org/10.1007/978-3-032-29561-3_13",
+    "abstract": "An AI-Ready Real-Time Multi-agent Attack-and-Defense Framework for In-Vehicle Network Security Evaluation",
+    "score": 0.4329,
+    "above_edge": false
+  },
+  {
+    "openalex_id": "https://openalex.org/W7212456881",
+    "title": "A Study on TSC (Technical Safety Concept) Design and Verification in EMB (Brake by Wire) Systems",
+    "year": 2026,
+    "doi": "https://doi.org/10.4271/2026-01-0801",
+    "abstract": "The Electro-Mechanical Brake (EMB) system is a dry-type Brake-by-Wire technology that eliminates hydraulic components and directly controls friction braking using electrical actuators at each wheel. The EMB architecture consists of a Main Center Control Unit, a redundant Backup Center Control Unit, and four Wheel Control Units communicating via CAN FD. Due to its direct involvement in vehicle braking, compliance with ISO 26262 functional safety requirements is critical. As system complexity increases, potential risks such as hardware failures and communication faults must be systematically addressed. The proposed TSC was developed according to ISO 26262, covering the concept phase (Part 3), system-level development (Part 4), and software implementation (Part 6). Safety goals and Functional Safety Requirements derived from HARA are used to guide system architecture design and TSC development. Key design principles include modularity, redundancy, fault detection, and fail-safe operation. Verification is conducted at both system and vehicle levels using ECU-in-the-Loop Simulation (EILS), Hardware-in-the-Loop Simulation (HILS), and real-vehicle tests. Fault scenarios, including Main Center Control Unit failures and CAN communication losses, are injected using a custom LabVIEW-based fault injection tool. The study evaluates Fault Tolerant Time Interval (FTTI) settings, error handling mechanisms, and control handover strategies under fault conditions. The results show that redundancy and localized communication enable stable operation and smooth control transfer within the FTTI window without noticeable impact on braking performance or driver awareness. This study demonstrates the robustness of the proposed EMB architecture. Future work will focus on prognostics and maintenance strategies to support safe deployment in autonomous and electric vehicles. [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]",
+    "score": 0.3785,
+    "above_edge": false
+  },
+  {
+    "openalex_id": "https://openalex.org/W7213439023",
+    "title": "Penetration testing of the CAN bus-based XCP protocol for automotive ECMs",
+    "year": 2026,
+    "doi": "https://doi.org/10.1117/12.3123240",
+    "abstract": "With the development of automotive intelligence and connectivity, the security vulnerabilities of the XCP protocol adopted by in-vehicle ECUs have become increasingly prominent. Conducting targeted penetration testing is crucial for safeguarding in-vehicle security. This paper takes the ECM engine controller as the research object, builds a test environment based on CAN FD-200U hardware and Kali Linux, and uses SocketCAN and CaringCaribou tools. It designs and conducts penetration tests covering three typical XCP attack scenarios: node scanning, information disclosure, and calibration data tampering. A layered test architecture tailored for ECM applications is constructed, security risks of the XCP protocol under unauthenticated and weak-permission scenarios are identified, and engineering-oriented mitigation strategies are proposed. The research results can provide references for security testing, vulnerability mining, and protection system construction of the XCP protocol for in-vehicle ECUs.",
+    "score": 0.3433,
+    "above_edge": false
+  },
+  {
+    "openalex_id": "https://openalex.org/W7212015745",
+    "title": "An intelligent analysis model for detecting anomalies in autonomous vehicle networks with enhanced edge computing",
+    "year": 2026,
+    "doi": "https://doi.org/10.1117/12.3129891",
+    "abstract": "Autonomous vehicle in-vehicle networks integrate Controller Area Network (CAN), CAN with Flexible Data-Rate (CAN-FD), in-vehicle Ethernet, domain controllers, and safety-critical electronic control units. Their high communication frequency, strong inter-node coupling, and strict real-time requirements make delayed cloud-based detection unsuitable for protecting perception, braking, steering, and powertrain control links. To address detection delay, uncertain attack propagation, and limited adaptability to edge deployment, an intelligent intrusion analysis model for autonomous vehicle networks is developed. A convolutional neural network\u2013bidirectional gated recurrent unit (CNN-BiGRU) architecture learns local message disturbances and temporal communication dependencies, while an attention mechanism highlights high-risk windows for identifying denial-of-service (DoS), Fuzzy, Replay, and Spoofing attacks. The recognition output is further mapped to the in-vehicle topology by combining node criticality and link association strength to quantify propagation risk and determine response priority. Simulation results show an accuracy of 97.38%, an F1-score of 96.89%, and an inference latency of 14.2 ms under 8 tera operations per second (TOPS). The model maintains stable detection under different edge computing capacities and connects intrusion recognition, propagation assessment, and local response into a continuous evaluation chain, providing millisecond-level security support for safety-critical communication and control in autonomous vehicles and reducing the time available for malicious traffic to affect driving decisions.",
+    "score": 0.3328,
+    "above_edge": false
+  },
+  {
+    "openalex_id": "https://openalex.org/W7204481893",
+    "title": "Adversarial Commercial Vehicle Datasets with Protocol Aware Annotation for Cybersecurity Research",
+    "year": 2026,
+    "doi": "https://doi.org/10.1007/978-3-032-33701-6_18",
+    "abstract": "Adversarial Commercial Vehicle Datasets with Protocol Aware Annotation for Cybersecurity Research",
+    "score": 0.3052,
+    "above_edge": false
+  },
+  {
+    "openalex_id": "https://openalex.org/W7204786216",
+    "title": "Serial-Studio/Serial-Studio: Serial Studio 4.1.0",
+    "year": 2026,
+    "doi": "https://doi.org/10.5281/zenodo.22206578",
+    "abstract": "\u26a0\ufe0f Important Notices Windows Smart App Control: On newer Windows machines, Smart App Control may prevent Serial Studio from running because the binaries are not code-signed yet. Either install from the Microsoft Store, or turn off Smart App Control (Windows Security \u2192 App & browser control \u2192 Smart App Control settings). macOS: The minimum supported version is now macOS 14.0 (Sonoma). Linux: AppImage/.deb/.rpm builds contain bundled glibc dependencies, which makes them available for older distributions too (RHEL 8 / Debian 10 era). \ud83d\ude80 New Features OPC UA driver: Connect to OPC UA servers through an embedded open62541 + mbedTLS stack with all five security policies: secure channels, a server trust store, X.509 client identity, and bounded discovery/browse. The tag browser lets you browse the server's address space, tick the tags you want, and generates the project for you. Sparkplug B: The MQTT driver now decodes Sparkplug B topic namespaces, and Serial Studio can publish as a Sparkplug B Edge Node with stable metric aliases \u2014 including projects with multiple data sources feeding one node. Industrial drivers: New drivers for Siemens S7 PLCs (S7comm), EtherNet/IP PLCs (Allen-Bradley and friends), and IEC 60870-5-104 substations. CAN Bus: J1939 and ISO-TP decoding, DBC extended multiplexing, and CAN FD commands on the API server. InfluxDB sink: Stream live telemetry straight into InfluxDB. Network source: WebSocket and HTTP/HTTPS clients join TCP and UDP in the Network driver. MQTT mutual TLS: Client-certificate authentication for brokers that require it. Dedicated processing thread: The whole frame pipeline (decoding, parsing, dataset updates) moved off the GUI thread, so the dashboard stays responsive even at extreme data rates. LuaJIT scripting: The Lua runtime is now LuaJIT 2.1 with a per-project Safe/Fast execution mode, and the editor shows migration hints for Lua 5.3-era scripts. GPU rendering: The 3D plot and the waterfall now render on the GPU, and the 3D plot's stereo (anaglyph) eye channels are properly isolated. Command palette: One palette across all contexts, with editor history and workspace switching. Dashboard layout: Per-view auto-layout patterns, frozen seams, uniform widget widths in uneven layouts, manual-layout alignment guides, and shared margin/spacing settings. Widget polish: Per-widget display titles, freeze modes with a caption menu, per-dataset color overrides, and dataset aliases. Plots & FFT: Log-scale axes, FFT ballistics, labeled frequency markers with warning/alarm levels, and FFT/audio (WAV) export from the FFT plot and waterfall. Replay: Timeline scrubbing, and huge CSV/MDF4 recordings now stream through a memory-mapped index with background loaders instead of being loaded into RAM. Script macro console: A new macro console with a built-in API terminal for driving the app from scripts. Historian: Archived sessions are verified for reproducibility, and the SQLite database format is documented for external tools. Clearer names: Session Database is now Historian, Shared Memory is now Variables, Virtual Dataset is now Computed Dataset, and Painter is now Canvas Widget. Existing project files keep working unchanged. XY plots for everyone: Dataset-vs-dataset (XY) plotting is now free in the GPL build \u2014 pick any dataset as the X axis of a plot. Trial parity: The 14-day trial now unlocks the complete Pro feature set. Licensing: The open-source core is relicensed to GPL-3.0-or-later, and the repository is fully REUSE-compliant. \ud83d\udc1b Bug Fixes UART: Fixed garbled data at 15 Mbaud on Windows (#386) and the COM port dropdown now shows the full port name on hover (#387) \u2014 thanks @ZhiyuanYuanNJ! Connections: Connection state is now truthful while a link is dialing, phantom TCP connects no longer wedge the connect button, sessions survive link drops, and Modbus dials asynchronously. Replay & export fidelity: Dense stream recordings replay and export correctly again, and the Historian flushes open blocks before verifying an archive. Windows: Dashboard widgets no longer slide under the window caption. macOS: Window title bars no longer mismatch the app theme (per-window appearance is pinned to the painted caption color). Linux packaging: The AppImage now bundles the Mesa GL vendor stack, Wayland platform plugins, KaTeX, ALSA pulse plugins, and OpenSSL 3 \u2014 it works out of the box on far more distributions. Plots: Axis tick anchors are guarded against non-finite and inverted ranges. Memory: The frame pool is bounded by bytes and no longer regrows after every structural change; idle stream exports no longer cost memory. Licensing: Licensing state is built first at startup, rejected cached licenses revalidate, and late or offline activation no longer downgrades Pro widgets to fallbacks. Scripting: Generated protobuf parsers are now LuaJIT-compatible. Stability: A full pre-release review sweep closed the remaining blockers across security and dependencies, lazily-opened project editor dialogs are released properly, and the OPC UA stack sizes certificate SAN buffers from the actual name lengths. \ud83d\udcda Documentation The Historian's SQLite database format is documented so external tools can consume recordings directly. New and updated manual pages for OPC UA, the industrial drivers, and the Command Palette. \ud83d\udca1 Serial Studio Pro Unlock advanced features with a license key via About \u2192 License Management. The 14-day trial unlocks everything below. Pro features include: 3D Plot, Waterfall, Image View, and Canvas widgets Output widgets, operator shortcuts, and runtime mode Full MQTT support with Sparkplug B Modbus, CAN Bus, OPC UA, Siemens S7, EtherNet/IP, and IEC 104 Audio input, raw USB & HID, and Process I/O drivers Multiple devices in one project MDF4 import/export and the Historian File-transfer protocols (X/Y/ZMODEM) Modbus register-map and CAN DBC importers \ud83d\udc49 Get Serial Studio Pro: https://store.serial-studio.com/buy/ba46c099-0d51-4d98-9154-6be5c35bc1ec No Budget? You can still unlock Serial Studio Pro by contributing: Share tutorials, videos, or forum posts. Promote on social media or dev communities. Translate the UI or improve documentation. Send logs, protocol data, or donate development hardware. \ud83d\udc49 VALUE-FOR-LICENSE.md Full changelog: v4.0.3 \u2192 v4.1.0",
+    "score": 0.2161,
+    "above_edge": false
+  }
+]

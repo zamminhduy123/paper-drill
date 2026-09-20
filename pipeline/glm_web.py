@@ -1,6 +1,7 @@
 """GLM-web minimal client (chat.z.ai, stable semantic hooks, token-only)."""
 import json
 import os
+import re
 from asyncio import sleep
 from pathlib import Path
 from time import time
@@ -114,9 +115,11 @@ async def send_message(browser, message, timeout=180):
             "document.documentElement.outerHTML", await_promise=True, return_by_value=True,
         )
         text = _scrape(html)
-        if text and text != last:
+        if not text or re.fullmatch(r"(Thinking\.{0,3}|\.{3})", text.strip(), re.I):
+            continue  # still reasoning, not an answer yet
+        if text != last:
             last, stable_since = text, time()
-        if last and time() - stable_since > 6:
+        if time() - stable_since > 6:
             return last
     raise TimeoutError("no stable response in timeout")
 

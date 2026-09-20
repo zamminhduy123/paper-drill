@@ -1,5 +1,6 @@
 """Daily: ingest -> rank -> extract -> writer."""
 import asyncio
+import json
 import re
 from datetime import date
 from pathlib import Path
@@ -27,6 +28,7 @@ def run(scope="ivn", backfill=False, frm=None, to=None):
     items = ingest.ingest(limit=cfg["limits"]["per_run"], mode="backfill" if backfill else "new", frm=frm, to=to, scope=scope)
     model = rank.load_model(scope=scope)
     ranked = rank.rank(items, thesis, model, threshold=cfg["thresholds"]["semantic_edge"], keep=cfg["limits"]["keep"])
+    rank.state_paths(scope)[1].write_text(json.dumps(ranked, indent=2))
     paths, seen, bodies = [], set(), []
     for it in ranked:
         if len(paths) >= min(cfg["limits"]["keep"], 5):

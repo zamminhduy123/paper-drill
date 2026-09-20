@@ -1,0 +1,20 @@
+[
+  {
+    "openalex_id": "https://openalex.org/W7213580019",
+    "title": "Rusltareq/FedGov-IoT-IDS: Initial public release",
+    "year": 2026,
+    "doi": "https://doi.org/10.5281/zenodo.22833145",
+    "abstract": "Initial public release of the code accompanying this PhD research: a federated learning (FedAvg/FedProx/FedDyn) framework for IoT intrusion detection, and the ReputationManager smart contract for active on-chain governance.",
+    "score": 0.2666,
+    "above_edge": false
+  },
+  {
+    "openalex_id": "https://openalex.org/W7213605781",
+    "title": "Rusltareq/FedGov-IoT-IDS: Initial public release",
+    "year": 2026,
+    "doi": "https://doi.org/10.5281/zenodo.22833144",
+    "abstract": "Initial public release of the code accompanying this PhD research: a federated learning (FedAvg/FedProx/FedDyn) framework for IoT intrusion detection, and the ReputationManager smart contract for active on-chain governance.",
+    "score": 0.2666,
+    "above_edge": false
+  }
+]

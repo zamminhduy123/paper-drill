@@ -64,6 +64,8 @@ async def cross_run(scopes=("ivn", "iot-ids", "nids")):
             lims.extend(m.group(1).strip() for m in LIM_RE.finditer(body) if m.group(1).strip())
             concepts.extend(writer.HUB_RE.findall(body))
         sections[scope] = lims
+    if not any(sections.values()):
+        raise RuntimeError("cross_run: no limitations found in any scope; run per-scope dailies first")
     thesis = "Transfer proven methods across network intrusion domains (ivn, iot-ids, nids): apply Method X from one domain to Problem Y in another."
     prompt = build_cross_prompt(sections, thesis, list(dict.fromkeys(datasets)))
     ideas = await llm.arun(prompt, timeout=300)

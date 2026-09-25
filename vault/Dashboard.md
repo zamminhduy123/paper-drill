@@ -1,5 +1,5 @@
 # Dashboard
-_updated 2026-09-25 · 5 papers, 10 hubs, 3 ideas_
+_updated 2026-09-26 · 5 papers, 10 hubs, 3 ideas_
 
 ## New papers (by day, score desc)
 | date | title | year | score |

@@ -1,1 +1,20 @@
-[]
+[
+  {
+    "openalex_id": "https://openalex.org/W7214333488",
+    "title": "Edge AI for Energy-Efficient Smart IoT Systems: A Sustainable Computing Approach",
+    "year": 2026,
+    "doi": "https://doi.org/10.5281/zenodo.22953474",
+    "abstract": "Abstract Artificial Intelligence of Things (AIoT) is transforming Internet of Things (IoT) systems by enabling data-driven decisions close to the point where data are generated. However, conventional cloud-centric architectures can introduce communication overhead, latency, privacy concerns, and additional energy costs. This paper examines Edge AI as a sustainable computing approach for energy-efficient smart IoT systems, with particular relevance to the development priorities associated with Viksit Bharat 2047. The study follows a descriptive and analytical approach based on research literature concerning TinyML, on-device machine learning, Edge AI, and energy-aware IoT. It proposes an architecture consisting of sensing, local inference, edge coordination, selective cloud processing, and energy-aware orchestration. The paper further identifies measurable parameters including accuracy, inference latency, energy per inference, communication volume, memory footprint, and reliability for evaluating sustainable AIoT systems. The objective is not to claim unverified experimental results, but to establish a practical research framework that can subsequently be tested on resource-constrained edge hardware. The study indicates that sustainable AIoT should be evaluated not only through predictive performance but also through the computational, communication, and energy resources required to deliver each intelligent decision.",
+    "score": 0.5249,
+    "above_edge": false
+  },
+  {
+    "openalex_id": "https://openalex.org/W7214364618",
+    "title": "Edge AI for Energy-Efficient Smart IoT Systems: A Sustainable Computing Approach",
+    "year": 2026,
+    "doi": "https://doi.org/10.5281/zenodo.22953475",
+    "abstract": "Abstract Artificial Intelligence of Things (AIoT) is transforming Internet of Things (IoT) systems by enabling data-driven decisions close to the point where data are generated. However, conventional cloud-centric architectures can introduce communication overhead, latency, privacy concerns, and additional energy costs. This paper examines Edge AI as a sustainable computing approach for energy-efficient smart IoT systems, with particular relevance to the development priorities associated with Viksit Bharat 2047. The study follows a descriptive and analytical approach based on research literature concerning TinyML, on-device machine learning, Edge AI, and energy-aware IoT. It proposes an architecture consisting of sensing, local inference, edge coordination, selective cloud processing, and energy-aware orchestration. The paper further identifies measurable parameters including accuracy, inference latency, energy per inference, communication volume, memory footprint, and reliability for evaluating sustainable AIoT systems. The objective is not to claim unverified experimental results, but to establish a practical research framework that can subsequently be tested on resource-constrained edge hardware. The study indicates that sustainable AIoT should be evaluated not only through predictive performance but also through the computational, communication, and energy resources required to deliver each intelligent decision.",
+    "score": 0.5249,
+    "above_edge": false
+  }
+]

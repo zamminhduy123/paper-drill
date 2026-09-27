@@ -5,3 +5,4 @@ pipeline/__pycache__/**
 .browsers/cron.log
 cron.lock
 __pycache__/
+.browsers/

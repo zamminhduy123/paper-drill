@@ -1,20 +1,137 @@
 [
   {
-    "openalex_id": "https://openalex.org/W7213761417",
-    "title": "Reconfigurable Electric Vehicle Battery Balancing and Power Dispatch via Tropical Dynamic Programming and Pareto Dominance Filters",
-    "year": 2026,
-    "doi": "https://doi.org/10.5281/zenodo.22865624",
-    "abstract": "Electric vehicle (EV) battery management systems (BMS) utilizing reconfigurable battery systems (RBS) require deterministic, computationally tractable power dispatch across heterogeneous, aged cells to satisfy powertrain torque requests while preventing thermal runaway, localized overpotential degradation, and cell capacity divergence. Formulated as a bounded 0/1 knapsack resource allocation problem across reconfigurable submodule bypass switches, classical branch-and-bound and pseudo-polynomial dynamic programming solvers suffer from state-space explosion, severe memory overhead, and variable execution jitter that disrupt automotive embedded controllers (AUTOSAR/CAN-FD). In this paper, we establish an algebraic discrete optimization framework formulated over the max-plus tropical semiring (R_max, \u2295, \u2297) coupled with an algebraic Pareto dominance filter (\u03a0_Pareto\u00b2 = \u03a0_Pareto) within a tropical Nemhauser-Ullmann dynamic programming architecture. Grounded in authentic electrochemical open-circuit potential models from the literature (Chen 2020 NMC-811 and Safari 2011 LFP) and evaluated on physically-parameterized battery packs spanning N \u2208 {24, 48, 96, 192, 384} cells, the proposed framework is benchmarked against exact Branch-and-Cut (HiGHS), dense grid dynamic programming, and greedy heuristics under single-threaded execution. The framework achieves strict 0.00% optimality gap parity across all instances and eliminates up to 99.6% of candidate states. For distributed submodule-level controllers (N = 24 cells), TropicalParetoDP executes in 1.32 ms (7.2x faster than HiGHS and 6.0x faster than dense grid DP), comfortably satisfying the strict 10 ms CAN-FD hard real-time deadline within a fixed 64 KB static scratchpad footprint (0.0 Bytes runtime heap allocation) in compliance with ISO 26262 ASIL-D and MISRA C:2012. For centralized full packs (N \u2265 96), general-purpose MILP solvers prove faster (8.96\u201366.2 ms vs. 132\u20137105 ms), demonstrating that tropical Pareto DP is uniquely suited for distributed submodule BMS architectures rather than monolithic centralized packs.",
-    "score": 0.2393,
+    "openalex_id": "https://openalex.org/W4390906415",
+    "title": "Application-Layer Anomaly Detection Leveraging Time-Series Physical Semantics in CAN-FD Vehicle Networks",
+    "year": 2024,
+    "doi": "https://doi.org/10.3390/electronics13020377",
+    "abstract": "The Controller Area Network with Flexible Data-Rate (CAN-FD) bus is the predominant in-vehicle network protocol, responsible for transmitting crucial application semantic signals. Due to the absence of security measures, CAN-FD is vulnerable to numerous cyber threats, particularly those altering its authentic physical values. This paper introduces Physical Semantics-Enhanced Anomaly Detection (PSEAD) for CAN-FD networks. Our framework effectively extracts and standardizes the genuine physical meaning features present in the message data fields. The implementation involves a Long Short-Term Memory (LSTM) network augmented with a self-attention mechanism, thereby enabling the unsupervised capture of temporal information within high-dimensional data. Consequently, this approach fully exploits contextual information within the physical meaning features. In contrast to the non-physical semantics-aware whole frame combination detection method, our approach is more adept at harnessing the physical significance inherent in each segment of the message. This enhancement results in improved accuracy and interpretability of anomaly detection. Experimental results demonstrate that our method achieves a mere 0.64% misclassification rate for challenging-to-detect replay attacks and zero misclassifications for DoS, fuzzing, and spoofing attacks. The accuracy has been enhanced by over 4% in comparison to existing methods that rely on byte-level data field characterization at the data link layer.",
+    "score": 0.8723,
+    "above_edge": true
+  },
+  {
+    "openalex_id": "https://openalex.org/W4392544351",
+    "title": "Analysis of Cooperative Operating Concepts for Robust Data Transmission in Periodically Disturbed CAN FD Networks",
+    "year": 2024,
+    "doi": "https://doi.org/10.1109/temc.2024.3365218",
+    "abstract": "The demands on safety and reliability of fast automotive communication systems like controller area network (CAN) or CAN with flexible data rate (CAN FD) grow with the increasing use of highly automated driving functions in future vehicles. As the vehicular electromagnetic environment is very challenging, electromagnetic interference (EMI) and cable coupling in the extended wire harness are important issues. In particular, modern power electronic systems for electric driving with fast switching semiconductors can cause severe electromagnetic interference in nearby electronic systems, such as bus systems. Power electronic devices are often controlled by periodic pulsewidth modulation signals, so interference in communication systems is also periodic. The periodic disturbances in the transmission channel can result in a significant reduction in the effective data rate and high latency. This article introduces and analyzes the possibilities of cooperative operating concepts of EMI sources and a modified CAN FD communication system. Source and sink of electromagnetic emissions are considered together to minimize the influence of common and differential mode disturbances on the data transmission. In the proposed concept, data transmission is synchronized to a known major disturbance source, e.g., the motor inverter for electric driving. A much faster and more reliable data transmission with low latency can be realized.",
+    "score": 0.7952,
     "above_edge": false
   },
   {
-    "openalex_id": "https://openalex.org/W7213768986",
-    "title": "Reconfigurable Electric Vehicle Battery Balancing and Power Dispatch via Tropical Dynamic Programming and Pareto Dominance Filters",
-    "year": 2026,
-    "doi": "https://doi.org/10.5281/zenodo.22865625",
-    "abstract": "Electric vehicle (EV) battery management systems (BMS) utilizing reconfigurable battery systems (RBS) require deterministic, computationally tractable power dispatch across heterogeneous, aged cells to satisfy powertrain torque requests while preventing thermal runaway, localized overpotential degradation, and cell capacity divergence. Formulated as a bounded 0/1 knapsack resource allocation problem across reconfigurable submodule bypass switches, classical branch-and-bound and pseudo-polynomial dynamic programming solvers suffer from state-space explosion, severe memory overhead, and variable execution jitter that disrupt automotive embedded controllers (AUTOSAR/CAN-FD). In this paper, we establish an algebraic discrete optimization framework formulated over the max-plus tropical semiring (R_max, \u2295, \u2297) coupled with an algebraic Pareto dominance filter (\u03a0_Pareto\u00b2 = \u03a0_Pareto) within a tropical Nemhauser-Ullmann dynamic programming architecture. Grounded in authentic electrochemical open-circuit potential models from the literature (Chen 2020 NMC-811 and Safari 2011 LFP) and evaluated on physically-parameterized battery packs spanning N \u2208 {24, 48, 96, 192, 384} cells, the proposed framework is benchmarked against exact Branch-and-Cut (HiGHS), dense grid dynamic programming, and greedy heuristics under single-threaded execution. The framework achieves strict 0.00% optimality gap parity across all instances and eliminates up to 99.6% of candidate states. For distributed submodule-level controllers (N = 24 cells), TropicalParetoDP executes in 1.32 ms (7.2x faster than HiGHS and 6.0x faster than dense grid DP), comfortably satisfying the strict 10 ms CAN-FD hard real-time deadline within a fixed 64 KB static scratchpad footprint (0.0 Bytes runtime heap allocation) in compliance with ISO 26262 ASIL-D and MISRA C:2012. For centralized full packs (N \u2265 96), general-purpose MILP solvers prove faster (8.96\u201366.2 ms vs. 132\u20137105 ms), demonstrating that tropical Pareto DP is uniquely suited for distributed submodule BMS architectures rather than monolithic centralized packs.",
-    "score": 0.2393,
+    "openalex_id": "https://openalex.org/W4400067440",
+    "title": "A Privacy-Preserving Self-Supervised Learning-Based Intrusion Detection System for 5g-V2x Networks",
+    "year": 2024,
+    "doi": "https://doi.org/10.2139/ssrn.4878963",
+    "abstract": "A Privacy-Preserving Self-Supervised Learning-Based Intrusion Detection System for 5g-V2x Networks",
+    "score": 0.6404,
+    "above_edge": false
+  },
+  {
+    "openalex_id": "https://openalex.org/W4400947898",
+    "title": "Design of network security protection network architecture for intelligent networked vehicles",
+    "year": 2024,
+    "doi": "https://doi.org/10.1145/3672919.3672925",
+    "abstract": "The network architecture design scheme of network security protection for intelligent connected vehicles is based on the functional performance and implementation scheme of each functional domain of the vehicle. The key controller of intelligent connected vehicles, the status of the controller in the vehicle and the network interface in the vehicle that is vulnerable to external attacks are analyzed from the functional domain division of the vehicle, and the realization process of real data detection and dangerous data generation in the detection network is studied. Design the classification principle of connected vehicle domain controller, complete the design of vehicle network security architecture, strengthen the security measures of central gateway and area controller, ensure the security of bus communication, provide comprehensive security protection for vehicle network, and realize the security protection of vehicle network.",
+    "score": 0.6377,
+    "above_edge": false
+  },
+  {
+    "openalex_id": "https://openalex.org/W4403210304",
+    "title": "GenCoder: A Generative AI-Based Adaptive Intra-Vehicle Intrusion Detection System",
+    "year": 2024,
+    "doi": "https://doi.org/10.1109/access.2024.3476177",
+    "abstract": "With the rapid expansion of the vehicular cybersecurity (VCS) market and the increasing sophistication of cyberthreats, developing an adaptive intra-vehicular intrusion detection system (IDS) is crucial. This paper introduces GenCoder, a generative artificial intelligence (GenAI)-based IDS that uniquely addresses the dynamic and evolving nature of vehicular cyberthreats. GenCoder combines a five-layer deep neural network (DNN) with a variational autoencoder (VAE), overseen by a novel communication layer known as the GenCoder layer. This system dynamically adapts to new intrusion patterns by generating and utilizing new training data when deviations from known patterns are detected. The generated samples have a Shannon entropy (SE) value of 1.65 bits for four classes, indicating standard variety among the synthetic data. GenCoder demonstrates exceptional adaptability, pushing the accuracy, precision, recall, and F1-score from 84.79%, 83.58%, 83.70%, and 83.64% to 92.19%, 90.12%, 90.44%, and 90.28%, respectively, after introducing 50% feature deformation to testing data. The novel concept of an adaptive intra-vehicular IDS, the innovative GenCoder layer that establishes seamless communication among the DNN, the VAE, and the dataset, as well as the unique assessment strategies of adaptability make this research exceptional with the potential to create a new dimension in automotive IDS research.",
+    "score": 0.5022,
+    "above_edge": false
+  },
+  {
+    "openalex_id": "https://openalex.org/W4401501905",
+    "title": "Evaluating Multidimensional RSSI-Based Approaches for Identifying Sybil Nodes in VANETs to Improve Vehicle Network Security",
+    "year": 2024,
+    "doi": "https://doi.org/10.1504/ijahuc.2024.10065931",
+    "abstract": "Sybil attacks pose a significant security risk to ad hoc sensor networks, distorting information on traffic congestion, fake message transfers, etc. To address this issue, a novel technique for detecting Sybil attacks in VANETs makes use of node positions, distances, and received signal strength indicator (RSSI) values, whereas the legitimate nodes exhibit variations due to their various physical locations. The key idea is to identify Sybil nodes based on their similar RSSI and use a machine-learning model to detect Sybil nodes with high accuracy. In this work, the RSSI-based Sybil node identification (RSSI-SNID) technique, intended for Sybil node identification in a VANET environment, is used to construct a Sybil attack model. By integrating RSSI, distance, and timestamps in a multidimensional analysis, RSSI-SNIDs improve VANET's overall functionality in identifying Sybil attacks and attain 98% accuracy with a low false-positive rate, making it unique in its ability to identify these nodes.",
+    "score": 0.4828,
+    "above_edge": false
+  },
+  {
+    "openalex_id": "https://openalex.org/W4402054506",
+    "title": "Evaluating multidimensional RSSI-based approaches for identifying Sybil nodes in VANETs to improve vehicle network security",
+    "year": 2024,
+    "doi": "https://doi.org/10.1504/ijahuc.2024.140667",
+    "abstract": "Sybil attacks pose a significant security risk to ad hoc sensor networks, distorting information on traffic congestion, fake message transfers, etc. To address this issue, a novel technique for detecting Sybil attacks in VANETs makes use of node positions, distances, and received signal strength indicator (RSSI) values, whereas the legitimate nodes exhibit variations due to their various physical locations. The key idea is to identify Sybil nodes based on their similar RSSI and use a machine-learning model to detect Sybil nodes with high accuracy. In this work, the RSSI-based Sybil node identification (RSSI-SNID) technique, intended for Sybil node identification in a VANET environment, is used to construct a Sybil attack model. By integrating RSSI, distance, and timestamps in a multidimensional analysis, RSSI-SNIDs improve VANET's overall functionality in identifying Sybil attacks and attain 98% accuracy with a low false-positive rate, making it unique in its ability to identify these nodes.",
+    "score": 0.4804,
+    "above_edge": false
+  },
+  {
+    "openalex_id": "https://openalex.org/W4392122558",
+    "title": "can-train-and-test: A curated CAN dataset for automotive intrusion detection",
+    "year": 2024,
+    "doi": "https://doi.org/10.1016/j.cose.2024.103777",
+    "abstract": "When it comes to in-vehicle networks (IVNs), the controller area network (CAN) bus dominates the market; automobiles manufactured and sold worldwide depend on the CAN bus for safety-critical communications between various components of the vehicle (e.g., the engine, the transmission, the steering column). Unfortunately, the CAN bus is inherently insecure; in fact, it completely lacks controls such as authentication, authorization, and confidentiality (i.e., encryption). Therefore, researchers have travailed to develop automotive security enhancements. The automotive intrusion detection system (IDS) is especially popular in the literature\u2014due to its relatively low cost in terms of money, resource utilization, and implementation effort. That said, developing and evaluating an automotive IDS is often challenging; if researchers do not have access to a test vehicle, then they are forced to depend on publicly available CAN data\u2014which is not without limitations. Lack of access to adequate CAN data, then, becomes a barrier to entry into automotive security research. We seek to lower that barrier to entry by introducing a new CAN dataset to facilitate the development and evaluation of automotive IDSs. Our datasets\u2014dubbed can-dataset, can-log, can-csv, can-ml, and can-train-and-test\u2014provide CAN data from four different vehicles produced by two different manufacturers. The attack captures for each vehicle model are equivalent, enabling researchers to assess the ability of a given IDS to generalize to different vehicle models and even different vehicle manufacturers. Our datasets contain replayable .log files as well as labeled and unlabeled .csv files, thereby meeting a variety of development and evaluation needs. In particular, the can-train-and-test dataset offers nine unique attacks, ranging from denial of service (DoS) to gear spoofing to standstill; as such, researchers can select a subset of the attacks for training and save the remainder for testing in order to assess a given IDS against unseen attacks. Many of our attacks, particularly the spoofing-related attacks, were conducted during live, on-the-road experiments with real vehicles. These attacks have known physical impacts. As a benchmark, we pit a number of machine learning IDSs against our dataset and analyze the results. We present our datasets\u2014especially can-train-and-test\u2014as a contribution to the existing catalogue of open-access datasets in hopes of filling in the gaps left by those datasets.",
+    "score": 0.4027,
+    "above_edge": false
+  },
+  {
+    "openalex_id": "https://openalex.org/W4392061622",
+    "title": "Secure and Low-Delay CAN-FD Communication in Embedded Microcontroller: A Cooperative Swapping Approach",
+    "year": 2024,
+    "doi": "https://doi.org/10.1109/tcad.2024.3368971",
+    "abstract": "As promising industrial embedded networks, Controller Area Networks with Flexible Data-rate (CAN-FD) are widely used in time-sensitive domains, such as automotive networks. However, the absence of built-in security mechanisms in CAN-FD necessitates the development of security protection mechanisms. The existing Lightweight Authentication for Secure Automotive Networks (LASAN) framework focuses on enhancing the security of CAN/CAN-FD communication but neglects the conflict between security and delay. In this study, we conduct a thorough analysis of the causal mechanism related to the security and delay of LASAN and propose a static message scheduling method called Cooperative Swapping Approach (CSA) to achieve secure and low-delay CAN-FD communication. CSA is to minimize the end-to-end delay of precedence-constrained CAN-FD applications by swapping message positions in a valid message sequence. Nevertheless, exchanging message positions may impact the precedence dependencies between messages; therefore, we propose a novel Cooperative Transform Approach (CTA) within the CSA to efficiently preserve these precedence constraints. Valid message sequences with minimal end-to-end delays of a motivation example and an Adaptive Cruise Control (ACC) application are obtained in LASAN by CSA. These sequences are implemented on the embedded microcontroller platform of STM32H743IITs for evaluation. Experimental results show that our proposed CSA can effectively reduce the end-to-end delay of LASAN and outperform the state-of-the-art static message scheduling method in terms of low delay.",
+    "score": 0.3256,
+    "above_edge": false
+  },
+  {
+    "openalex_id": "https://openalex.org/W4391800603",
+    "title": "Benchmarking Frameworks and Comparative Studies of Controller Area Network (CAN) Intrusion Detection Systems: A Review",
+    "year": 2024,
+    "doi": "https://doi.org/10.48550/arxiv.2402.06904",
+    "abstract": "The development of intrusion detection systems (IDS) for the in-vehicle Controller Area Network (CAN) bus is one of the main efforts being taken to secure the in-vehicle network against various cyberattacks, which have the potential to cause vehicles to malfunction and result in dangerous accidents. These CAN IDS are evaluated in disparate experimental conditions that vary in terms of the workload used, the features used, the metrics reported, etc., which makes direct comparison difficult. Therefore, there have been several benchmarking frameworks and comparative studies designed to evaluate CAN IDS in similar experimental conditions to understand their relative performance and facilitate the selection of the best CAN IDS for implementation in automotive networks. This work provides a comprehensive survey of CAN IDS benchmarking frameworks and comparative studies in the current literature. A CAN IDS evaluation design space is also proposed in this work, which draws from the wider CAN IDS literature. This is not only expected to serve as a guide for designing CAN IDS evaluation experiments but is also used for categorizing current benchmarking efforts. The surveyed works have been discussed on the basis of the five aspects in the design space-namely IDS type, attack model, evaluation type, workload generation, and evaluation metrics-and recommendations for future work have been identified.",
+    "score": 0.3157,
+    "above_edge": false
+  },
+  {
+    "openalex_id": "https://openalex.org/W4391097714",
+    "title": "A comprehensive guide to CAN IDS data and introduction of the ROAD dataset",
+    "year": 2024,
+    "doi": "https://doi.org/10.1371/journal.pone.0296879",
+    "abstract": "Although ubiquitous in modern vehicles, Controller Area Networks (CANs) lack basic security properties and are easily exploitable. A rapidly growing field of CAN security research has emerged that seeks to detect intrusions or anomalies on CANs. Producing vehicular CAN data with a variety of intrusions is a difficult task for most researchers as it requires expensive assets and deep expertise. To illuminate this task, we introduce the first comprehensive guide to the existing open CAN intrusion detection system (IDS) datasets. We categorize attacks on CANs including fabrication (adding frames, e.g., flooding or targeting and ID), suspension (removing an ID's frames), and masquerade attacks (spoofed frames sent in lieu of suspended ones). We provide a quality analysis of each dataset; an enumeration of each datasets' attacks, benefits, and drawbacks; categorization as real vs. simulated CAN data and real vs. simulated attacks; whether the data is raw CAN data or signal-translated; number of vehicles/CANs; quantity in terms of time; and finally a suggested use case of each dataset. State-of-the-art public CAN IDS datasets are limited to real fabrication (simple message injection) attacks and simulated attacks often in synthetic data, lacking fidelity. In general, the physical effects of attacks on the vehicle are not verified in the available datasets. Only one dataset provides signal-translated data but is missing a corresponding \"raw\" binary version. This issue pigeon-holes CAN IDS research into testing on limited and often inappropriate data (usually with attacks that are too easily detectable to truly test the method). The scarcity of appropriate data has stymied comparability and reproducibility of results for researchers. As our primary contribution, we present the Real ORNL Automotive Dynamometer (ROAD) CAN IDS dataset, consisting of over 3.5 hours of one vehicle's CAN data. ROAD contains ambient data recorded during a diverse set of activities, and attacks of increasing stealth with multiple variants and instances of real (i.e. non-simulated) fuzzing, fabrication, unique advanced attacks, and simulated masquerade attacks. To facilitate a benchmark for CAN IDS methods that require signal-translated inputs, we also provide the signal time series format for many of the CAN captures. Our contributions aim to facilitate appropriate benchmarking and needed comparability in the CAN IDS research field.",
+    "score": 0.3122,
+    "above_edge": false
+  },
+  {
+    "openalex_id": "https://openalex.org/W4390945507",
+    "title": "Controller Area Network With Flexible Data Rate (CAN FD) Eye Diagram Prediction",
+    "year": 2024,
+    "doi": "https://doi.org/10.1109/temc.2024.3350054",
+    "abstract": "A method for predicting the eye diagram for a controller area network with a flexible data rate (CAN FD) is proposed in this article. A CAN FD changes a data rate according to the status to overcome the limitation of latency. In other words, when data to be transmitted are accumulated, the CAN FD increases the data rate up to 5 Mb/s. The CAN FD has a bus topology consisting of multiple electronic control units, which results in a significant amount of signal reflection. Thus, the above causes the signal integrity analysis uncertain. To avoid this, this article proposes a simplified model for the CAN FD and the eye diagram prediction method based on it. The proposed method has the deterministic and statistical: the deterministic part uses an iterative single bit response method for bit probabilities of a CAN FD packet, and the statistical part uses a modified double edge response method for the flexible data rate. For verification, this article compares the predicted eye diagram to the measured eye diagram, and they are nearly the same when the CAN FD operates at the nominal data rate of 1 and optional data rate of 2 Mb/s.",
+    "score": 0.3073,
+    "above_edge": false
+  },
+  {
+    "openalex_id": "https://openalex.org/W4401227352",
+    "title": "Fusion Analysis of Intelligent Connected Vehicle Security Events Based on Multidimensional Heterogeneous Data",
+    "year": 2024,
+    "doi": "https://doi.org/10.1007/978-981-97-4522-7_23",
+    "abstract": "Fusion Analysis of Intelligent Connected Vehicle Security Events Based on Multidimensional Heterogeneous Data",
+    "score": 0.3044,
+    "above_edge": false
+  },
+  {
+    "openalex_id": "https://openalex.org/W4398198709",
+    "title": "Design of Large-Scale Power Battery Safety Monitoring System",
+    "year": 2024,
+    "doi": "https://doi.org/10.1109/cstic61820.2024.10531836",
+    "abstract": "This paper proposes a safety monitoring system for large-scale power batteries. The system is based on a Central Control Unit and a Safety Monitoring Unit. It can automatically collect important parameters such as voltage, current, temperature, and insulation resistance during the charging and discharging process of the power batteries. The relevant data of the battery pack can be uploaded to the server through Ethernet, realizing the monitoring of the power battery parameters and real-time fault diagnosis to improve the safety of the battery system. In addition, the Central Control Unit can communicate bidirectionally with the Safety Monitoring Unit through the CAN FD bus to control the charging and discharging working status of the battery pack. The test results of this paper show that the CAN FD bus can achieve high-speed data interaction within a communication distance of 15 meters. The insulation resistance monitoring accuracy of the Safety Monitoring Unit can reach 2%, and the voltage measurement accuracy is \u00b15mV, while the current measurement accuracy is 1%.",
+    "score": 0.302,
+    "above_edge": false
+  },
+  {
+    "openalex_id": "https://openalex.org/W4399526966",
+    "title": "Intrusion Detection System for In-Vehicle CAN-FD Bus ID Based on GAN Model",
+    "year": 2024,
+    "doi": "https://doi.org/10.1109/access.2024.3412933",
+    "abstract": "The growing abundance of electronic control units and peripheral devices loaded and connected to smart connected cars has resulted in a constant stream of cyber-attacks at various levels and dimensions. The CAN-FD bus plays a crucial role in smart connected cars. Currently, the majority of research efforts remain centered around the traditional CAN bus, with fewer studies addressing intrusion detection for the CAN-FD bus in smart connected vehicles. CAN-FD boasts a notable improvement in transmission speed, capable of reaching up to 8 Mbps compared to the 1 Mbps of the standard CAN bus. Utilizing intrusion detection systems designed for the CAN bus in high-speed CAN-FD applications could potentially hinder normal transmission and detection efficiency. Hence, we focus on the attack and intrusion detection of CAN-FD bus ID nodes to prevent unauthorized access and potential malicious attacks. We propose an ID intrusion detection system based on an improved Generative Adversarial Network (GAN) model, which consists of two parts: a data pre-processing module and a detection module. To apply the GAN model to the vehicle bus, we perform pre-processing of the bus data. We introduce the concept of dual discriminator to improve the detection rate and enable the handling of unknown attacks. With the output of dual discriminator, we can determine whether there are any anomalies in the detection data. First, we use a data pre-processing module to convert the ID segments of the automobile CAN-FD into binary image encoding to form ID images. Subsequently, these ID images are fed into an ID image feature extractor in the detection module to extract various auxiliary features. The discriminator receives these auxiliary features and calculates the probability of whether the received image is a normal ID image or not to determine the authenticity of the ID image. The experimental results show that the proposed intrusion detection system is able to detect a message within 0.15 ms, which fully meets the real-time detection requirements while the vehicle is in motion. The average detection rate of the proposed system for different types of attacks is 99.93%, which is an average of 1.2% improvement of the detection rate over the GIDS algorithm. The proposed system not only ensures the normal communication of CAN-FD bus but also realizes real-time and accurate intrusion detection.",
+    "score": 0.2008,
     "above_edge": false
   }
 ]

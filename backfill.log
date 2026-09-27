@@ -1,0 +1,8 @@
+Loading weights:   0%|          | 0/398 [00:00<?, ?it/s]Loading weights: 100%|██████████| 398/398 [00:00<00:00, 4487.03it/s]
+Default prompt name is set to 'document'. This prompt will be applied to all inference calls, except if a `prompt` or `prompt_name` parameter is provided.
+/mnt/data2/ntmduy/paper-drill/vault/ideas/ivn-2026-09-27.md
+/mnt/data2/ntmduy/paper-drill/vault/papers/Paper - Application-Layer Anomaly Detection Leveraging Time-Series Physical Semantics in.md
+/mnt/data2/ntmduy/paper-drill/vault/papers/Paper - Analysis of Cooperative Operating Concepts for Robust Data Transmission in Perio.md
+/mnt/data2/ntmduy/paper-drill/vault/papers/Paper - A Privacy-Preserving Self-Supervised Learning-Based Intrusion Detection System f.md
+/mnt/data2/ntmduy/paper-drill/vault/papers/Paper - Design of network security protection network architecture for intelligent netwo.md
+/mnt/data2/ntmduy/paper-drill/vault/papers/Paper - GenCoder A Generative AI-Based Adaptive Intra-Vehicle Intrusion Detection System.md

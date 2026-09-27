@@ -163,6 +163,6 @@ class H(BaseHTTPRequestHandler):
 
 
 if __name__ == "__main__":
-    with ThreadingHTTPServer(("127.0.0.1", 8080), H) as srv:  # ponytail: localhost bind is the auth, no campus exposure
-        print("serving http://127.0.0.1:8080")
+    with ThreadingHTTPServer(("127.0.0.1", 18080), H) as srv:  # ponytail: localhost bind is the auth, no campus exposure
+        print("serving http://127.0.0.1:18080")
         srv.serve_forever()

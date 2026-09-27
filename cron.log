@@ -1,0 +1,454 @@
+=== 2026-09-20T14:26:22+09:00 start ===
+Already up to date.
+Loading weights:   0%|          | 0/398 [00:00<?, ?it/s]Loading weights:  39%|███▉      | 156/398 [00:00<00:00, 1549.84it/s]Loading weights: 100%|██████████| 398/398 [00:00<00:00, 2826.34it/s]
+Default prompt name is set to 'document'. This prompt will be applied to all inference calls, except if a `prompt` or `prompt_name` parameter is provided.
+skip BAsyncFed-IDS A buffered asynchronous federated learning-based intrusion detecti: extract failed: all LLM rungs failed or returned busy text
+skip A diffusion-based anomaly detection framework for securing in-vehicle CAN networ: extract failed: all LLM rungs failed or returned busy text
+skip Deep Learning-Based Intrusion Detection Models for Controller Area Networks in I: extract failed: all LLM rungs failed or returned busy text
+skip BusRecall replication package for Measuring source-vehicle forgetting in cross-v: extract failed: all LLM rungs failed or returned busy text
+skip An AI-Ready Real-Time Multi-agent Attack-and-Defense Framework for In-Vehicle Ne: extract failed: all LLM rungs failed or returned busy text
+skip A Study on TSC Technical Safety Concept Design and Verification in EMB Brake by: extract failed: all LLM rungs failed or returned busy text
+skip Penetration testing of the CAN bus-based XCP protocol for automotive ECMs: extract failed: all LLM rungs failed or returned busy text
+skip An intelligent analysis model for detecting anomalies in autonomous vehicle netw: extract failed: all LLM rungs failed or returned busy text
+skip Adversarial Commercial Vehicle Datasets with Protocol Aware Annotation for Cyber: extract failed: all LLM rungs failed or returned busy text
+skip Serial-StudioSerial-Studio Serial Studio 410: extract failed: all LLM rungs failed or returned busy text
+Loading weights:   0%|          | 0/398 [00:00<?, ?it/s]Loading weights:  80%|███████▉  | 318/398 [00:00<00:00, 3160.26it/s]Loading weights: 100%|██████████| 398/398 [00:00<00:00, 3154.12it/s]
+Default prompt name is set to 'document'. This prompt will be applied to all inference calls, except if a `prompt` or `prompt_name` parameter is provided.
+skip RusltareqFedGov-IoT-IDS Initial public release: extract failed: all LLM rungs failed or returned busy text
+Loading weights:   0%|          | 0/398 [00:00<?, ?it/s]Loading weights:  75%|███████▌  | 300/398 [00:00<00:00, 2997.03it/s]Loading weights: 100%|██████████| 398/398 [00:00<00:00, 3356.35it/s]
+Default prompt name is set to 'document'. This prompt will be applied to all inference calls, except if a `prompt` or `prompt_name` parameter is provided.
+Traceback (most recent call last):
+  File "/mnt/data2/ntmduy/paper-drill/pipeline/deepseek_web.py", line 108, in ask
+    await login_token(browser, token)
+  File "/mnt/data2/ntmduy/paper-drill/pipeline/deepseek_web.py", line 39, in login_token
+    assert token, "export DEEPSEEK_TOKEN first"
+AssertionError: export DEEPSEEK_TOKEN first
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/ntmduy/miniconda3/lib/python3.12/asyncio/runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ntmduy/miniconda3/lib/python3.12/asyncio/base_events.py", line 685, in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+  File "/mnt/data2/ntmduy/paper-drill/pipeline/llm.py", line 26, in arun
+    text = await deepseek_web.ask(prompt, timeout=timeout)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/data2/ntmduy/paper-drill/pipeline/deepseek_web.py", line 112, in ask
+    await browser.stop()
+  File "/mnt/data2/ntmduy/paper-drill/.venv/lib/python3.12/site-packages/zendriver/core/browser.py", line 632, in stop
+    await asyncio.sleep(0.25)
+  File "/home/ntmduy/miniconda3/lib/python3.12/asyncio/tasks.py", line 665, in sleep
+    return await future
+           ^^^^^^^^^^^^
+asyncio.exceptions.CancelledError
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "/mnt/data2/ntmduy/paper-drill/pipeline/daily.py", line 74, in <module>
+    for pth in run(scope=a.scope, backfill=a.backfill, frm=a.frm, to=a.to):
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/data2/ntmduy/paper-drill/pipeline/daily.py", line 44, in run
+    body = extract.extract(thesis, it["title"], abstract)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/data2/ntmduy/paper-drill/pipeline/extract.py", line 76, in extract
+    return llm.run(prompt, timeout=300)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/data2/ntmduy/paper-drill/pipeline/llm.py", line 43, in run
+    return asyncio.run(arun(prompt, timeout=timeout))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ntmduy/miniconda3/lib/python3.12/asyncio/runners.py", line 194, in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+  File "/home/ntmduy/miniconda3/lib/python3.12/asyncio/runners.py", line 123, in run
+    raise KeyboardInterrupt()
+KeyboardInterrupt
+=== 2026-09-20T17:38:16+09:00 start ===
+Already up to date.
+Loading weights:   0%|          | 0/398 [00:00<?, ?it/s]Loading weights:  83%|████████▎ | 332/398 [00:00<00:00, 3244.21it/s]Loading weights: 100%|██████████| 398/398 [00:00<00:00, 3187.90it/s]
+Default prompt name is set to 'document'. This prompt will be applied to all inference calls, except if a `prompt` or `prompt_name` parameter is provided.
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "/mnt/data2/ntmduy/paper-drill/pipeline/daily.py", line 82, in <module>
+    for pth in run(scope=a.scope, backfill=a.backfill, frm=a.frm, to=a.to):
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/data2/ntmduy/paper-drill/pipeline/daily.py", line 30, in run
+    ranked = rank.rank(items, thesis, model, threshold=cfg["thresholds"]["semantic_edge"], keep=cfg["limits"]["keep"])
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/data2/ntmduy/paper-drill/pipeline/rank.py", line 59, in rank
+    scores = score(thesis, [i.get("title") for i in items], model)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/data2/ntmduy/paper-drill/pipeline/rank.py", line 49, in score
+    return (p @ q.T).ravel().tolist()
+            ~~^~~~~
+ValueError: matmul: Input operand 1 has a mismatch in its core dimension 0, with gufunc signature (n?,k),(k,m?)->(n?,m?) (size 2560 is different from 0)
+Loading weights:   0%|          | 0/398 [00:00<?, ?it/s]Loading weights:  54%|█████▍    | 214/398 [00:00<00:00, 2135.43it/s]Loading weights: 100%|██████████| 398/398 [00:00<00:00, 2860.60it/s]
+Default prompt name is set to 'document'. This prompt will be applied to all inference calls, except if a `prompt` or `prompt_name` parameter is provided.
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "/mnt/data2/ntmduy/paper-drill/pipeline/daily.py", line 82, in <module>
+    for pth in run(scope=a.scope, backfill=a.backfill, frm=a.frm, to=a.to):
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/data2/ntmduy/paper-drill/pipeline/daily.py", line 30, in run
+    ranked = rank.rank(items, thesis, model, threshold=cfg["thresholds"]["semantic_edge"], keep=cfg["limits"]["keep"])
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/data2/ntmduy/paper-drill/pipeline/rank.py", line 59, in rank
+    scores = score(thesis, [i.get("title") for i in items], model)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/data2/ntmduy/paper-drill/pipeline/rank.py", line 49, in score
+    return (p @ q.T).ravel().tolist()
+            ~~^~~~~
+ValueError: matmul: Input operand 1 has a mismatch in its core dimension 0, with gufunc signature (n?,k),(k,m?)->(n?,m?) (size 2560 is different from 0)
+Loading weights:   0%|          | 0/398 [00:00<?, ?it/s]Loading weights:  82%|████████▏ | 328/398 [00:00<00:00, 3277.77it/s]Loading weights: 100%|██████████| 398/398 [00:00<00:00, 3333.60it/s]
+Default prompt name is set to 'document'. This prompt will be applied to all inference calls, except if a `prompt` or `prompt_name` parameter is provided.
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "/mnt/data2/ntmduy/paper-drill/pipeline/daily.py", line 82, in <module>
+    for pth in run(scope=a.scope, backfill=a.backfill, frm=a.frm, to=a.to):
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/data2/ntmduy/paper-drill/pipeline/daily.py", line 30, in run
+    ranked = rank.rank(items, thesis, model, threshold=cfg["thresholds"]["semantic_edge"], keep=cfg["limits"]["keep"])
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/data2/ntmduy/paper-drill/pipeline/rank.py", line 59, in rank
+    scores = score(thesis, [i.get("title") for i in items], model)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/data2/ntmduy/paper-drill/pipeline/rank.py", line 49, in score
+    return (p @ q.T).ravel().tolist()
+            ~~^~~~~
+ValueError: matmul: Input operand 1 has a mismatch in its core dimension 0, with gufunc signature (n?,k),(k,m?)->(n?,m?) (size 2560 is different from 0)
+Loading weights:   0%|          | 0/398 [00:00<?, ?it/s]Loading weights:  80%|███████▉  | 317/398 [00:00<00:00, 3147.27it/s]Loading weights: 100%|██████████| 398/398 [00:00<00:00, 3167.16it/s]
+Default prompt name is set to 'document'. This prompt will be applied to all inference calls, except if a `prompt` or `prompt_name` parameter is provided.
+skip saeedachimthanawalalegacy-meets-tinyml Initial release Legacy Meets TinyML: extract failed: all LLM rungs failed or returned busy text
+skip AI-Based Obstacle Avoidance Line Following and Traffic Light Detection Robot Car: extract failed: all LLM rungs failed or returned busy text
+skip Low-Cost TinyML-Enabled Portable Machinery for Precision Cotton Harvesting: extract failed: all LLM rungs failed or returned busy text
+skip Machine learning and remote sensing for smallholder precision agriculture in Eth: extract failed: all LLM rungs failed or returned busy text
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "/mnt/data2/ntmduy/paper-drill/pipeline/daily.py", line 76, in <module>
+    print(asyncio.run(gap.cross_run()))
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ntmduy/miniconda3/lib/python3.12/asyncio/runners.py", line 194, in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+  File "/home/ntmduy/miniconda3/lib/python3.12/asyncio/runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ntmduy/miniconda3/lib/python3.12/asyncio/base_events.py", line 685, in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+  File "/mnt/data2/ntmduy/paper-drill/pipeline/gap.py", line 71, in cross_run
+    ideas = await llm.arun(prompt, timeout=300)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/data2/ntmduy/paper-drill/pipeline/llm.py", line 38, in arun
+    raise RuntimeError("all LLM rungs failed or returned busy text")
+RuntimeError: all LLM rungs failed or returned busy text
+[main 0773d54] daily 2026-09-20
+ 3 files changed, 114 insertions(+)
+ create mode 100644 vault/Dashboard.md
+ create mode 100644 vault/ideas/cross-2026-09-18.md
+ create mode 100644 vault/ideas/cross-2026-09-20.md
+fatal: could not read Username for 'https://github.com': No such device or address
+=== 2026-09-20T17:40:08+09:00 done ===
+=== 2026-09-20T17:44:07+09:00 start ===
+Already up to date.
+Loading weights:   0%|          | 0/398 [00:00<?, ?it/s]Loading weights:  81%|████████  | 322/398 [00:00<00:00, 3214.96it/s]Loading weights: 100%|██████████| 398/398 [00:00<00:00, 3064.80it/s]
+Default prompt name is set to 'document'. This prompt will be applied to all inference calls, except if a `prompt` or `prompt_name` parameter is provided.
+Loading weights:   0%|          | 0/398 [00:00<?, ?it/s]Loading weights:  77%|███████▋  | 308/398 [00:00<00:00, 3061.57it/s]Loading weights: 100%|██████████| 398/398 [00:00<00:00, 3270.62it/s]
+Default prompt name is set to 'document'. This prompt will be applied to all inference calls, except if a `prompt` or `prompt_name` parameter is provided.
+Loading weights:   0%|          | 0/398 [00:00<?, ?it/s]Loading weights:  80%|████████  | 319/398 [00:00<00:00, 3174.82it/s]Loading weights: 100%|██████████| 398/398 [00:00<00:00, 3142.20it/s]
+Default prompt name is set to 'document'. This prompt will be applied to all inference calls, except if a `prompt` or `prompt_name` parameter is provided.
+Loading weights:   0%|          | 0/398 [00:00<?, ?it/s]Loading weights:  84%|████████▍ | 334/398 [00:00<00:00, 3327.27it/s]Loading weights: 100%|██████████| 398/398 [00:00<00:00, 3258.32it/s]
+Default prompt name is set to 'document'. This prompt will be applied to all inference calls, except if a `prompt` or `prompt_name` parameter is provided.
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "/mnt/data2/ntmduy/paper-drill/pipeline/daily.py", line 76, in <module>
+    print(asyncio.run(gap.cross_run()))
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ntmduy/miniconda3/lib/python3.12/asyncio/runners.py", line 194, in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+  File "/home/ntmduy/miniconda3/lib/python3.12/asyncio/runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ntmduy/miniconda3/lib/python3.12/asyncio/base_events.py", line 685, in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+  File "/mnt/data2/ntmduy/paper-drill/pipeline/gap.py", line 68, in cross_run
+    raise RuntimeError("cross_run: no limitations found in any scope; run per-scope dailies first")
+RuntimeError: cross_run: no limitations found in any scope; run per-scope dailies first
+fatal: could not read Username for 'https://github.com': No such device or address
+=== 2026-09-20T17:45:02+09:00 done ===
+=== 2026-09-20T17:45:28+09:00 start ===
+Already up to date.
+Loading weights:   0%|          | 0/398 [00:00<?, ?it/s]Loading weights:  81%|████████  | 322/398 [00:00<00:00, 3201.54it/s]Loading weights: 100%|██████████| 398/398 [00:00<00:00, 3177.77it/s]
+Default prompt name is set to 'document'. This prompt will be applied to all inference calls, except if a `prompt` or `prompt_name` parameter is provided.
+Loading weights:   0%|          | 0/398 [00:00<?, ?it/s]Loading weights:  67%|██████▋   | 265/398 [00:00<00:00, 2646.66it/s]Loading weights: 100%|██████████| 398/398 [00:00<00:00, 3098.51it/s]
+Default prompt name is set to 'document'. This prompt will be applied to all inference calls, except if a `prompt` or `prompt_name` parameter is provided.
+Loading weights:   0%|          | 0/398 [00:00<?, ?it/s]Loading weights:  69%|██████▊   | 273/398 [00:00<00:00, 2726.12it/s]Loading weights: 100%|██████████| 398/398 [00:00<00:00, 2985.46it/s]
+Default prompt name is set to 'document'. This prompt will be applied to all inference calls, except if a `prompt` or `prompt_name` parameter is provided.
+Loading weights:   0%|          | 0/398 [00:00<?, ?it/s]Loading weights:  83%|████████▎ | 330/398 [00:00<00:00, 3262.28it/s]Loading weights: 100%|██████████| 398/398 [00:00<00:00, 3221.23it/s]
+Default prompt name is set to 'document'. This prompt will be applied to all inference calls, except if a `prompt` or `prompt_name` parameter is provided.
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "/mnt/data2/ntmduy/paper-drill/pipeline/daily.py", line 76, in <module>
+    print(asyncio.run(gap.cross_run()))
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ntmduy/miniconda3/lib/python3.12/asyncio/runners.py", line 194, in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+  File "/home/ntmduy/miniconda3/lib/python3.12/asyncio/runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ntmduy/miniconda3/lib/python3.12/asyncio/base_events.py", line 685, in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+  File "/mnt/data2/ntmduy/paper-drill/pipeline/gap.py", line 68, in cross_run
+    raise RuntimeError("cross_run: no limitations found in any scope; run per-scope dailies first")
+RuntimeError: cross_run: no limitations found in any scope; run per-scope dailies first
+fatal: could not read Username for 'https://github.com': No such device or address
+=== 2026-09-20T17:46:24+09:00 done ===
+=== 2026-09-21T02:00:01+09:00 start ===
+Already up to date.
+Loading weights:   0%|          | 0/398 [00:00<?, ?it/s]Loading weights:  80%|███████▉  | 318/398 [00:00<00:00, 3173.30it/s]Loading weights: 100%|██████████| 398/398 [00:00<00:00, 3209.12it/s]
+Default prompt name is set to 'document'. This prompt will be applied to all inference calls, except if a `prompt` or `prompt_name` parameter is provided.
+Loading weights:   0%|          | 0/398 [00:00<?, ?it/s]Loading weights:  81%|████████  | 321/398 [00:00<00:00, 3207.33it/s]Loading weights: 100%|██████████| 398/398 [00:00<00:00, 3194.00it/s]
+Default prompt name is set to 'document'. This prompt will be applied to all inference calls, except if a `prompt` or `prompt_name` parameter is provided.
+Loading weights:   0%|          | 0/398 [00:00<?, ?it/s]Loading weights:  81%|████████  | 323/398 [00:00<00:00, 3213.44it/s]Loading weights: 100%|██████████| 398/398 [00:00<00:00, 3084.61it/s]
+Default prompt name is set to 'document'. This prompt will be applied to all inference calls, except if a `prompt` or `prompt_name` parameter is provided.
+Loading weights:   0%|          | 0/398 [00:00<?, ?it/s]Loading weights:  93%|█████████▎| 369/398 [00:00<00:00, 3640.64it/s]Loading weights: 100%|██████████| 398/398 [00:00<00:00, 3672.36it/s]
+Default prompt name is set to 'document'. This prompt will be applied to all inference calls, except if a `prompt` or `prompt_name` parameter is provided.
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "/mnt/data2/ntmduy/paper-drill/pipeline/daily.py", line 76, in <module>
+    print(asyncio.run(gap.cross_run()))
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ntmduy/miniconda3/lib/python3.12/asyncio/runners.py", line 194, in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+  File "/home/ntmduy/miniconda3/lib/python3.12/asyncio/runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ntmduy/miniconda3/lib/python3.12/asyncio/base_events.py", line 685, in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+  File "/mnt/data2/ntmduy/paper-drill/pipeline/gap.py", line 68, in cross_run
+    raise RuntimeError("cross_run: no limitations found in any scope; run per-scope dailies first")
+RuntimeError: cross_run: no limitations found in any scope; run per-scope dailies first
+[main 82cdccc] daily 2026-09-21
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+gh auth git-credential get: 1: gh: not found
+fatal: could not read Username for 'https://github.com': No such device or address
+=== 2026-09-21T02:00:57+09:00 done ===
+=== 2026-09-22T02:00:01+09:00 start ===
+Already up to date.
+Loading weights:   0%|          | 0/398 [00:00<?, ?it/s]Loading weights:  84%|████████▍ | 334/398 [00:00<00:00, 3333.00it/s]Loading weights: 100%|██████████| 398/398 [00:00<00:00, 3113.00it/s]
+Default prompt name is set to 'document'. This prompt will be applied to all inference calls, except if a `prompt` or `prompt_name` parameter is provided.
+skip Reconfigurable Electric Vehicle Battery Balancing and Power Dispatch via Tropica: extract failed: all LLM rungs failed or returned busy text
+Loading weights:   0%|          | 0/398 [00:00<?, ?it/s]Loading weights:  72%|███████▏  | 287/398 [00:00<00:00, 2868.74it/s]Loading weights: 100%|██████████| 398/398 [00:00<00:00, 3069.55it/s]
+Default prompt name is set to 'document'. This prompt will be applied to all inference calls, except if a `prompt` or `prompt_name` parameter is provided.
+Loading weights:   0%|          | 0/398 [00:00<?, ?it/s]Loading weights:  80%|████████  | 320/398 [00:00<00:00, 3197.68it/s]Loading weights: 100%|██████████| 398/398 [00:00<00:00, 3280.86it/s]
+Default prompt name is set to 'document'. This prompt will be applied to all inference calls, except if a `prompt` or `prompt_name` parameter is provided.
+Loading weights:   0%|          | 0/398 [00:00<?, ?it/s]Loading weights:  82%|████████▏ | 328/398 [00:00<00:00, 3267.84it/s]Loading weights: 100%|██████████| 398/398 [00:00<00:00, 3352.45it/s]
+Default prompt name is set to 'document'. This prompt will be applied to all inference calls, except if a `prompt` or `prompt_name` parameter is provided.
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "/mnt/data2/ntmduy/paper-drill/pipeline/daily.py", line 76, in <module>
+    print(asyncio.run(gap.cross_run()))
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ntmduy/miniconda3/lib/python3.12/asyncio/runners.py", line 194, in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+  File "/home/ntmduy/miniconda3/lib/python3.12/asyncio/runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ntmduy/miniconda3/lib/python3.12/asyncio/base_events.py", line 685, in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+  File "/mnt/data2/ntmduy/paper-drill/pipeline/gap.py", line 68, in cross_run
+    raise RuntimeError("cross_run: no limitations found in any scope; run per-scope dailies first")
+RuntimeError: cross_run: no limitations found in any scope; run per-scope dailies first
+[main 996b55f] daily 2026-09-22
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+gh auth git-credential get: 1: gh: not found
+fatal: could not read Username for 'https://github.com': No such device or address
+=== 2026-09-22T02:02:30+09:00 done ===
+=== 2026-09-23T02:00:01+09:00 start ===
+Already up to date.
+Loading weights:   0%|          | 0/398 [00:00<?, ?it/s]Loading weights: 100%|██████████| 398/398 [00:00<00:00, 4568.37it/s]
+Default prompt name is set to 'document'. This prompt will be applied to all inference calls, except if a `prompt` or `prompt_name` parameter is provided.
+Loading weights:   0%|          | 0/398 [00:00<?, ?it/s]Loading weights: 100%|██████████| 398/398 [00:00<00:00, 4160.00it/s]
+Default prompt name is set to 'document'. This prompt will be applied to all inference calls, except if a `prompt` or `prompt_name` parameter is provided.
+Loading weights:   0%|          | 0/398 [00:00<?, ?it/s]Loading weights: 100%|██████████| 398/398 [00:00<00:00, 4351.35it/s]
+Default prompt name is set to 'document'. This prompt will be applied to all inference calls, except if a `prompt` or `prompt_name` parameter is provided.
+Loading weights:   0%|          | 0/398 [00:00<?, ?it/s]Loading weights:  91%|█████████ | 361/398 [00:00<00:00, 3603.88it/s]Loading weights: 100%|██████████| 398/398 [00:00<00:00, 3721.65it/s]
+Default prompt name is set to 'document'. This prompt will be applied to all inference calls, except if a `prompt` or `prompt_name` parameter is provided.
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "/mnt/data2/ntmduy/paper-drill/pipeline/daily.py", line 76, in <module>
+    print(asyncio.run(gap.cross_run()))
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ntmduy/miniconda3/lib/python3.12/asyncio/runners.py", line 194, in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+  File "/home/ntmduy/miniconda3/lib/python3.12/asyncio/runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ntmduy/miniconda3/lib/python3.12/asyncio/base_events.py", line 685, in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+  File "/mnt/data2/ntmduy/paper-drill/pipeline/gap.py", line 68, in cross_run
+    raise RuntimeError("cross_run: no limitations found in any scope; run per-scope dailies first")
+RuntimeError: cross_run: no limitations found in any scope; run per-scope dailies first
+[main 47ae2c7] daily 2026-09-23
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+To https://github.com/zamminhduy123/paper-drill.git
+   92f38ca..47ae2c7  main -> main
+=== 2026-09-23T02:01:09+09:00 done ===
+=== 2026-09-24T02:00:01+09:00 start ===
+Already up to date.
+Loading weights:   0%|          | 0/398 [00:00<?, ?it/s]Loading weights: 100%|██████████| 398/398 [00:00<00:00, 20873.97it/s]
+Default prompt name is set to 'document'. This prompt will be applied to all inference calls, except if a `prompt` or `prompt_name` parameter is provided.
+Loading weights:   0%|          | 0/398 [00:00<?, ?it/s]Loading weights: 100%|██████████| 398/398 [00:00<00:00, 16102.37it/s]
+Default prompt name is set to 'document'. This prompt will be applied to all inference calls, except if a `prompt` or `prompt_name` parameter is provided.
+Loading weights:   0%|          | 0/398 [00:00<?, ?it/s]Loading weights: 100%|██████████| 398/398 [00:00<00:00, 8522.40it/s]
+Default prompt name is set to 'document'. This prompt will be applied to all inference calls, except if a `prompt` or `prompt_name` parameter is provided.
+Loading weights:   0%|          | 0/398 [00:00<?, ?it/s]Loading weights: 100%|██████████| 398/398 [00:00<00:00, 19596.10it/s]
+Default prompt name is set to 'document'. This prompt will be applied to all inference calls, except if a `prompt` or `prompt_name` parameter is provided.
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "/mnt/data2/ntmduy/paper-drill/pipeline/daily.py", line 76, in <module>
+    print(asyncio.run(gap.cross_run()))
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ntmduy/miniconda3/lib/python3.12/asyncio/runners.py", line 194, in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+  File "/home/ntmduy/miniconda3/lib/python3.12/asyncio/runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ntmduy/miniconda3/lib/python3.12/asyncio/base_events.py", line 685, in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+  File "/mnt/data2/ntmduy/paper-drill/pipeline/gap.py", line 68, in cross_run
+    raise RuntimeError("cross_run: no limitations found in any scope; run per-scope dailies first")
+RuntimeError: cross_run: no limitations found in any scope; run per-scope dailies first
+[main b799656] daily 2026-09-24
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+To https://github.com/zamminhduy123/paper-drill.git
+   47ae2c7..b799656  main -> main
+=== 2026-09-24T02:01:18+09:00 done ===
+=== 2026-09-25T02:00:01+09:00 start ===
+Already up to date.
+Loading weights:   0%|          | 0/398 [00:00<?, ?it/s]Loading weights:  34%|███▍      | 137/398 [00:00<00:00, 1289.60it/s]Loading weights: 100%|██████████| 398/398 [00:00<00:00, 3000.67it/s]
+Default prompt name is set to 'document'. This prompt will be applied to all inference calls, except if a `prompt` or `prompt_name` parameter is provided.
+Loading weights:   0%|          | 0/398 [00:00<?, ?it/s]Loading weights:  84%|████████▎ | 333/398 [00:00<00:00, 3319.47it/s]Loading weights: 100%|██████████| 398/398 [00:00<00:00, 3389.47it/s]
+Default prompt name is set to 'document'. This prompt will be applied to all inference calls, except if a `prompt` or `prompt_name` parameter is provided.
+Loading weights:   0%|          | 0/398 [00:00<?, ?it/s]Loading weights:  82%|████████▏ | 327/398 [00:00<00:00, 3265.21it/s]Loading weights: 100%|██████████| 398/398 [00:00<00:00, 3272.77it/s]
+Default prompt name is set to 'document'. This prompt will be applied to all inference calls, except if a `prompt` or `prompt_name` parameter is provided.
+Loading weights:   0%|          | 0/398 [00:00<?, ?it/s]Loading weights:  82%|████████▏ | 325/398 [00:00<00:00, 3248.93it/s]Loading weights: 100%|██████████| 398/398 [00:00<00:00, 3238.82it/s]
+Default prompt name is set to 'document'. This prompt will be applied to all inference calls, except if a `prompt` or `prompt_name` parameter is provided.
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "/mnt/data2/ntmduy/paper-drill/pipeline/daily.py", line 76, in <module>
+    print(asyncio.run(gap.cross_run()))
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ntmduy/miniconda3/lib/python3.12/asyncio/runners.py", line 194, in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+  File "/home/ntmduy/miniconda3/lib/python3.12/asyncio/runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ntmduy/miniconda3/lib/python3.12/asyncio/base_events.py", line 685, in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+  File "/mnt/data2/ntmduy/paper-drill/pipeline/gap.py", line 68, in cross_run
+    raise RuntimeError("cross_run: no limitations found in any scope; run per-scope dailies first")
+RuntimeError: cross_run: no limitations found in any scope; run per-scope dailies first
+[main b216b34] daily 2026-09-25
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+To https://github.com/zamminhduy123/paper-drill.git
+   b799656..b216b34  main -> main
+=== 2026-09-25T02:04:50+09:00 done ===
+=== 2026-09-26T02:00:01+09:00 start ===
+Already up to date.
+Loading weights:   0%|          | 0/398 [00:00<?, ?it/s]Loading weights:  41%|████▏     | 165/398 [00:00<00:00, 1647.81it/s]Loading weights: 100%|██████████| 398/398 [00:00<00:00, 2530.14it/s]
+Default prompt name is set to 'document'. This prompt will be applied to all inference calls, except if a `prompt` or `prompt_name` parameter is provided.
+Loading weights:   0%|          | 0/398 [00:00<?, ?it/s]Loading weights:  74%|███████▍  | 295/398 [00:00<00:00, 2935.53it/s]Loading weights: 100%|██████████| 398/398 [00:00<00:00, 2719.00it/s]
+Default prompt name is set to 'document'. This prompt will be applied to all inference calls, except if a `prompt` or `prompt_name` parameter is provided.
+Loading weights:   0%|          | 0/398 [00:00<?, ?it/s]Loading weights:  66%|██████▌   | 263/398 [00:00<00:00, 2596.96it/s]Loading weights: 100%|██████████| 398/398 [00:00<00:00, 2607.27it/s]
+Default prompt name is set to 'document'. This prompt will be applied to all inference calls, except if a `prompt` or `prompt_name` parameter is provided.
+skip Federated learning and autoencoder-based hybrid framework for DDoS detection: extract failed: all LLM rungs failed or returned busy text
+Loading weights:   0%|          | 0/398 [00:00<?, ?it/s]Loading weights:  81%|████████  | 322/398 [00:00<00:00, 3170.80it/s]Loading weights: 100%|██████████| 398/398 [00:00<00:00, 2984.40it/s]
+Default prompt name is set to 'document'. This prompt will be applied to all inference calls, except if a `prompt` or `prompt_name` parameter is provided.
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "/mnt/data2/ntmduy/paper-drill/pipeline/daily.py", line 76, in <module>
+    print(asyncio.run(gap.cross_run()))
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ntmduy/miniconda3/lib/python3.12/asyncio/runners.py", line 194, in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+  File "/home/ntmduy/miniconda3/lib/python3.12/asyncio/runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ntmduy/miniconda3/lib/python3.12/asyncio/base_events.py", line 685, in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+  File "/mnt/data2/ntmduy/paper-drill/pipeline/gap.py", line 68, in cross_run
+    raise RuntimeError("cross_run: no limitations found in any scope; run per-scope dailies first")
+RuntimeError: cross_run: no limitations found in any scope; run per-scope dailies first
+[main 7016376] daily 2026-09-26
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+To https://github.com/zamminhduy123/paper-drill.git
+   b216b34..7016376  main -> main
+=== 2026-09-26T02:01:34+09:00 done ===
+=== 2026-09-27T02:00:01+09:00 start ===
+Already up to date.
+Loading weights:   0%|          | 0/398 [00:00<?, ?it/s]Loading weights:  79%|███████▉  | 315/398 [00:00<00:00, 3142.42it/s]Loading weights: 100%|██████████| 398/398 [00:00<00:00, 3347.77it/s]
+Default prompt name is set to 'document'. This prompt will be applied to all inference calls, except if a `prompt` or `prompt_name` parameter is provided.
+Loading weights:   0%|          | 0/398 [00:00<?, ?it/s]Loading weights:  74%|███████▍  | 295/398 [00:00<00:00, 2944.86it/s]Loading weights: 100%|██████████| 398/398 [00:00<00:00, 3128.78it/s]
+Default prompt name is set to 'document'. This prompt will be applied to all inference calls, except if a `prompt` or `prompt_name` parameter is provided.
+Loading weights:   0%|          | 0/398 [00:00<?, ?it/s]Loading weights:  69%|██████▊   | 273/398 [00:00<00:00, 2722.44it/s]Loading weights: 100%|██████████| 398/398 [00:00<00:00, 2815.68it/s]
+Default prompt name is set to 'document'. This prompt will be applied to all inference calls, except if a `prompt` or `prompt_name` parameter is provided.
+Loading weights:   0%|          | 0/398 [00:00<?, ?it/s]Loading weights:  74%|███████▍  | 294/398 [00:00<00:00, 2930.93it/s]Loading weights: 100%|██████████| 398/398 [00:00<00:00, 3031.12it/s]
+Default prompt name is set to 'document'. This prompt will be applied to all inference calls, except if a `prompt` or `prompt_name` parameter is provided.
+skip Edge AI for Energy-Efficient Smart IoT Systems A Sustainable Computing Approach: extract failed: all LLM rungs failed or returned busy text
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "/mnt/data2/ntmduy/paper-drill/pipeline/daily.py", line 76, in <module>
+    print(asyncio.run(gap.cross_run()))
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ntmduy/miniconda3/lib/python3.12/asyncio/runners.py", line 194, in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+  File "/home/ntmduy/miniconda3/lib/python3.12/asyncio/runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ntmduy/miniconda3/lib/python3.12/asyncio/base_events.py", line 685, in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+  File "/mnt/data2/ntmduy/paper-drill/pipeline/gap.py", line 68, in cross_run
+    raise RuntimeError("cross_run: no limitations found in any scope; run per-scope dailies first")
+RuntimeError: cross_run: no limitations found in any scope; run per-scope dailies first
+[main c6be6c8] daily 2026-09-27
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+To https://github.com/zamminhduy123/paper-drill.git
+   7016376..c6be6c8  main -> main
+=== 2026-09-27T02:01:17+09:00 done ===

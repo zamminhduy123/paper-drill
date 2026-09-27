@@ -10,7 +10,7 @@ from pipeline.dashboard import CONCEPTS, IDEAS, PAPERS, SCOPES, _meta
 
 ROOT = Path(__file__).resolve().parent.parent
 LINK_RE = re.compile(r"\[\[(.+?)\]\]")
-CSS = "body{font-family:sans-serif;max-width:60em;margin:2em auto;padding:0 1em}table{border-collapse:collapse;width:100%}td,th{border:1px solid #ccc;padding:.2em .5em;text-align:left}nav a{margin-right:1em}pre{background:#f4f4f4;padding:1em;overflow:auto}"
+CSS = "body{font-family:sans-serif;max-width:900px;margin:2em auto;padding:0 1em;line-height:1.55}table{border-collapse:collapse;width:100%}td,th{border:1px solid #ccc;padding:.2em .5em;text-align:left}th{background:#f4f4f4}li{margin:.25em 0}nav a{margin-right:1em}pre{background:#f4f4f4;padding:1em;overflow:auto}"
 NAV = '<nav><a href="/">overview</a><a href="/papers">papers</a><a href="/ideas">ideas</a></nav>'
 
 
@@ -21,15 +21,57 @@ def page(title, body):
 
 
 def md(text):
-    """Render note Markdown-ish: escaped HTML, [[links]], #/## headers."""
+    """Render note Markdown-ish: lists, tables, bold, escaped HTML, [[links]], #/## headers."""
+    def inline(s):
+        """Apply [[links]] and **bold** to already-escaped text."""
+        s = LINK_RE.sub(lambda m: f'<a href="/paper?slug={quote(m.group(1))}">{m.group(1)}</a>' if m.group(1).startswith("Paper - ") else f"<b>{m.group(1)}</b>", s)
+        return re.sub(r"\*\*(.+?)\*\*", r"<strong>\1</strong>", s)
     text = html.escape(text)
     if text.startswith("---"):
         text = text.split("---", 2)[-1]
-    out = []
-    for ln in text.splitlines():
-        ln = LINK_RE.sub(lambda m: f'<a href="/paper?slug={quote(m.group(1))}">{m.group(1)}</a>' if m.group(1).startswith("Paper - ") else f"<b>{m.group(1)}</b>", ln)
-        out.append(f"<h2>{ln[3:]}</h2>" if ln.startswith("## ") else f"<h1>{ln[2:]}</h1>" if ln.startswith("# ") else f"<p>{ln}</p>" if ln.strip(" -") else "")
-    return "".join(out)
+    lines, out, i, in_ul, in_ol = text.splitlines(), [], 0, False, False
+    def close():
+        """Close any open list tags and return the closers."""
+        nonlocal in_ul, in_ol
+        s = ("</ul>" if in_ul else "") + ("</ol>" if in_ol else "")
+        in_ul, in_ol = False, False
+        return s
+    while i < len(lines):
+        s = lines[i].strip()
+        if s == "---":
+            out.append(close() + "<hr>")
+            i += 1
+            continue
+        if not s.strip(" -"):
+            out.append(close())
+            i += 1
+            continue
+        if "|" in s and i + 1 < len(lines) and "---" in lines[i + 1]:
+            head = [inline(c.strip()) for c in s.strip().strip("|").split("|")]
+            out.append(close() + "<table><tr>" + "".join(f"<th>{c}</th>" for c in head) + "</tr>")
+            i += 2
+            while i < len(lines) and "|" in lines[i] and lines[i].strip():
+                cells = [inline(c.strip()) for c in lines[i].strip().strip("|").split("|")]
+                out.append("<tr>" + "".join(f"<td>{c}</td>" for c in cells) + "</tr>")
+                i += 1
+            out.append("</table>")
+            continue
+        if s.startswith("## "):
+            out.append(close() + f"<h2>{inline(s[3:])}</h2>")
+        elif s.startswith("# "):
+            out.append(close() + f"<h1>{inline(s[2:])}</h1>")
+        elif m := re.match(r"[*\-]\s+(.*)", s):
+            pre = ("</ol>" if in_ol else "") + ("<ul>" if not in_ul else "")
+            out.append(pre + f"<li>{inline(m.group(1))}</li>")
+            in_ul, in_ol = True, False
+        elif m := re.match(r"\d+\.\s+(.*)", s):
+            pre = ("</ul>" if in_ul else "") + ("<ol>" if not in_ol else "")
+            out.append(pre + f"<li>{inline(m.group(1))}</li>")
+            in_ul, in_ol = False, True
+        else:
+            out.append(close() + (f"<p>{inline(s)}</p>" if s.strip(" -") else ""))
+        i += 1
+    return "".join(out) + close()
 
 
 def papers():

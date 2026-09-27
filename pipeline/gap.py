@@ -19,7 +19,10 @@ def build_prompt(thesis, limitations, datasets):
     return (
         f"Thesis: {thesis}\nExplicit limitations:\n{lims}\n"
         f"Propose concrete research splits using only these datasets: {names}.\n"
-        f"Use no other dataset names."
+        f"Use no other dataset names.\n"
+        "Format: use ## for section titles, - for bullets, 1. for numbered steps,\n"
+        "and GitHub pipe tables (| col |) with a --- separator row for any tabular data.\n"
+        "Never use space-aligned tables."
     )
 
 
@@ -41,6 +44,7 @@ def build_cross_prompt(sections, thesis, datasets):
     names = ", ".join(datasets)
     parts.append("Propose concrete ideas shaped as `Method X from Scope A -> Problem Y in Scope B`.")
     parts.append(f"Propose concrete research splits using only these datasets: {names}.\nUse no other dataset names.")
+    parts.append("Format: use ## for section titles, - for bullets, 1. for numbered steps,\nand GitHub pipe tables (| col |) with a --- separator row for any tabular data.\nNever use space-aligned tables.")
     return "\n".join(parts)
 
 

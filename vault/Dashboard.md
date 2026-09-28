@@ -1,20 +1,20 @@
 # Dashboard
-_updated 2026-09-28 · 10 papers, 19 hubs, 4 ideas_
+_updated 2026-09-29 · 10 papers, 19 hubs, 4 ideas_
 
 ## New papers (by day, score desc)
 | date | title | year | score |
 |---|---|---|---|
 
-| 2026-09-27 | GenCoder: A Generative AI-Based Adaptive Intra-Vehicle Intrusion Detection System | 2024 | 10.0 |
-| 2026-09-27 | Application-Layer Anomaly Detection Leveraging Time-Series Physical Semantics in CAN-FD Vehicle Networks | 2024 | 9.5 |
-| 2026-09-18 | Deep Learning-Based Intrusion Detection Models for Controller Area Networks in Intelligent Connected Vehicles | 2026 | 9.0 |
-| 2026-09-18 | BusRecall: replication package for "Measuring source-vehicle forgetting in cross-vehicle CAN intrusion detection" | 2026 | 9.0 |
-| 2026-09-17 | A diffusion-based anomaly detection framework for securing in-vehicle CAN networks | 2026 | 9.0 |
-| 2026-09-27 | Analysis of Cooperative Operating Concepts for Robust Data Transmission in Periodically Disturbed CAN FD Networks | 2024 | 7.952 |
-| 2026-09-27 | A Privacy-Preserving Self-Supervised Learning-Based Intrusion Detection System for 5g-V2x Networks | 2024 | 6.404 |
-| 2026-09-27 | Design of network security protection network architecture for intelligent networked vehicles | 2024 | 6.377000000000001 |
-| 2026-09-18 | A Study on TSC (Technical Safety Concept) Design and Verification in EMB (Brake by Wire) Systems | 2026 | 2.0 |
-| 2026-09-18 | An AI-Ready Real-Time Multi-agent Attack-and-Defense Framework for In-Vehicle Network Security Evaluation | 2026 | 0.9 |
+| 2026-09-28 | GenCoder: A Generative AI-Based Adaptive Intra-Vehicle Intrusion Detection System | 2024 | 10.0 |
+| 2026-09-28 | Application-Layer Anomaly Detection Leveraging Time-Series Physical Semantics in CAN-FD Vehicle Networks | 2024 | 9.5 |
+| 2026-09-28 | Deep Learning-Based Intrusion Detection Models for Controller Area Networks in Intelligent Connected Vehicles | 2026 | 9.0 |
+| 2026-09-28 | BusRecall: replication package for "Measuring source-vehicle forgetting in cross-vehicle CAN intrusion detection" | 2026 | 9.0 |
+| 2026-09-28 | A diffusion-based anomaly detection framework for securing in-vehicle CAN networks | 2026 | 9.0 |
+| 2026-09-28 | Analysis of Cooperative Operating Concepts for Robust Data Transmission in Periodically Disturbed CAN FD Networks | 2024 | 7.952 |
+| 2026-09-28 | A Privacy-Preserving Self-Supervised Learning-Based Intrusion Detection System for 5g-V2x Networks | 2024 | 6.404 |
+| 2026-09-28 | Design of network security protection network architecture for intelligent networked vehicles | 2024 | 6.377000000000001 |
+| 2026-09-28 | A Study on TSC (Technical Safety Concept) Design and Verification in EMB (Brake by Wire) Systems | 2026 | 2.0 |
+| 2026-09-28 | An AI-Ready Real-Time Multi-agent Attack-and-Defense Framework for In-Vehicle Network Security Evaluation | 2026 | 0.9 |
 
 ## Concept hubs (papers using each hub)
 | hub | papers | flag |
@@ -48,6 +48,12 @@ _updated 2026-09-28 · 10 papers, 19 hubs, 4 ideas_
 | 2026-09-20 | cross | cross-2026-09-20.md | 8 |
 | 2026-09-18 | cross | cross-2026-09-18.md | 0 |
 | 2026-09-17 | unknown | 2026-09-17.md | 4 |
+
+## Cards (question, novelty, broken links)
+| file | question | novelty | broken links | flag |
+|---|---|---|---|---|
+
+_none_
 
 ## Warnings
 

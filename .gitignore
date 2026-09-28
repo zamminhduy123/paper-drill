@@ -7,3 +7,4 @@ cron.lock
 __pycache__/
 .browsers/
 cron.log
+.DS_Store

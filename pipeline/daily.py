@@ -5,7 +5,7 @@ import re
 from datetime import date
 from pathlib import Path
 
-from . import dashboard, extract, gap, ingest, rank, writer
+from . import dashboard, extract, gap, ingest, rank, record, writer
 
 ROOT = Path(__file__).resolve().parent.parent
 STATE = ROOT / "state"
@@ -25,6 +25,11 @@ def parse_relevance(body, fallback):
 def report_path(scope="ivn"):
     """Resolve state/<scope>-report.json path."""
     return STATE / f"{scope}-report.json"
+
+
+def records_path(scope="ivn"):
+    """Resolve state/<scope>-records.json path."""
+    return STATE / f"{scope}-records.json"
 
 
 def write_report(scope, report):
@@ -57,7 +62,7 @@ def run(scope="ivn", backfill=False, frm=None, to=None):
     if not ranked:
         write_report(scope, report)
         return []
-    paths, seen, bodies, failed_ids = [], set(), [], []
+    paths, seen, bodies, failed_ids, recs = [], set(), [], [], []
     store = ingest.load_seen(scope)
     today = date.today().isoformat()
     for it in ranked:
@@ -76,12 +81,22 @@ def run(scope="ivn", backfill=False, frm=None, to=None):
             print(f"skip {slug}: extract failed: {e}")
             failed_ids.append(it.get("openalex_id") or slug)
             continue
-        paths.append(writer.write_paper(it["title"], it.get("year"), it.get("doi") or "", parse_relevance(body, it["score"] * 10), body, force=not backfill))
+        rec = record.parse(body)
+        # fill metadata from ingest item, flag thin records
+        rec.update({"title": it["title"], "year": it.get("year"), "body": body,
+                    "relevance": parse_relevance(body, it["score"] * 10)})
+        if it.get("doi") and record._is_empty(rec.get("doi")):
+            rec["doi"] = it["doi"]
+        if record.validate(rec):
+            rec["body"] += "\n\n#needs-review"
+        paths.append(writer.write_record(rec, force=not backfill))
+        recs.append(rec)
         bodies.append(body)
         for k in ingest.keys_of(it):
             store[k] = today
     if paths:
         ingest.save_seen(store, scope)
+        records_path(scope).write_text(json.dumps(recs, indent=2))
         try:  # ponytail: 1 gap call/day, never break daily on failure
             lims = [m.group(1).strip() for b in bodies for m in re.finditer(r"## Explicit Limitations\s*(.*?)(?=\n## |\Z)", b, re.S) if m.group(1).strip()]
             ideas = asyncio.run(gap.run(lims, thesis, cfg["seeds"]["datasets"]))

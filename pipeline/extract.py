@@ -24,6 +24,21 @@ Output:
 Monitoring problem, signal, uncertainty method, resulting action, evaluation setting.
 One transfer to IVN and one reason the transfer may fail.
 3-5 hubs as [[Concept - Name]], 2-4 word noun, reuse names, never output angle brackets.
+Then exact field lines, one per line, plain values or not stated:
+doi:
+source_link:
+text_kind:
+monitoring_problem:
+signal:
+uncertainty_method:
+action:
+eval_setting:
+limitation_author:
+limitation_inference:
+limitation_unknown:
+support_passage:
+transfer_ivn:
+transfer_risk:
 """
 
 def chat(

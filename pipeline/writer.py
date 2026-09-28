@@ -5,6 +5,8 @@ import sys
 import unicodedata
 from pathlib import Path
 
+from . import record as _record
+
 ROOT = Path(__file__).resolve().parent.parent
 PAPERS = ROOT / "vault" / "papers"
 CONCEPTS = ROOT / "vault" / "concepts"
@@ -58,6 +60,16 @@ def write_paper(title, year, doi, relevance, body, force=False) -> Path:
         if not stub.exists():
             stub.write_text(f"# Concept - {h}\nHub for {h}.\n")
     return dest
+
+
+def write_record(rec, force=False) -> Path:
+    """Render note from record dict via write_paper, return path."""
+    body = str(rec.get("body", "") or "")
+    fields = "\n".join(f"{f}: {rec.get(f, 'not stated')}" for f in _record.FIELDS)
+    full = f"{body.strip()}\n\n## Record Fields\n{fields}\n"
+    return write_paper(rec.get("title", "untitled"), rec.get("year"),
+                       rec.get("doi", "") or "", rec.get("relevance", rec.get("relevance_score", 0.0)),
+                       full, force=force)
 
 
 def check() -> Path:

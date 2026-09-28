@@ -54,6 +54,21 @@ def build_cross_prompt(sections, thesis, datasets):
     return "\n".join(parts)
 
 
+def records_lims(scope):
+    """Load limitation_author/inference from state records, empty when absent."""
+    try:
+        recs = json.loads((ROOT / "state" / f"{scope}-records.json").read_text())
+    except (OSError, ValueError):
+        return []
+    out = []
+    for r in recs or []:
+        for k in ("limitation_author", "limitation_inference"):
+            v = str((r or {}).get(k, "") or "").strip()
+            if v and v.lower() not in ("not stated", "not stated in abstract", "none", ""):
+                out.append(v)
+    return out
+
+
 async def cross_run(scopes=("ivn", "iot-ids", "nids")):
     """Run one cross-scope gap prompt and save ideas note, return path."""
     sections, datasets, papers, concepts = {}, [], [], []
@@ -63,7 +78,7 @@ async def cross_run(scopes=("ivn", "iot-ids", "nids")):
         except (OSError, ValueError):
             continue  # ponytail: missing/corrupt ranked state, skip scope
         datasets.extend(rank.load_cfg(scope)["seeds"]["datasets"])
-        lims = []
+        lims = records_lims(scope) or []
         for it in items:
             slug = writer.slugify(it["title"])
             papers.append(slug)
@@ -71,7 +86,8 @@ async def cross_run(scopes=("ivn", "iot-ids", "nids")):
             if not note.exists():
                 continue
             body = note.read_text()
-            lims.extend(m.group(1).strip() for m in LIM_RE.finditer(body) if m.group(1).strip())
+            if not lims:
+                lims.extend(m.group(1).strip() for m in LIM_RE.finditer(body) if m.group(1).strip())
             concepts.extend(writer.HUB_RE.findall(body))
         sections[scope] = lims
     if not any(sections.values()):

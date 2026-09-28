@@ -14,8 +14,7 @@ API = "https://api.openalex.org/works"
 
 last_counts = {"available": 0, "examined": 0}
 
-WINDOW_MAX_PAGES = 10
-WINDOW_MAX_RESULTS = 500
+RESULTS_CAP = 500
 
 def cfg_path(scope="ivn"):
     """Resolve config/scopes/<scope>.yaml path."""
@@ -104,6 +103,39 @@ def advance_cursor(scope="ivn", value=None):
     cursor_path.write_text(value or date.today().isoformat())
 
 
+def fetch_path(scope="ivn"):
+    """Resolve state/<scope>-fetch.json resume offset path."""
+    return STATE / f"{scope}-fetch.json"
+
+
+def load_fetch(scope="ivn"):
+    """Load fetch resume {window, offset, available}, empty dict when missing."""
+    p = fetch_path(scope)
+    try:
+        d = json.loads(p.read_text()) if p.exists() else {}
+    except Exception:
+        return {}
+    return d if isinstance(d, dict) else {}
+
+
+def save_fetch(scope, window, offset, available):
+    """Persist fetch resume {window, offset, available} to state file."""
+    dest = fetch_path(scope)
+    dest.parent.mkdir(exist_ok=True)
+    dest.write_text(json.dumps({"window": window, "offset": offset, "available": available}))
+
+
+def fetch_complete(scope, window):
+    """Return True when stored offset covers available for window."""
+    d = load_fetch(scope)
+    if d.get("window") != window:
+        return False
+    try:
+        return int(d.get("offset") or 0) >= int(d.get("available") or 0)
+    except (TypeError, ValueError):
+        return False
+
+
 def keys_of(item):
     """Return dedupe keys: openalex_id, else doi, else title slug."""
     keys = []
@@ -121,7 +153,7 @@ def keys_of(item):
 
 
 def ingest_with_counts(limit=50, per_page=50, mode="new", frm=None, to=None, scope="ivn"):
-    """Fetch full window pages up to 500 examined, return (fresh items, counts)."""
+    """Fetch window page resuming at stored offset up to cap, return (fresh, counts)."""
     global last_counts
     cfg = load_cfg(scope)
     _, _, cursor_path = state_paths(scope)
@@ -129,25 +161,45 @@ def ingest_with_counts(limit=50, per_page=50, mode="new", frm=None, to=None, sco
     q = "|".join(f'"{k}"' for k in cfg["seeds"]["keywords"])
     if mode == "backfill":
         filt = f"from_publication_date:{frm},to_publication_date:{to},title-and-abstract.search:{q}"
+        window = f"{frm}:{to}"
     else:
         start = cursor_path.read_text().strip() if cursor_path.exists() else ox["from_publication_date"]
         filt = f"from_publication_date:{start},title-and-abstract.search:{q}"
-    available, examined, page = 0, 0, 1
+        window = start
+    prev = load_fetch(scope)
+    start_offset = int(prev.get("offset") or 0) if prev.get("window") == window else 0
+    try:
+        known = int(prev.get("available") or 0) if prev.get("window") == window else 0
+    except (TypeError, ValueError):
+        known = 0
+    available, examined = known, 0
     seen, out = set(), []
-    fetch_budget = max(limit, WINDOW_MAX_RESULTS)
-    while examined < fetch_budget and page <= WINDOW_MAX_PAGES:
+    page = start_offset // per_page + 1
+    skip = start_offset % per_page
+    first = True
+    while examined < RESULTS_CAP and (available == 0 or start_offset + examined < available):
         params = {"filter": filt, "sort": "publication_date:desc", "per-page": per_page, "page": page, "mailto": ox["mailto"]}
         data = fetch(params) or {}
-        if page == 1:
+        if first:
+            first = False
             try:
-                available = int((data.get("meta") or {}).get("count") or 0)
+                available = int((data.get("meta") or {}).get("count") or known or 0)
             except (TypeError, ValueError):
-                available = 0
-        results = data.get("results") or []
-        if not results:
+                available = known
+        raw = data.get("results") or []
+        if not raw:
             break
+        results = raw[skip:] if skip else raw
+        skip = 0
+        if not results:
+            if len(raw) < per_page:
+                break
+            page += 1
+            continue
         for w in results:
-            if examined >= fetch_budget:
+            if examined >= RESULTS_CAP:
+                break
+            if available and start_offset + examined >= available:
                 break
             examined += 1
             oid = w.get("id")
@@ -155,9 +207,11 @@ def ingest_with_counts(limit=50, per_page=50, mode="new", frm=None, to=None, sco
                 continue
             seen.add(oid)
             out.append({"openalex_id": oid, "title": w.get("title"), "year": w.get("publication_year"), "doi": w.get("doi"), "abstract": inv_to_text(w.get("abstract_inverted_index")) or w.get("title")})
-        if len(results) < per_page:
+        if len(raw) < per_page:
             break
         page += 1
+    new_offset = start_offset + examined
+    save_fetch(scope, window, new_offset, available)
     store = load_seen(scope)
     fresh = []
     for it in out:
@@ -165,8 +219,8 @@ def ingest_with_counts(limit=50, per_page=50, mode="new", frm=None, to=None, sco
         if any(k in store for k in keys):
             continue
         fresh.append(it)
-    # ponytail: never advance cursor here, daily.py advances only when pending empty
-    last_counts = {"available": available, "examined": examined}
+    # ponytail: never advance cursor here, daily.py advances only when offset covered and pending empty
+    last_counts = {"available": available, "examined": examined, "offset": new_offset}
     ingest.last_counts = last_counts
     return fresh, dict(last_counts)
 

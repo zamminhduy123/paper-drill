@@ -77,7 +77,13 @@ def run(scope="ivn", backfill=False, frm=None, to=None):
     today = date.today().isoformat()
     paths, seen, bodies, failed_ids, recs = [], set(), [], [], []
     still_pending, dead_ids, dead_reasons = [], [], {}
-    for entry in ingest.load_pending(scope):
+    extract_budget = min(cfg["limits"]["keep"], 5)
+    pending_processed, fresh_processed, tried = 0, 0, 0
+    pending_list = ingest.load_pending(scope)
+    for idx, entry in enumerate(pending_list):
+        if tried >= extract_budget:  # ponytail: budget is total, remainder stays queued untouched
+            still_pending.extend(pending_list[idx:])
+            break
         it = entry.get("item") or {}
         attempts = int(entry.get("attempts") or 0) + 1
         slug = writer.slugify(it.get("title") or entry.get("id") or "untitled")
@@ -90,6 +96,7 @@ def run(scope="ivn", backfill=False, frm=None, to=None):
             path, rec, body = _process_one(it, thesis, backfill)
         except Exception as e:  # ponytail: failure = queued, never a stub note
             print(f"skip {slug}: retry failed: {e}")
+            tried += 1
             failed_ids.append(entry.get("id"))
             if attempts >= MAX_ATTEMPTS:
                 dead_ids.append(entry.get("id"))
@@ -97,6 +104,8 @@ def run(scope="ivn", backfill=False, frm=None, to=None):
             else:
                 still_pending.append(_queue_entry(it, scope, entry.get("window", window), attempts))
             continue
+        tried += 1
+        pending_processed += 1
         paths.append(path)
         recs.append(rec)
         bodies.append(body)
@@ -116,7 +125,6 @@ def run(scope="ivn", backfill=False, frm=None, to=None):
               "available": counts.get("available", found), "examined": counts.get("examined", found),
               "selection_reason": f"score >= {stats.get('threshold', threshold)}"}
     queued_ids = {e["id"] for e in still_pending}
-    extract_budget = min(cfg["limits"]["keep"], 5)
     for it in ranked:
         if _item_id(it) in queued_ids:
             continue
@@ -126,7 +134,7 @@ def run(scope="ivn", backfill=False, frm=None, to=None):
         seen.add(slug)
         if backfill and (writer.PAPERS / f"Paper - {slug}.md").exists():
             continue
-        if len(paths) >= extract_budget:  # ponytail: budget caps cost, overflow queues unprocessed, never dropped
+        if tried >= extract_budget:  # ponytail: budget caps cost, overflow queues unprocessed, never dropped
             still_pending.append(_queue_entry(it, scope, window, 0))
             queued_ids.add(_item_id(it))
             continue
@@ -134,10 +142,13 @@ def run(scope="ivn", backfill=False, frm=None, to=None):
             path, rec, body = _process_one(it, thesis, backfill)
         except Exception as e:  # ponytail: skip paper, never overwrite good note with stub
             print(f"skip {slug}: extract failed: {e}")
+            tried += 1
             failed_ids.append(_item_id(it))
             still_pending.append(_queue_entry(it, scope, window, 1))
             queued_ids.add(_item_id(it))
             continue
+        tried += 1
+        fresh_processed += 1
         paths.append(path)
         recs.append(rec)
         bodies.append(body)
@@ -157,7 +168,7 @@ def run(scope="ivn", backfill=False, frm=None, to=None):
         except Exception:
             pass
     ingest.save_pending(still_pending, scope)
-    if not backfill and not still_pending:
+    if not backfill and not still_pending and ingest.fetch_complete(scope, window):
         ingest.advance_cursor(scope, today)
     try:  # ponytail: dashboard never breaks daily
         dashboard.build()
@@ -165,6 +176,7 @@ def run(scope="ivn", backfill=False, frm=None, to=None):
         pass
     report.update({"selected": len(ranked), "processed": len(paths), "failed": len(failed_ids), "failed_ids": failed_ids,
                    "pending": len(still_pending), "pending_ids": [e["id"] for e in still_pending],
+                   "pending_processed": pending_processed, "fresh_processed": fresh_processed,
                    "dead": len(dead_ids), "dead_ids": dead_ids, "dead_reasons": dead_reasons})
     write_report(scope, report)
     if failed_ids:

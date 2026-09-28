@@ -1,6 +1,7 @@
 thresholds:
-  # mechanism_edge 0.37 = precision choice: 0 FP on measured set (4/6 relevant + 0/5 controls).
-  # Recall alternative 0.35: 6/6 relevant + 2/5 controls. Relevant mech 0.404/0.388/0.355/0.370/0.490/0.406; controls 0.272-0.369 (zembed, title-only).
+  # mechanism_edge 0.37 best-effort, no clean split on this set (reviewer-measured zembed title-only):
+  # admits 3/6 positives + 1/5 controls; positives ~0.355-0.490 overlap controls (max control ~0.369+).
+  # Overlap band ~0.355-0.37: raising edge cuts recall faster than FP, lowering admits more controls.
   mechanism_edge: 0.37
 mechanisms:
   shift_monitoring:

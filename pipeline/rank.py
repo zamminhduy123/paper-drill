@@ -114,7 +114,12 @@ def rank_with_stats(items, thesis, model, threshold=0.80, keep=20, lens="monitor
                       key=lambda d: d["mechanism_score"], reverse=True)[:3 - mech_in_top]
         for d in pool:
             d["selection_reason"] = "mechanism-quota"
-        ranked.extend(pool)
+        if pool:
+            thesis_idx = sorted((i for i, d in enumerate(ranked) if d["selection_reason"] == "thesis"), reverse=True)[:len(pool)]
+            drop = set(thesis_idx)
+            ranked = [d for i, d in enumerate(ranked) if i not in drop] + pool
+            ranked = sorted(ranked, key=lambda d: max(d["score"], d["mechanism_score"]), reverse=True)[:keep]
+    assert len(ranked) <= keep
     last_stats = {"threshold": threshold, "above": above, "below": below,
                   "mechanism_admits": sum(1 for d in ranked if d["selection_reason"] in ("mechanism", "mechanism-quota"))}
     rank.last_stats = last_stats

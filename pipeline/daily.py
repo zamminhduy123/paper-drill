@@ -8,6 +8,7 @@ from pathlib import Path
 from . import dashboard, extract, gap, ingest, rank, writer
 
 ROOT = Path(__file__).resolve().parent.parent
+STATE = ROOT / "state"
 
 REL_RE = re.compile(r"^\s*(?:-\s*)?(\d+(?:\.\d+)?)\s*(?:/10)?\s*(?:—|-|:)?")
 
@@ -21,17 +22,42 @@ def parse_relevance(body, fallback):
     return fallback
 
 
+def report_path(scope="ivn"):
+    """Resolve state/<scope>-report.json path."""
+    return STATE / f"{scope}-report.json"
+
+
+def write_report(scope, report):
+    """Write read-only per-scope run report JSON."""
+    dest = report_path(scope)
+    dest.parent.mkdir(exist_ok=True)
+    dest.write_text(json.dumps(report, indent=2))
+    return dest
+
+
 def run(scope="ivn", backfill=False, frm=None, to=None):
     """Run ingest-rank-extract-write for top-5, return written paths."""
     cfg = rank.load_cfg(scope)
     thesis = cfg["seeds"]["thesis_statements"][0]
+    threshold = cfg["thresholds"]["semantic_edge"]
     items = ingest.ingest(limit=cfg["limits"]["per_run"], mode="backfill" if backfill else "new", frm=frm, to=to, scope=scope)
+    counts = dict(getattr(ingest, "last_counts", {}) or {"available": len(items), "examined": len(items)})
+    if not counts.get("examined"):
+        counts = {"available": counts.get("available", len(items)), "examined": len(items)}
+    found = len(items)
     model = rank.load_model(scope=scope)
-    ranked = rank.rank(items, thesis, model, threshold=cfg["thresholds"]["semantic_edge"], keep=cfg["limits"]["keep"])
+    ranked = rank.rank(items, thesis, model, threshold=threshold, keep=cfg["limits"]["keep"])
+    stats = dict(getattr(rank, "last_stats", None) or {"threshold": threshold, "above": len(ranked), "below": found - len(ranked)})
     rank.state_paths(scope)[1].write_text(json.dumps(ranked, indent=2))
+    report = {"scope": scope, "date": date.today().isoformat(), "found": found, "selected": len(ranked),
+              "processed": 0, "failed": 0, "failed_ids": [], "threshold": stats.get("threshold", threshold),
+              "above_threshold": stats.get("above", len(ranked)), "below_threshold": stats.get("below", max(0, found - len(ranked))),
+              "available": counts.get("available", found), "examined": counts.get("examined", found),
+              "selection_reason": f"score >= {stats.get('threshold', threshold)}"}
     if not ranked:
+        write_report(scope, report)
         return []
-    paths, seen, bodies = [], set(), []
+    paths, seen, bodies, failed_ids = [], set(), [], []
     store = ingest.load_seen(scope)
     today = date.today().isoformat()
     for it in ranked:
@@ -48,6 +74,7 @@ def run(scope="ivn", backfill=False, frm=None, to=None):
             body = extract.extract(thesis, it["title"], abstract)
         except Exception as e:  # ponytail: skip paper, never overwrite good note with stub
             print(f"skip {slug}: extract failed: {e}")
+            failed_ids.append(it.get("openalex_id") or slug)
             continue
         paths.append(writer.write_paper(it["title"], it.get("year"), it.get("doi") or "", parse_relevance(body, it["score"] * 10), body, force=not backfill))
         bodies.append(body)
@@ -67,6 +94,10 @@ def run(scope="ivn", backfill=False, frm=None, to=None):
         dashboard.build()
     except Exception:
         pass
+    report.update({"selected": len(ranked), "processed": len(paths), "failed": len(failed_ids), "failed_ids": failed_ids})
+    write_report(scope, report)
+    if failed_ids:
+        print(f"SCOPE-FAILED {scope} failed={len(failed_ids)} processed={len(paths)} selected={len(ranked)}")
     return paths
 
 
@@ -86,5 +117,13 @@ if __name__ == "__main__":
         except Exception:
             pass
     else:
-        for pth in run(scope=a.scope, backfill=a.backfill, frm=a.frm, to=a.to):
+        paths = run(scope=a.scope, backfill=a.backfill, frm=a.frm, to=a.to)
+        for pth in paths:
             print(pth)
+        try:
+            failed = (json.loads(report_path(a.scope).read_text()) or {}).get("failed", 0)
+        except Exception:
+            failed = 0
+        if failed:
+            print(f"SCOPE-FAILED {a.scope} failed={failed}")
+            raise SystemExit(1)

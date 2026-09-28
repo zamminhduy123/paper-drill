@@ -12,6 +12,8 @@ SCOPES = ROOT / "config" / "scopes"
 STATE = ROOT / "state"
 API = "https://api.openalex.org/works"
 
+last_counts = {"available": 0, "examined": 0}
+
 def cfg_path(scope="ivn"):
     """Resolve config/scopes/<scope>.yaml path."""
     return SCOPES / f"{scope}.yaml"
@@ -82,10 +84,11 @@ def keys_of(item):
     return keys
 
 
-def ingest(limit=50, per_page=50, mode="new", frm=None, to=None, scope="ivn"):
-    """Fetch OpenAlex window, drop seen IDs, return items only."""
+def ingest_with_counts(limit=50, per_page=50, mode="new", frm=None, to=None, scope="ivn"):
+    """Fetch window pages up to limit examined, return (fresh items, counts)."""
+    global last_counts
     cfg = load_cfg(scope)
-    out_path, _, cursor_path = state_paths(scope)
+    _, _, cursor_path = state_paths(scope)
     ox = cfg["sources"]["openalex"]
     q = "|".join(f'"{k}"' for k in cfg["seeds"]["keywords"])
     if mode == "backfill":
@@ -93,15 +96,31 @@ def ingest(limit=50, per_page=50, mode="new", frm=None, to=None, scope="ivn"):
     else:
         start = cursor_path.read_text().strip() if cursor_path.exists() else ox["from_publication_date"]
         filt = f"from_publication_date:{start},title-and-abstract.search:{q}"
-    params = {"filter": filt, "sort": "publication_date:desc", "per-page": per_page, "mailto": ox["mailto"]}
-    data = fetch(params).get("results", [])[:limit]
+    available, examined, page = 0, 0, 1
     seen, out = set(), []
-    for w in data:
-        oid = w.get("id")
-        if oid in seen:
-            continue
-        seen.add(oid)
-        out.append({"openalex_id": oid, "title": w.get("title"), "year": w.get("publication_year"), "doi": w.get("doi"), "abstract": inv_to_text(w.get("abstract_inverted_index")) or w.get("title")})
+    while examined < limit:
+        params = {"filter": filt, "sort": "publication_date:desc", "per-page": per_page, "page": page, "mailto": ox["mailto"]}
+        data = fetch(params) or {}
+        if page == 1:
+            try:
+                available = int((data.get("meta") or {}).get("count") or 0)
+            except (TypeError, ValueError):
+                available = 0
+        results = data.get("results") or []
+        if not results:
+            break
+        for w in results:
+            if examined >= limit:
+                break
+            examined += 1
+            oid = w.get("id")
+            if oid in seen:
+                continue
+            seen.add(oid)
+            out.append({"openalex_id": oid, "title": w.get("title"), "year": w.get("publication_year"), "doi": w.get("doi"), "abstract": inv_to_text(w.get("abstract_inverted_index")) or w.get("title")})
+        if len(results) < per_page:
+            break
+        page += 1
     store = load_seen(scope)
     today = date.today().isoformat()
     fresh = []
@@ -113,7 +132,18 @@ def ingest(limit=50, per_page=50, mode="new", frm=None, to=None, scope="ivn"):
     if mode == "new":
         cursor_path.parent.mkdir(exist_ok=True)
         cursor_path.write_text(today)
-    return fresh
+    last_counts = {"available": available, "examined": examined}
+    ingest.last_counts = last_counts
+    return fresh, dict(last_counts)
+
+
+def ingest(limit=50, per_page=50, mode="new", frm=None, to=None, scope="ivn"):
+    """Fetch OpenAlex window, drop seen IDs, return items only."""
+    items, _ = ingest_with_counts(limit=limit, per_page=per_page, mode=mode, frm=frm, to=to, scope=scope)
+    return items
+
+
+ingest.last_counts = {"available": 0, "examined": 0}
 
 
 if __name__ == "__main__":

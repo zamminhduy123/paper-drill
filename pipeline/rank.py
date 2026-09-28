@@ -19,6 +19,8 @@ NEG = ["HairCLIP text image hair editing StyleGAN",
        "LLM summarization of legal contracts"]
 CHECK_THESIS = "deep learning for in-vehicle CAN intrusion detection"
 
+last_stats = {"threshold": 0.0, "above": 0, "below": 0}
+
 
 def cfg_path(scope="ivn"):
     """Resolve config/scopes/<scope>.yaml path."""
@@ -54,14 +56,31 @@ def gap(pos, neg):
     return float(min(pos) - max(neg))  # pos_min - neg_max, want >0.05
 
 
-def rank(items, thesis, model, threshold=0.80, keep=20):
-    """Score items, drop below threshold, return top-N sorted desc."""
+def rank_with_stats(items, thesis, model, threshold=0.80, keep=20):
+    """Score items, return (top-N above threshold, {threshold, above, below})."""
+    global last_stats
     if not items:
-        return []  # nothing new today, skip encode
+        last_stats = {"threshold": threshold, "above": 0, "below": 0}
+        rank.last_stats = last_stats
+        return [], dict(last_stats)
     scores = score(thesis, [i.get("title") for i in items], model)
+    above = sum(1 for s in scores if float(s) >= threshold)
+    below = len(items) - above
     out = [{**i, "score": round(float(s), 4), "above_edge": float(s) >= threshold}
            for i, s in zip(items, scores) if float(s) >= threshold]
-    return sorted(out, key=lambda d: d["score"], reverse=True)[:keep]
+    ranked = sorted(out, key=lambda d: d["score"], reverse=True)[:keep]
+    last_stats = {"threshold": threshold, "above": above, "below": below}
+    rank.last_stats = last_stats
+    return ranked, dict(last_stats)
+
+
+def rank(items, thesis, model, threshold=0.80, keep=20):
+    """Score items, drop below threshold, return top-N sorted desc."""
+    ranked, _ = rank_with_stats(items, thesis, model, threshold=threshold, keep=keep)
+    return ranked
+
+
+rank.last_stats = {"threshold": 0.0, "above": 0, "below": 0}
 
 
 if __name__ == "__main__":

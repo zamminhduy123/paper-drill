@@ -68,6 +68,39 @@ def save_seen(seen, scope="ivn"):
     dest.write_text(json.dumps(seen, indent=2))
 
 
+def pending_path(scope="ivn"):
+    """Resolve state/<scope>-pending.json durable retry queue path."""
+    return STATE / f"{scope}-pending.json"
+
+
+def load_pending(scope="ivn"):
+    """Load pending retry queue, empty list when missing."""
+    p = pending_path(scope)
+    return json.loads(p.read_text()) if p.exists() else []
+
+
+def save_pending(pending, scope="ivn"):
+    """Persist pending retry queue to state/<scope>-pending.json."""
+    dest = pending_path(scope)
+    dest.parent.mkdir(exist_ok=True)
+    dest.write_text(json.dumps(pending, indent=2))
+
+
+def current_window(scope="ivn"):
+    """Return current fetch window start (cursor or config default)."""
+    _, _, cursor_path = state_paths(scope)
+    if cursor_path.exists():
+        return cursor_path.read_text().strip()
+    return load_cfg(scope)["sources"]["openalex"]["from_publication_date"]
+
+
+def advance_cursor(scope="ivn", value=None):
+    """Advance date cursor to value (today default), creating state dir."""
+    _, _, cursor_path = state_paths(scope)
+    cursor_path.parent.mkdir(exist_ok=True)
+    cursor_path.write_text(value or date.today().isoformat())
+
+
 def keys_of(item):
     """Return dedupe keys: openalex_id, else doi, else title slug."""
     keys = []
@@ -122,16 +155,13 @@ def ingest_with_counts(limit=50, per_page=50, mode="new", frm=None, to=None, sco
             break
         page += 1
     store = load_seen(scope)
-    today = date.today().isoformat()
     fresh = []
     for it in out:
         keys = keys_of(it)
         if any(k in store for k in keys):
             continue
         fresh.append(it)
-    if mode == "new":
-        cursor_path.parent.mkdir(exist_ok=True)
-        cursor_path.write_text(today)
+    # ponytail: never advance cursor here, daily.py advances only when pending empty
     last_counts = {"available": available, "examined": examined}
     ingest.last_counts = last_counts
     return fresh, dict(last_counts)

@@ -1,0 +1,20 @@
+mechanisms:
+  shift_monitoring:
+    probes:
+      - "vehicle model shift detection across driving conditions"
+      - "capture condition shift in sensor data distribution"
+      - "attack shift detection under novel intrusion variants"
+      - "distribution shift monitoring for deployment drift"
+    transfer_target: "Detect CAN IDS drift across vehicle models, datasets, and new attack variants."
+  uncertainty_abstention:
+    probes:
+      - "human review trigger on low confidence predictions"
+      - "selective abstention under predictive uncertainty"
+      - "calibration of confidence scores for abstention"
+    transfer_target: "Abstain or trigger review on low-confidence CAN alerts to cut false positives."
+  response_feedback:
+    probes:
+      - "logging uncertain predictions for later investigation"
+      - "escalation policy for flagged anomalies"
+      - "recalibration after feedback from field investigations"
+    transfer_target: "Log, escalate, and recalibrate CAN IDS from analyst investigations."

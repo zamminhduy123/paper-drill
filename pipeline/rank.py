@@ -7,6 +7,7 @@ import yaml
 
 ROOT = Path(__file__).resolve().parent.parent
 SCOPES = ROOT / "config" / "scopes"
+LENSES = ROOT / "config" / "lenses"
 STATE = ROOT / "state"
 
 # ponytail: 4 pos + 3 neg from notebooks/02-shootout.ipynb, enough to judge separation
@@ -51,32 +52,56 @@ def score(thesis, texts, model):
     return (p @ q.T).ravel().tolist()
 
 
+def load_lens(name="monitoring"):
+    """Load lens yaml mechanisms with probes and transfer targets."""
+    return yaml.safe_load((LENSES / f"{name}.yaml").read_text())
+
+
+def mechanism_fit(items, mechanisms, model):
+    """Max cosine title vs any probe, return per-item (best name, best score)."""
+    titles = [(i.get("title") or "") for i in items]
+    names = [""] * len(items)
+    scores = [0.0] * len(items)
+    for mech_name, mech in (mechanisms or {}).items():
+        for probe in (mech.get("probes", []) if isinstance(mech, dict) else []):
+            for idx, v in enumerate(score(probe, titles, model)):
+                if float(v) > scores[idx]:
+                    names[idx] = mech_name
+                    scores[idx] = round(float(v), 4)
+    return list(zip(names, scores))
+
+
 def gap(pos, neg):
     """Gap = pos_min - neg_max, want >0.05 for clean split."""
     return float(min(pos) - max(neg))  # pos_min - neg_max, want >0.05
 
 
-def rank_with_stats(items, thesis, model, threshold=0.80, keep=20):
-    """Score items, return (top-N above threshold, {threshold, above, below})."""
+def rank_with_stats(items, thesis, model, threshold=0.80, keep=20, lens="monitoring"):
+    """Score thesis + mechanism fit, gate on thesis, attach mechanism best/score."""
     global last_stats
     if not items:
         last_stats = {"threshold": threshold, "above": 0, "below": 0}
         rank.last_stats = last_stats
         return [], dict(last_stats)
     scores = score(thesis, [i.get("title") for i in items], model)
+    try:
+        fits = mechanism_fit(items, load_lens(lens).get("mechanisms", {}), model)
+    except Exception:
+        fits = [("", 0.0)] * len(items)  # ponytail: lens optional, thesis gate never breaks
     above = sum(1 for s in scores if float(s) >= threshold)
     below = len(items) - above
-    out = [{**i, "score": round(float(s), 4), "above_edge": float(s) >= threshold}
-           for i, s in zip(items, scores) if float(s) >= threshold]
+    out = [{**i, "score": round(float(s), 4), "above_edge": float(s) >= threshold,
+            "mechanism_best": f[0], "mechanism_score": f[1]}
+           for i, s, f in zip(items, scores, fits) if float(s) >= threshold]
     ranked = sorted(out, key=lambda d: d["score"], reverse=True)[:keep]
     last_stats = {"threshold": threshold, "above": above, "below": below}
     rank.last_stats = last_stats
     return ranked, dict(last_stats)
 
 
-def rank(items, thesis, model, threshold=0.80, keep=20):
+def rank(items, thesis, model, threshold=0.80, keep=20, lens="monitoring"):
     """Score items, drop below threshold, return top-N sorted desc."""
-    ranked, _ = rank_with_stats(items, thesis, model, threshold=threshold, keep=keep)
+    ranked, _ = rank_with_stats(items, thesis, model, threshold=threshold, keep=keep, lens=lens)
     return ranked
 
 

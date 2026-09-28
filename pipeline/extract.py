@@ -20,6 +20,9 @@ Output:
 ## Future Work
 ## Concept Hubs
 ## Relevance Score
+## Monitoring Transfer
+Monitoring problem, signal, uncertainty method, resulting action, evaluation setting.
+One transfer to IVN and one reason the transfer may fail.
 3-5 hubs as [[Concept - Name]], 2-4 word noun, reuse names, never output angle brackets.
 """
 

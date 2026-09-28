@@ -144,11 +144,13 @@ def run(scope="ivn", backfill=False, frm=None, to=None):
         ingest.save_seen(store, scope)
         records_path(scope).write_text(json.dumps(recs, indent=2))
         try:  # ponytail: 1 gap call/day, never break daily on failure
-            lims = [m.group(1).strip() for b in bodies for m in re.finditer(r"## Explicit Limitations\s*(.*?)(?=\n## |\Z)", b, re.S) if m.group(1).strip()]
-            ideas = asyncio.run(gap.run(lims, thesis, cfg["seeds"]["datasets"]))
-            papers = [writer.slugify(it["title"]) for it in ranked[:5]]
-            concepts = list(dict.fromkeys(h for b in bodies for h in writer.HUB_RE.findall(b)))
-            print(gap.save(ideas, path=ROOT / "vault" / "ideas" / f"{scope}-{today}.md", papers=papers, concepts=concepts))
+            scopes = (scope,)
+            card_paths = asyncio.run(gap.cards_run(scopes))
+            if not card_paths:
+                print("skip ideas: no records/thin evidence, no card written")
+            else:
+                for cp in card_paths:
+                    print(cp)
         except Exception:
             pass
     ingest.save_pending(still_pending, scope)

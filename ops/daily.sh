@@ -3,6 +3,7 @@
 # Safe to re-run (writer overwrites same-day notes, git no-ops if unchanged).
 set -u
 cd "$(dirname "$0")/.."
+[ -f ./.env ] && set -a && . ./.env && set +a
 [ -f "$HOME/.paper-drill.env" ] && set -a && . "$HOME/.paper-drill.env" && set +a
 LOG=cron.log
 {

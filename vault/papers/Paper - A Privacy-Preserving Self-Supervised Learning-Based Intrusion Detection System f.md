@@ -9,32 +9,32 @@ type: paper
 
 Novelty
 
-          * First-line novelty (inferred from title): combines privacy preservation with self-supervised learning for intrusion detection, avoiding both labeled-data dependence and raw traffic data sharing across vehicles/network operators.
-          * Targets the 5G-V2X setting, extending deep-learning IDS beyond legacy in-vehicle buses to vehicle-to-everything communication links.
-          * Note: the provided abstract restates only the title, so claimed contributions beyond the title cannot be verified.
+* First-line novelty (inferred from title): combines privacy preservation with self-supervised learning for intrusion detection, avoiding both labeled-data dependence and raw traffic data sharing across vehicles/network operators.
+* Targets the 5G-V2X setting, extending deep-learning IDS beyond legacy in-vehicle buses to vehicle-to-everything communication links.
+* Note: the provided abstract restates only the title, so claimed contributions beyond the title cannot be verified.
 
-        Methodology
+Methodology
 
-          * Self-supervised representation learning on (presumably) unlabeled 5G-V2X traffic to reduce reliance on annotated attack datasets.
-          * Privacy-preserving training regime (federated or similar decentralized scheme inferred from the "Privacy-Preserving" claim) so sensitive vehicular data stays local.
-          * Downstream detection head/classifier distinguishing normal vs. malicious network behavior.
-          * Note: architecture details, datasets, and evaluation protocols are not specified in the provided abstract.
+* Self-supervised representation learning on (presumably) unlabeled 5G-V2X traffic to reduce reliance on annotated attack datasets.
+* Privacy-preserving training regime (federated or similar decentralized scheme inferred from the "Privacy-Preserving" claim) so sensitive vehicular data stays local.
+* Downstream detection head/classifier distinguishing normal vs. malicious network behavior.
+* Note: architecture details, datasets, and evaluation protocols are not specified in the provided abstract.
 
-        Explicit Limitations
+Explicit Limitations
 
-          * None stated in the provided abstract (abstract contains no limitation statements).
+* None stated in the provided abstract (abstract contains no limitation statements).
 
-        Future Work
+Future Work
 
-          * None stated in the provided abstract.
+* None stated in the provided abstract.
 
-        Concept Hubs
+Concept Hubs
 
-          * [[Concept - Deep Learning Intrusion Detection]]
-          * [[Concept - Privacy-Preserving Learning]]
-          * [[Concept - Self-Supervised Learning]]
-          * [[Concept - V2X Network Security]]
+* [[Concept - Deep Learning Intrusion Detection]]
+* [[Concept - Privacy-Preserving Learning]]
+* [[Concept - Self-Supervised Learning]]
+* [[Concept - V2X Network Security]]
 
-        Relevance Score
+Relevance Score
 
-          * 4/5 — Directly applies deep learning to security of vehicular networks, matching the thesis; slight offset because 5G-V2X concerns inter-vehicle/infrastructure communication rather than strictly in-vehicle networks (e.g., CAN/Ethernet domains).
+* 4/5 — Directly applies deep learning to security of vehicular networks, matching the thesis; slight offset because 5G-V2X concerns inter-vehicle/infrastructure communication rather than strictly in-vehicle networks (e.g., CAN/Ethernet domains).

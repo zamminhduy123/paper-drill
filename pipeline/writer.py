@@ -1,5 +1,6 @@
 """Writer: paper md + concept stubs (stdlib only)."""
 import re
+import textwrap
 import sys
 import unicodedata
 from pathlib import Path
@@ -35,7 +36,8 @@ def write_paper(title, year, doi, relevance, body, force=False) -> Path:
     """Write paper note + missing concept stubs, return path."""
     PAPERS.mkdir(parents=True, exist_ok=True)
     CONCEPTS.mkdir(parents=True, exist_ok=True)
-    body = normalize_hubs(body)
+    body = textwrap.dedent(normalize_hubs(body))
+    body = "\n".join(ln.lstrip() if ln.strip() else "" for ln in body.splitlines())
     dest = PAPERS / f"Paper - {slugify(title)}.md"
     if dest.exists() and not force:
         raise FileExistsError(f"{dest} exists (use force=True to overwrite)")

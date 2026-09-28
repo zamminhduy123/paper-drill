@@ -8,6 +8,28 @@ PAPERS, IDEAS, CONCEPTS = ROOT / "vault" / "papers", ROOT / "vault" / "ideas", R
 SCOPES, DEST = ROOT / "config" / "scopes", ROOT / "vault" / "Dashboard.md"
 HUB_RE, DATE_RE = re.compile(r"\[\[Concept - (.+?)\]\]"), re.compile(r"(20\d\d-\d\d-\d\d)")
 TITLE_RE, YEAR_RE, SCORE_RE = re.compile(r'^title:\s*"?(.*?)"?\s*$', re.M), re.compile(r"^year:\s*(\d{4})?", re.M), re.compile(r"^relevance_score:\s*([\d.]+)?", re.M)
+LINK_RE, Q_RE = re.compile(r"\[\[([^\]]+?)\]\]"), re.compile(r"^## Question\s*\n(.+?)(?=\n## |\Z)", re.M | re.S)
+NOV_RE = re.compile(r"novelty(?:\s+status)?\s*[:\-]\s*(unchecked|overlaps prior work|specific difference)", re.I)
+
+
+def _card_row(p):
+    """Parse one card file into (file, question, novelty, broken, flag)."""
+    t = p.read_text(errors="ignore")
+    m = Q_RE.search(t)
+    q = next((ln.strip() for ln in (m.group(1) if m else "").splitlines() if ln.strip()), "?")
+    n = NOV_RE.search(t)
+    novelty = n.group(1).lower() if n else "unchecked"
+    broken = 0
+    for target in LINK_RE.findall(t):
+        tg = target.strip()
+        if tg.startswith("Paper - "):
+            ok = (PAPERS / f"{tg}.md").exists()
+        elif tg.startswith("Concept - "):
+            ok = (CONCEPTS / f"{tg}.md").exists()
+        else:
+            ok = (PAPERS / f"Paper - {tg}.md").exists() or (CONCEPTS / f"Concept - {tg}.md").exists()
+        broken += 0 if ok else 1
+    return (p.name, q, novelty, broken, "needs-evidence-review" if novelty == "unchecked" else "")
 
 
 def _meta(p):
@@ -20,7 +42,7 @@ def _meta(p):
 
 
 def build():
-    """Scan vault, write Dashboard.md with 4 plain tables, return path."""
+    """Scan vault, write Dashboard.md with 5 plain tables, return path."""
     papers = sorted((_meta(p) for p in PAPERS.glob("*.md") if p.is_file()), key=lambda d: d["score"], reverse=True)
     counts = {}
     for d in papers:
@@ -47,6 +69,9 @@ def build():
     L += [f"| {h} | {n} | {'single-use' if n == 1 else 'unused' if n == 0 else ''} |" for h, n in sorted(counts.items(), key=lambda kv: (-kv[1], kv[0]))] or ["_none_"]
     L += ["\n## Ideas (date, scope, linked papers)\n| date | scope | file | linked papers |\n|---|---|---|---|\n"]
     L += [f"| {dt} | {sc} | {fn} | {n} |" for dt, sc, fn, n in ideas] or ["_none_"]
+    L += ["\n## Cards (question, novelty, broken links)\n| file | question | novelty | broken links | flag |\n|---|---|---|---|---|\n"]
+    L += [f"| {fn} | {q} | {nov} | {b} | {f} |" for fn, q, nov, b, f in
+          sorted((_card_row(p) for p in IDEAS.glob('card-*.md') if p.is_file()), reverse=True)] or ["_none_"]
     L += ["\n## Warnings\n"] + (warns or ["- none"])
     L += ['\n```dataview\nTABLE year, relevance_score FROM "papers" SORT relevance_score DESC\n```']
     DEST.write_text("\n".join(L) + "\n")

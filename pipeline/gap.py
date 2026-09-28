@@ -11,6 +11,81 @@ ROOT = Path(__file__).resolve().parent.parent
 
 LIM_RE = re.compile(r"## Explicit Limitations\s*(.*?)(?=\n## |\Z)", re.S)
 
+CARD_FIELDS = ("Question", "Evidence", "Transfer", "Experiment", "Value")
+CARD_METRICS = ("false alarms/hour", "detection delay", "accepted-error rate", "review workload", "post-shift performance")
+CARD_NOVELTY = ("unchecked", "overlaps prior work", "specific difference")
+
+
+def _card_slug(rec):
+    """Slugify one card record title for vault [[Paper - X]] links."""
+    return writer.slugify((rec or {}).get("title") or "untitled")
+
+
+def _card_evidence(rec):
+    """Render one record with author/inference/unknown labels preserved."""
+    rec = rec or {}
+    slug = _card_slug(rec)
+    lines = [f"- title: {rec.get('title', 'not stated')}", f"- note: [[Paper - {slug}]]"]
+    for f in ("monitoring_problem", "signal", "uncertainty_method", "action", "eval_setting",
+              "limitation_author", "limitation_inference", "limitation_unknown",
+              "support_passage", "transfer_ivn", "transfer_risk"):
+        lines.append(f"- {f} (record label, do not relabel): {rec.get(f, 'not stated')}")
+    return "\n".join(lines)
+
+
+def build_card_prompt(records):
+    """Build one disprovable candidate-card prompt from labeled records."""
+    records = [r for r in (records or []) if r]
+    slugs = [s for s in (_card_slug(r) for r in records)
+             if (writer.PAPERS / f"Paper - {s}.md").exists()]
+    allowed = ", ".join(f"[[Paper - {s}]]" for s in slugs) or "(none verified: use plain titles, no [[...]] links)"
+    ev = "\n\n".join(_card_evidence(r) for r in records) or "(no records)"
+    metrics = ", ".join(CARD_METRICS)
+    novelty = ", ".join(CARD_NOVELTY)
+    return (
+        "Write exactly ONE candidate card with these EXACT sections, in order:\n"
+        "## Question\n## Evidence\n## Transfer\n## Experiment\n## Value\n"
+        "## Question: one disprovable claim (falsifiable, single sentence first).\n"
+        "## Evidence: three labeled bullets: supporting papers, conflicting papers, unknown. "
+        "Use only record labels below; never present inference as author-stated; write \"not stated\" when absent. "
+        "Label thin/speculative parts as speculative.\n"
+        "## Transfer: source field -> mechanism -> IVN problem, one line each.\n"
+        "## Experiment: data, baseline, shift-or-failure condition, comparison.\n"
+        f"## Value: one measurement from [{metrics}], the job skill it improves, feasibility, "
+        f"and exactly one novelty line `Novelty status: <one of {novelty}>`.\n"
+        f"Link rules: only these verified links may appear: {allowed}. "
+        "Never invent [[Paper - X]] links; reuse record labels verbatim.\n"
+        f"Records:\n{ev}\n"
+    )
+
+
+def _top_card_records(scopes, limit=3):
+    """Load records files across scopes, return top-N by relevance desc."""
+    all_recs = []
+    for scope in scopes or []:
+        try:
+            recs = json.loads((ROOT / "state" / f"{scope}-records.json").read_text())
+        except (OSError, ValueError):
+            continue  # ponytail: missing/corrupt records file, skip scope
+        all_recs.extend([r for r in (recs or []) if r])
+    all_recs.sort(key=lambda r: float((r or {}).get("relevance", 0) or 0), reverse=True)
+    return all_recs[:max(0, limit)]
+
+
+async def cards_run(scopes=("ivn", "iot-ids", "nids")):
+    """Generate <=3 candidate cards from top records, save via save(), return paths."""
+    top = _top_card_records(scopes, limit=3)
+    if not top:
+        print("cards_run: no records, skipping"); return []
+    today = date.today().isoformat()
+    paths = []
+    for i, rec in enumerate(top, 1):
+        prompt = build_card_prompt([rec])
+        text = await llm.arun(prompt, timeout=300)
+        paths.append(save(text, path=ROOT / "vault" / "ideas" / f"card-{today}-{i}.md",
+                          papers=[_card_slug(rec)]))
+    return paths
+
 
 def build_prompt(thesis, limitations, datasets):
     """Build gap-ideas prompt constrained to scope datasets."""

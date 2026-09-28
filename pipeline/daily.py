@@ -29,7 +29,11 @@ def run(scope="ivn", backfill=False, frm=None, to=None):
     model = rank.load_model(scope=scope)
     ranked = rank.rank(items, thesis, model, threshold=cfg["thresholds"]["semantic_edge"], keep=cfg["limits"]["keep"])
     rank.state_paths(scope)[1].write_text(json.dumps(ranked, indent=2))
+    if not ranked:
+        return []
     paths, seen, bodies = [], set(), []
+    store = ingest.load_seen(scope)
+    today = date.today().isoformat()
     for it in ranked:
         if len(paths) >= min(cfg["limits"]["keep"], 5):
             break
@@ -47,7 +51,10 @@ def run(scope="ivn", backfill=False, frm=None, to=None):
             continue
         paths.append(writer.write_paper(it["title"], it.get("year"), it.get("doi") or "", parse_relevance(body, it["score"] * 10), body, force=not backfill))
         bodies.append(body)
+        for k in ingest.keys_of(it):
+            store[k] = today
     if paths:
+        ingest.save_seen(store, scope)
         try:  # ponytail: 1 gap call/day, never break daily on failure
             lims = [m.group(1).strip() for b in bodies for m in re.finditer(r"## Explicit Limitations\s*(.*?)(?=\n## |\Z)", b, re.S) if m.group(1).strip()]
             ideas = asyncio.run(gap.run(lims, thesis, cfg["seeds"]["datasets"]))

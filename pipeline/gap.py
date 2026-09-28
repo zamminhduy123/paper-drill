@@ -14,12 +14,14 @@ LIM_RE = re.compile(r"## Explicit Limitations\s*(.*?)(?=\n## |\Z)", re.S)
 
 def build_prompt(thesis, limitations, datasets):
     """Build gap-ideas prompt constrained to scope datasets."""
-    lims = "\n".join(f"- {x}" for x in limitations)
+    lims = "\n".join(f"- {x}" for x in limitations if x and x.strip())
     names = ", ".join(datasets)
     return (
         f"Thesis: {thesis}\nExplicit limitations:\n{lims}\n"
         f"Propose concrete research splits using only these datasets: {names}.\n"
         f"Use no other dataset names.\n"
+        "For each claim output exactly three labeled parts: Author-stated (quote or \"not stated in abstract\"), Inference (model's, mark as such), Proposed experiment.\n"
+        "Never present inference as author-stated; write \"not stated\" when absent.\n"
         "Format: use ## for section titles, - for bullets, 1. for numbered steps,\n"
         "and GitHub pipe tables (| col |) with a --- separator row for any tabular data.\n"
         "Never use space-aligned tables."
@@ -28,6 +30,7 @@ def build_prompt(thesis, limitations, datasets):
 
 async def run(limitations, thesis=None, datasets=None):
     """Ask GLM-web, fall back to DeepSeek-web, then Qwen."""
+    limitations = [l.strip() for l in (limitations or []) if l and l.strip()]
     if thesis is None or datasets is None:
         cfg = rank.load_cfg()
         thesis = thesis or cfg["seeds"]["thesis_statements"][0]
@@ -40,10 +43,13 @@ def build_cross_prompt(sections, thesis, datasets):
     """Build one cross-scope gap prompt with scope-labeled limitations."""
     parts = [f"Thesis: {thesis}"]
     for scope, lims in sections.items():
-        parts.append(f"Scope {scope} limitations:\n" + "\n".join(f"- {x}" for x in lims))
+        clean = [x.strip() for x in (lims or []) if x and x.strip()]
+        parts.append(f"Scope {scope} limitations:\n" + "\n".join(f"- {x}" for x in clean))
     names = ", ".join(datasets)
     parts.append("Propose concrete ideas shaped as `Method X from Scope A -> Problem Y in Scope B`.")
     parts.append(f"Propose concrete research splits using only these datasets: {names}.\nUse no other dataset names.")
+    parts.append("For each claim output exactly three labeled parts: Author-stated (quote or \"not stated in abstract\"), Inference (model's, mark as such), Proposed experiment.")
+    parts.append("Never present inference as author-stated; write \"not stated\" when absent.")
     parts.append("Format: use ## for section titles, - for bullets, 1. for numbered steps,\nand GitHub pipe tables (| col |) with a --- separator row for any tabular data.\nNever use space-aligned tables.")
     return "\n".join(parts)
 
@@ -97,7 +103,12 @@ def save(text, path=None, papers=None, concepts=None):
     text = re.sub(r"\n{4,}", "\n\n\n", text)
     text = text.strip()
     if papers:
-        text += "\n\n## Linked Papers\n" + "\n".join(f"[[Paper - {p}]]" for p in papers)
+        present = [p for p in papers if (writer.PAPERS / f"Paper - {p}.md").exists()]
+        absent = [p for p in papers if not (writer.PAPERS / f"Paper - {p}.md").exists()]
+        if present:
+            text += "\n\n## Linked Papers\n" + "\n".join(f"[[Paper - {p}]]" for p in present)
+        if absent:
+            text += "\n\n## To investigate (notes absent)\n" + "\n".join(f"- {p}" for p in absent)
     if concepts:
         text += "\n\n## Linked Concepts\n" + "\n".join(f"[[Concept - {c}]]" for c in concepts)
     dest = Path(path) if path else Path(__file__).resolve().parent.parent / "vault" / "ideas" / f"{date.today().isoformat()}.md"

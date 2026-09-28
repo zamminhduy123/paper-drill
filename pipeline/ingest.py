@@ -83,7 +83,7 @@ def keys_of(item):
 
 
 def ingest(limit=50, per_page=50, mode="new", frm=None, to=None, scope="ivn"):
-    """Fetch OpenAlex window, drop seen IDs, save seen, advance cursor."""
+    """Fetch OpenAlex window, drop seen IDs, return items only."""
     cfg = load_cfg(scope)
     out_path, _, cursor_path = state_paths(scope)
     ox = cfg["sources"]["openalex"]
@@ -110,9 +110,6 @@ def ingest(limit=50, per_page=50, mode="new", frm=None, to=None, scope="ivn"):
         if any(k in store for k in keys):
             continue
         fresh.append(it)
-        for k in keys:
-            store[k] = today
-    save_seen(store, scope)
     if mode == "new":
         cursor_path.parent.mkdir(exist_ok=True)
         cursor_path.write_text(today)

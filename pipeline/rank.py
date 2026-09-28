@@ -55,12 +55,12 @@ def gap(pos, neg):
 
 
 def rank(items, thesis, model, threshold=0.80, keep=20):
+    """Score items, drop below threshold, return top-N sorted desc."""
     if not items:
         return []  # nothing new today, skip encode
-    """Score items, flag above_edge, return top-N sorted desc."""
     scores = score(thesis, [i.get("title") for i in items], model)
     out = [{**i, "score": round(float(s), 4), "above_edge": float(s) >= threshold}
-           for i, s in zip(items, scores)]
+           for i, s in zip(items, scores) if float(s) >= threshold]
     return sorted(out, key=lambda d: d["score"], reverse=True)[:keep]
 
 

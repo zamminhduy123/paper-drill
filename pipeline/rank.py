@@ -76,32 +76,47 @@ def gap(pos, neg):
     return float(min(pos) - max(neg))  # pos_min - neg_max, want >0.05
 
 
-def rank_with_stats(items, thesis, model, threshold=0.80, keep=20, lens="monitoring"):
-    """Score thesis + mechanism fit, gate on thesis, attach mechanism best/score."""
+def rank_with_stats(items, thesis, model, threshold=0.80, keep=20, lens="monitoring", mechanism_threshold=None):
+    """Score thesis + mechanism, admit thesis>=thr OR mech>=mech_thr, sort by max desc."""
     global last_stats
     if not items:
-        last_stats = {"threshold": threshold, "above": 0, "below": 0}
+        last_stats = {"threshold": threshold, "above": 0, "below": 0, "mechanism_admits": 0}
         rank.last_stats = last_stats
         return [], dict(last_stats)
     scores = score(thesis, [i.get("title") for i in items], model)
+    lens_cfg = {}
     try:
-        fits = mechanism_fit(items, load_lens(lens).get("mechanisms", {}), model)
+        lens_cfg = load_lens(lens) or {}
+        fits = mechanism_fit(items, lens_cfg.get("mechanisms", {}), model)
     except Exception:
         fits = [("", 0.0)] * len(items)  # ponytail: lens optional, thesis gate never breaks
+    if mechanism_threshold is None:
+        try:
+            mechanism_threshold = float((lens_cfg.get("thresholds") or {}).get(
+                "mechanism_edge", lens_cfg.get("mechanism_threshold", threshold)))
+        except Exception:
+            mechanism_threshold = threshold  # ponytail: absent lens key, reuse thesis threshold
     above = sum(1 for s in scores if float(s) >= threshold)
     below = len(items) - above
-    out = [{**i, "score": round(float(s), 4), "above_edge": float(s) >= threshold,
-            "mechanism_best": f[0], "mechanism_score": f[1]}
-           for i, s, f in zip(items, scores, fits) if float(s) >= threshold]
-    ranked = sorted(out, key=lambda d: d["score"], reverse=True)[:keep]
-    last_stats = {"threshold": threshold, "above": above, "below": below}
+    out = []
+    for i, s, f in zip(items, scores, fits):
+        thesis_ok = float(s) >= threshold
+        mech_ok = float(f[1]) >= mechanism_threshold
+        if thesis_ok or mech_ok:
+            out.append({**i, "score": round(float(s), 4), "above_edge": thesis_ok,
+                        "mechanism_best": f[0], "mechanism_score": f[1],
+                        "selection_reason": "thesis" if thesis_ok else "mechanism"})
+    ranked = sorted(out, key=lambda d: max(d["score"], d["mechanism_score"]), reverse=True)[:keep]
+    last_stats = {"threshold": threshold, "above": above, "below": below,
+                  "mechanism_admits": sum(1 for d in ranked if d["selection_reason"] == "mechanism")}
     rank.last_stats = last_stats
     return ranked, dict(last_stats)
 
 
-def rank(items, thesis, model, threshold=0.80, keep=20, lens="monitoring"):
-    """Score items, drop below threshold, return top-N sorted desc."""
-    ranked, _ = rank_with_stats(items, thesis, model, threshold=threshold, keep=keep, lens=lens)
+def rank(items, thesis, model, threshold=0.80, keep=20, lens="monitoring", mechanism_threshold=None):
+    """Score items, admit by thesis or mechanism threshold, return top-N sorted desc."""
+    ranked, _ = rank_with_stats(items, thesis, model, threshold=threshold, keep=keep, lens=lens,
+                                mechanism_threshold=mechanism_threshold)
     return ranked
 
 

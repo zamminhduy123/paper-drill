@@ -107,8 +107,16 @@ def rank_with_stats(items, thesis, model, threshold=0.80, keep=20, lens="monitor
                         "mechanism_best": f[0], "mechanism_score": f[1],
                         "selection_reason": "thesis" if thesis_ok else "mechanism"})
     ranked = sorted(out, key=lambda d: max(d["score"], d["mechanism_score"]), reverse=True)[:keep]
+    mech_in_top = sum(1 for d in ranked if d["selection_reason"] == "mechanism")
+    if mech_in_top < 3:
+        seen = {id(d) for d in ranked}
+        pool = sorted((d for d in out if id(d) not in seen and d["selection_reason"] == "mechanism"),
+                      key=lambda d: d["mechanism_score"], reverse=True)[:3 - mech_in_top]
+        for d in pool:
+            d["selection_reason"] = "mechanism-quota"
+        ranked.extend(pool)
     last_stats = {"threshold": threshold, "above": above, "below": below,
-                  "mechanism_admits": sum(1 for d in ranked if d["selection_reason"] == "mechanism")}
+                  "mechanism_admits": sum(1 for d in ranked if d["selection_reason"] in ("mechanism", "mechanism-quota"))}
     rank.last_stats = last_stats
     return ranked, dict(last_stats)
 

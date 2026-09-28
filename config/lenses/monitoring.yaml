@@ -1,3 +1,7 @@
+thresholds:
+  # mechanism_edge 0.37 = precision choice: 0 FP on measured set (4/6 relevant + 0/5 controls).
+  # Recall alternative 0.35: 6/6 relevant + 2/5 controls. Relevant mech 0.404/0.388/0.355/0.370/0.490/0.406; controls 0.272-0.369 (zembed, title-only).
+  mechanism_edge: 0.37
 mechanisms:
   shift_monitoring:
     probes:

@@ -15,15 +15,15 @@ def _ok(text) -> bool:
 
 
 async def arun(prompt: str, timeout: int = 300) -> str:
-    """Try glm, deepseek, then local chat with same prompt, return first good text."""
+    """Try deepseek, glm, then local chat with same prompt, return first good text."""
     try:
-        text = await glm_web.ask(prompt, timeout=timeout)
+        text = await deepseek_web.ask(prompt, timeout=timeout)
         if _ok(text):
             return text
     except Exception:
         pass
     try:
-        text = await deepseek_web.ask(prompt, timeout=timeout)
+        text = await glm_web.ask(prompt, timeout=timeout)
         if _ok(text):
             return text
     except Exception:

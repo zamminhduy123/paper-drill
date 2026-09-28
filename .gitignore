@@ -6,3 +6,4 @@ pipeline/__pycache__/**
 cron.lock
 __pycache__/
 .browsers/
+cron.log

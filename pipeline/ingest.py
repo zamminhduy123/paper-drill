@@ -14,6 +14,9 @@ API = "https://api.openalex.org/works"
 
 last_counts = {"available": 0, "examined": 0}
 
+WINDOW_MAX_PAGES = 10
+WINDOW_MAX_RESULTS = 500
+
 def cfg_path(scope="ivn"):
     """Resolve config/scopes/<scope>.yaml path."""
     return SCOPES / f"{scope}.yaml"
@@ -118,7 +121,7 @@ def keys_of(item):
 
 
 def ingest_with_counts(limit=50, per_page=50, mode="new", frm=None, to=None, scope="ivn"):
-    """Fetch window pages up to limit examined, return (fresh items, counts)."""
+    """Fetch full window pages up to 500 examined, return (fresh items, counts)."""
     global last_counts
     cfg = load_cfg(scope)
     _, _, cursor_path = state_paths(scope)
@@ -131,7 +134,8 @@ def ingest_with_counts(limit=50, per_page=50, mode="new", frm=None, to=None, sco
         filt = f"from_publication_date:{start},title-and-abstract.search:{q}"
     available, examined, page = 0, 0, 1
     seen, out = set(), []
-    while examined < limit:
+    fetch_budget = max(limit, WINDOW_MAX_RESULTS)
+    while examined < fetch_budget and page <= WINDOW_MAX_PAGES:
         params = {"filter": filt, "sort": "publication_date:desc", "per-page": per_page, "page": page, "mailto": ox["mailto"]}
         data = fetch(params) or {}
         if page == 1:
@@ -143,7 +147,7 @@ def ingest_with_counts(limit=50, per_page=50, mode="new", frm=None, to=None, sco
         if not results:
             break
         for w in results:
-            if examined >= limit:
+            if examined >= fetch_budget:
                 break
             examined += 1
             oid = w.get("id")

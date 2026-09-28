@@ -67,7 +67,7 @@ def write_report(scope, report):
 
 
 def run(scope="ivn", backfill=False, frm=None, to=None):
-    """Run pending-retries then ingest-rank-extract-write for top-5, return paths."""
+    """Run pending-retries then ingest-rank-extract-write with overflow queued, return paths."""
     cfg = rank.load_cfg(scope)
     thesis = cfg["seeds"]["thesis_statements"][0]
     threshold = cfg["thresholds"]["semantic_edge"]
@@ -116,9 +116,8 @@ def run(scope="ivn", backfill=False, frm=None, to=None):
               "available": counts.get("available", found), "examined": counts.get("examined", found),
               "selection_reason": f"score >= {stats.get('threshold', threshold)}"}
     queued_ids = {e["id"] for e in still_pending}
+    extract_budget = min(cfg["limits"]["keep"], 5)
     for it in ranked:
-        if len(paths) >= min(cfg["limits"]["keep"], 5):
-            break
         if _item_id(it) in queued_ids:
             continue
         slug = writer.slugify(it["title"])
@@ -126,6 +125,10 @@ def run(scope="ivn", backfill=False, frm=None, to=None):
             continue
         seen.add(slug)
         if backfill and (writer.PAPERS / f"Paper - {slug}.md").exists():
+            continue
+        if len(paths) >= extract_budget:  # ponytail: budget caps cost, overflow queues unprocessed, never dropped
+            still_pending.append(_queue_entry(it, scope, window, 0))
+            queued_ids.add(_item_id(it))
             continue
         try:
             path, rec, body = _process_one(it, thesis, backfill)

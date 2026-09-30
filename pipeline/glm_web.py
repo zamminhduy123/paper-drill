@@ -94,6 +94,11 @@ async def _enable_thinking(browser):
         pass
 
 
+def _reasoning(html, text):
+    """Detect active reasoning from placeholder text or thinking container."""
+    return bool(re.fullmatch(r"(Thinking\.{0,3}|\.{3})", text.strip(), re.I)) or "thinking-chain-container" in html
+
+
 async def send_message(browser, message, timeout=180, thinking=True):
     """Send message, wait for stable response text, return it."""
     if thinking:
@@ -127,14 +132,20 @@ async def send_message(browser, message, timeout=180, thinking=True):
         })()""",
         await_promise=True, return_by_value=True,
     )
-    end, last, stable_since = time() + timeout, "", time()
+    start = time()
+    end, last, stable_since = start + timeout, "", start
+    cap, prev_len = start + 1800, 0
     while time() < end:
         await sleep(3)
         html = await browser.main_tab.evaluate(
             "document.documentElement.outerHTML", await_promise=True, return_by_value=True,
         )
         text = _scrape(html)
-        if not text or re.fullmatch(r"(Thinking\.{0,3}|\.{3})", text.strip(), re.I):
+        grown = len(html) > prev_len
+        prev_len = len(html)
+        if not text or _reasoning(html, text):
+            if grown:
+                end = min(time() + 180, cap)
             continue  # still reasoning, not an answer yet
         if text != last:
             last, stable_since = text, time()

@@ -5,7 +5,7 @@ import re
 from datetime import date
 from pathlib import Path
 
-from . import dashboard, extract, gap, ingest, rank, record, writer
+from . import dashboard, extract, fulltext, gap, ingest, rank, record, writer
 
 ROOT = Path(__file__).resolve().parent.parent
 STATE = ROOT / "state"
@@ -27,11 +27,14 @@ def _queue_entry(item, scope, window, attempts):
 
 def _process_one(it, thesis, backfill):
     """Extract, parse, and write one item, return (path, rec, body)."""
-    abstract = it.get("abstract") or it["title"]  # ponytail: title-only, full abstract when OpenAlex abstract_inverted_index wired
+    full = fulltext.get_text(it)  # ponytail: ranked-only, never bulk-download unranked
+    abstract = full or it.get("abstract") or it["title"]
+    it["text_kind"] = "fulltext" if full else "abstract"
     body = extract.extract(thesis, it["title"], abstract)
     rec = record.parse(body)
     rec.update({"title": it["title"], "year": it.get("year"), "body": body,
                 "relevance": parse_relevance(body, it.get("score", 0) * 10)})
+    rec["text_kind"] = it["text_kind"]
     if it.get("doi") and record._is_empty(rec.get("doi")):
         rec["doi"] = it["doi"]
     if record.validate(rec):

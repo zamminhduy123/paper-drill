@@ -14,28 +14,38 @@ def _ok(text) -> bool:
     return not BUSY_RE.search(str(text))
 
 
+def _scrub(msg) -> str:
+    """Redact bearer/token secrets and truncate message to 100 chars."""
+    s = re.sub(r"(?i)(bearer\s+[^\s'\";]+|token\s*[:=]\s*[^\s'\";,]+)", "[redacted]", str(msg))
+    return s[:100]
+
+
 async def arun(prompt: str, timeout: int = 600, thinking: bool = True) -> str:
     """Try deepseek, glm, then local chat with same prompt, return first good text."""
+    fails = []
     try:
         text = await deepseek_web.ask(prompt, timeout=timeout, thinking=thinking)
         if _ok(text):
             return text
-    except Exception:
-        pass
+        fails.append("deepseek: busy-text")
+    except Exception as e:
+        fails.append(f"deepseek: {type(e).__name__}({_scrub(e)})")
     try:
         text = await glm_web.ask(prompt, timeout=timeout, thinking=thinking)
         if _ok(text):
             return text
-    except Exception:
-        pass
+        fails.append("glm: busy-text")
+    except Exception as e:
+        fails.append(f"glm: {type(e).__name__}({_scrub(e)})")
     try:
         from .extract import chat
         text = chat(prompt, timeout=timeout)
         if _ok(text):
             return text
-    except Exception:
-        pass
-    raise RuntimeError("all LLM rungs failed or returned busy text")
+        fails.append("qwen: busy-text")
+    except Exception as e:
+        fails.append(f"qwen: {type(e).__name__}({_scrub(e)})")
+    raise RuntimeError(f"all LLM rungs failed: {'; '.join(fails)}")
 
 
 def run(prompt: str, timeout: int = 600, thinking: bool = True) -> str:

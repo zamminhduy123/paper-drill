@@ -16,6 +16,65 @@ last_counts = {"available": 0, "examined": 0}
 
 RESULTS_CAP = 500
 
+BACKFILL_FLOOR = "2024-01-01"
+BACKFILL_INIT_FROM = "2026-08-01"
+
+
+def backfill_path(scope="ivn"):
+    """Resolve state/<scope>-backfill.json monthly cursor path."""
+    return STATE / f"{scope}-backfill.json"
+
+
+def _month_end(frm):
+    """Return last-day ISO date for frm's month."""
+    import calendar
+    y, m, _ = (int(x) for x in frm.split("-"))
+    return f"{y:04d}-{m:02d}-{calendar.monthrange(y, m)[1]:02d}"
+
+
+def _prev_month_start(frm):
+    """Return first-day ISO date of month before frm."""
+    y, m, _ = (int(x) for x in frm.split("-"))
+    m -= 1
+    if m < 1:
+        m, y = 12, y - 1
+    return f"{y:04d}-{m:02d}-01"
+
+
+def next_backfill_window(scope="ivn"):
+    """Return (frm, to) monthly backfill window, init recent, (None, None) when done."""
+    p = backfill_path(scope)
+    if not p.exists():
+        frm = BACKFILL_INIT_FROM
+        cur = {"next_from": frm, "next_to": _month_end(frm)}
+        p.parent.mkdir(exist_ok=True)
+        p.write_text(json.dumps(cur, indent=2))
+        return cur["next_from"], cur["next_to"]
+    try:
+        cur = json.loads(p.read_text())
+    except Exception:
+        return None, None
+    if cur.get("done") or not cur.get("next_from"):
+        return None, None
+    if cur["next_from"] < BACKFILL_FLOOR:
+        return None, None
+    return cur["next_from"], cur.get("next_to") or _month_end(cur["next_from"])
+
+
+def advance_backfill(scope="ivn"):
+    """Step backfill cursor one month back, mark done at floor, return (frm, to)."""
+    frm, _ = next_backfill_window(scope)
+    if frm is None:
+        return None, None
+    prev = _prev_month_start(frm)
+    p = backfill_path(scope)
+    if prev < BACKFILL_FLOOR:
+        p.write_text(json.dumps({"done": True, "next_from": None, "next_to": None}, indent=2))
+        return None, None
+    cur = {"next_from": prev, "next_to": _month_end(prev)}
+    p.write_text(json.dumps(cur, indent=2))
+    return cur["next_from"], cur["next_to"]
+
 def cfg_path(scope="ivn"):
     """Resolve config/scopes/<scope>.yaml path."""
     return SCOPES / f"{scope}.yaml"

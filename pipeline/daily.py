@@ -42,6 +42,41 @@ def _process_one(it, thesis, backfill):
     return writer.write_record(rec, force=not backfill), rec, body
 
 
+def _drain_ranked(ranked, scope, window, thesis, backfill, store, today, seen, tried, extract_budget, paths, recs, bodies, failed_ids, still_pending, queued_ids):
+    """Drain ranked items through extract/write honoring shared budget, return (tried, n)."""
+    n = 0
+    for it in ranked:
+        if _item_id(it) in queued_ids:
+            continue
+        slug = writer.slugify(it["title"])
+        if slug in seen:  # ponytail: OpenAlex double-indexes same title, backfill from ranked
+            continue
+        seen.add(slug)
+        if backfill and (writer.PAPERS / f"Paper - {slug}.md").exists():
+            continue
+        if tried >= extract_budget:  # ponytail: budget caps cost, overflow queues unprocessed, never dropped
+            still_pending.append(_queue_entry(it, scope, window, 0))
+            queued_ids.add(_item_id(it))
+            continue
+        try:
+            path, rec, body = _process_one(it, thesis, backfill)
+        except Exception as e:  # ponytail: skip paper, never overwrite good note with stub
+            print(f"skip {slug}: extract failed: {e}")
+            tried += 1
+            failed_ids.append(_item_id(it))
+            still_pending.append(_queue_entry(it, scope, window, 1))
+            queued_ids.add(_item_id(it))
+            continue
+        tried += 1
+        n += 1
+        paths.append(path)
+        recs.append(rec)
+        bodies.append(body)
+        for k in ingest.keys_of(it):
+            store[k] = today
+    return tried, n
+
+
 def parse_relevance(body, fallback):
     """Parse 0-10 relevance from extract body, fallback to rank score."""
     for line in body.split("## Relevance Score")[-1].splitlines():
@@ -128,35 +163,26 @@ def run(scope="ivn", backfill=False, frm=None, to=None):
               "available": counts.get("available", found), "examined": counts.get("examined", found),
               "selection_reason": f"score >= {stats.get('threshold', threshold)}"}
     queued_ids = {e["id"] for e in still_pending}
-    for it in ranked:
-        if _item_id(it) in queued_ids:
-            continue
-        slug = writer.slugify(it["title"])
-        if slug in seen:  # ponytail: OpenAlex double-indexes same title, backfill from ranked
-            continue
-        seen.add(slug)
-        if backfill and (writer.PAPERS / f"Paper - {slug}.md").exists():
-            continue
-        if tried >= extract_budget:  # ponytail: budget caps cost, overflow queues unprocessed, never dropped
-            still_pending.append(_queue_entry(it, scope, window, 0))
-            queued_ids.add(_item_id(it))
-            continue
-        try:
-            path, rec, body = _process_one(it, thesis, backfill)
-        except Exception as e:  # ponytail: skip paper, never overwrite good note with stub
-            print(f"skip {slug}: extract failed: {e}")
-            tried += 1
-            failed_ids.append(_item_id(it))
-            still_pending.append(_queue_entry(it, scope, window, 1))
-            queued_ids.add(_item_id(it))
-            continue
-        tried += 1
-        fresh_processed += 1
-        paths.append(path)
-        recs.append(rec)
-        bodies.append(body)
-        for k in ingest.keys_of(it):
-            store[k] = today
+    tried, n = _drain_ranked(ranked, scope, window, thesis, backfill, store, today, seen, tried, extract_budget, paths, recs, bodies, failed_ids, still_pending, queued_ids)
+    fresh_processed += n
+    backfill_info = {"skipped": None, "frm": None, "to": None, "found": 0, "selected": 0, "processed": 0}
+    if not backfill:
+        if fresh_processed >= extract_budget:
+            backfill_info["skipped"] = "busy-day"
+        else:
+            bfrm, bto = ingest.next_backfill_window(scope)
+            if bfrm is None:
+                backfill_info["skipped"] = "floor-done"
+            else:
+                backfill_info["frm"], backfill_info["to"] = bfrm, bto
+                bitems = ingest.ingest(limit=cfg["limits"]["per_run"], mode="backfill", frm=bfrm, to=bto, scope=scope)
+                backfill_info["found"] = len(bitems)
+                branked = rank.rank(bitems, thesis, model, threshold=threshold, keep=cfg["limits"]["keep"])
+                backfill_info["selected"] = len(branked)
+                before = len(paths)
+                tried, n = _drain_ranked(branked, scope, f"{bfrm}:{bto}", thesis, True, store, today, seen, tried, extract_budget, paths, recs, bodies, failed_ids, still_pending, queued_ids)
+                backfill_info["processed"] = len(paths) - before
+                ingest.advance_backfill(scope)
     if paths:
         ingest.save_seen(store, scope)
         records_path(scope).write_text(json.dumps(recs, indent=2))
@@ -180,6 +206,7 @@ def run(scope="ivn", backfill=False, frm=None, to=None):
     report.update({"selected": len(ranked), "processed": len(paths), "failed": len(failed_ids), "failed_ids": failed_ids,
                    "pending": len(still_pending), "pending_ids": [e["id"] for e in still_pending],
                    "pending_processed": pending_processed, "fresh_processed": fresh_processed,
+                   "backfill": backfill_info,
                    "dead": len(dead_ids), "dead_ids": dead_ids, "dead_reasons": dead_reasons})
     write_report(scope, report)
     if failed_ids:

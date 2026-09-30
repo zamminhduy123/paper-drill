@@ -72,16 +72,49 @@ async def _click_send(browser):
 
 
 def _scrape(html):
-    """Extract ds-markdown blocks as text (stable design-system class)."""
+    """Extract ds-markdown blocks as text, dropping thinking blocks."""
     from bs4 import BeautifulSoup
     from inscriptis import get_text
     soup = BeautifulSoup(html, "html.parser")
+    for tc in soup.find_all(class_=lambda c: c and any(
+            k in c.lower() for k in ("think", "reasoning", "thought"))):
+        tc.decompose()
     blocks = soup.find_all(class_=lambda c: c and "ds-markdown" in c)
     return "\n\n".join(get_text(str(b)).strip() for b in blocks)
 
 
-async def send_message(browser, message, timeout=180):
+async def _enable_thinking(browser):
+    """Click DeepThink toggle near textbox if present, never fail."""
+    try:
+        await browser.main_tab.evaluate(
+            """(() => {
+              const ta = document.querySelector('textarea[placeholder^="Message"]');
+              const els = [...document.querySelectorAll('button, div[role="button"]')];
+              let t = els.find(e => /deepthink|deep.?think|深度思考/i.test(e.innerText || e.getAttribute('aria-label') || ''));
+              if (!t && ta) {
+                const r = ta.getBoundingClientRect();
+                let bd = 1e12;
+                for (const b of els) {
+                  if (!/think/i.test(b.innerText || '')) continue;
+                  const q = b.getBoundingClientRect();
+                  const d = Math.hypot(q.left - r.left, q.top - r.top);
+                  if (d < bd) { bd = d; t = b; }
+                }
+              }
+              if (!t) return;
+              const on = t.getAttribute('aria-pressed') === 'true' || /active|selected|on/.test(t.className || '');
+              if (!on) t.click();
+            })()""",
+            await_promise=True, return_by_value=True,
+        )
+    except Exception:
+        pass
+
+
+async def send_message(browser, message, timeout=180, thinking=True):
     """Send message, wait for fresh ds-markdown response, return text."""
+    if thinking:
+        await _enable_thinking(browser)
     box = await browser.main_tab.select(TEXTBOX_CSS, timeout=15)
     await box.send_keys(message)
     await _click_send(browser)
@@ -101,12 +134,12 @@ async def send_message(browser, message, timeout=180):
     raise TimeoutError("no stable response in timeout")
 
 
-async def ask(message, token=None, timeout=180):
+async def ask(message, token=None, timeout=180, thinking=True):
     """One-shot: launch, login, ask, close, return text."""
     browser = await launch()
     try:
         await login_token(browser, token)
-        return await send_message(browser, message, timeout)
+        return await send_message(browser, message, timeout, thinking=thinking)
     finally:
         try:
             await browser.stop()

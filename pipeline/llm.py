@@ -14,16 +14,16 @@ def _ok(text) -> bool:
     return not BUSY_RE.search(str(text))
 
 
-async def arun(prompt: str, timeout: int = 300) -> str:
+async def arun(prompt: str, timeout: int = 600, thinking: bool = True) -> str:
     """Try deepseek, glm, then local chat with same prompt, return first good text."""
     try:
-        text = await deepseek_web.ask(prompt, timeout=timeout)
+        text = await deepseek_web.ask(prompt, timeout=timeout, thinking=thinking)
         if _ok(text):
             return text
     except Exception:
         pass
     try:
-        text = await glm_web.ask(prompt, timeout=timeout)
+        text = await glm_web.ask(prompt, timeout=timeout, thinking=thinking)
         if _ok(text):
             return text
     except Exception:
@@ -38,6 +38,6 @@ async def arun(prompt: str, timeout: int = 300) -> str:
     raise RuntimeError("all LLM rungs failed or returned busy text")
 
 
-def run(prompt: str, timeout: int = 300) -> str:
+def run(prompt: str, timeout: int = 600, thinking: bool = True) -> str:
     """Run async chain from sync contexts, return first good text."""
-    return asyncio.run(arun(prompt, timeout=timeout))
+    return asyncio.run(arun(prompt, timeout=timeout, thinking=thinking))

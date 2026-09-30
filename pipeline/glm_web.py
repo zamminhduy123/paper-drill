@@ -77,8 +77,27 @@ def _scrape(html):
     return text if text else get_text(str(latest)).strip()
 
 
-async def send_message(browser, message, timeout=180):
+async def _enable_thinking(browser):
+    """Click Deep Think Max toggle if present, never fail."""
+    try:
+        await browser.main_tab.evaluate(
+            """(() => {
+              const els = [...document.querySelectorAll('button, div[role="button"]')];
+              const t = els.find(e => /deep.?think|深度思考/i.test(e.innerText || ''));
+              if (!t) return;
+              const on = t.getAttribute('aria-pressed') === 'true' || /active|selected|on/.test(t.className || '');
+              if (!on) t.click();
+            })()""",
+            await_promise=True, return_by_value=True,
+        )
+    except Exception:
+        pass
+
+
+async def send_message(browser, message, timeout=180, thinking=True):
     """Send message, wait for stable response text, return it."""
+    if thinking:
+        await _enable_thinking(browser)
     await _dismiss_modal(browser)
     msg_json = json.dumps(message)
     await browser.main_tab.evaluate(
@@ -124,12 +143,12 @@ async def send_message(browser, message, timeout=180):
     raise TimeoutError("no stable response in timeout")
 
 
-async def ask(message, token=None, timeout=180):
+async def ask(message, token=None, timeout=180, thinking=True):
     """One-shot: launch, login, ask, close, return text."""
     browser = await launch()
     try:
         await login_token(browser, token)
-        return await send_message(browser, message, timeout)
+        return await send_message(browser, message, timeout, thinking=thinking)
     finally:
         try:
             await browser.stop()

@@ -126,6 +126,7 @@ def build_cross_prompt(sections, thesis, datasets):
     parts.append("For each claim output exactly three labeled parts: Author-stated (quote or \"not stated in abstract\"), Inference (model's, mark as such), Proposed experiment.")
     parts.append("Never present inference as author-stated; write \"not stated\" when absent.")
     parts.append("Format: use ## for section titles, - for bullets, 1. for numbered steps,\nand GitHub pipe tables (| col |) with a --- separator row for any tabular data.\nNever use space-aligned tables.")
+    parts.append("Every section title MUST start with ##. Never repeat any section; output each section once.")
     return "\n".join(parts)
 
 
@@ -173,6 +174,36 @@ async def cross_run(scopes=("ivn", "iot-ids", "nids")):
     return save(ideas, path=ROOT / "vault" / "ideas" / f"cross-{date.today().isoformat()}.md", papers=papers, concepts=concepts)
 
 
+CROSS_TITLES = ("Transfer Hypotheses", "Cross-Domain Transfer Proposals", "Claims Audit",
+                "Research Splits", "IVN →", "IoT-IDS →", "NIDS →")
+
+
+def _clean(text):
+    """Cut a duplicated tail and promote bare cross-note section titles to ## headings."""
+    def key(ln):
+        """Reduce a line to bare wording so a bullet copy and a plain copy compare equal."""
+        return re.sub(r"\s+", " ", re.sub(r"^[#*+\-\d. ]+", "", ln)).strip().lower()
+
+    seen, lines = {}, []  # ponytail: exact-wording dedup, misses paraphrased copies
+    for i, ln in enumerate(text.splitlines()):
+        k = key(ln)
+        if k:
+            if k in seen and i - seen[k] >= 5:
+                break
+            seen.setdefault(k, i)
+        lines.append(ln)
+    out, secs = [], False
+    for ln in lines:
+        if ln.startswith("#"):
+            secs = False
+        elif not re.match(r"^[#*+-]", ln) and ln.startswith(CROSS_TITLES):
+            ln, secs = "## " + ln, True
+        elif secs and re.match(r"^\d+\. ", ln):
+            ln = "**" + ln.split(". ", 1)[1].rstrip(".") + "**"
+        out.append(ln)
+    return "\n".join(out)
+
+
 def save(text, path=None, papers=None, concepts=None):
     """Write ideas note, return path."""
     papers = list(dict.fromkeys(papers or []))
@@ -191,6 +222,8 @@ def save(text, path=None, papers=None, concepts=None):
                 break
             keep.append(ln)
         text = head + "Summary of Splits" + "\n".join(keep)
+    else:
+        text = _clean(text)
     text = re.sub(r"\n{4,}", "\n\n\n", text)
     text = text.strip()
     if papers:

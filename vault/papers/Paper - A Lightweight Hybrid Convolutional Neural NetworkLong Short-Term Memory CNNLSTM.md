@@ -2,62 +2,46 @@
 title: "A Lightweight Hybrid Convolutional Neural Network–Long Short-Term Memory (CNN–LSTM) and AdaBoost Framework for Edge-Based Internet of Things (IoT) Intrusion Detection"
 year: 2026
 doi: "https://doi.org/10.7759/s44389-026-00170-3"
-relevance_score: 0.95
+relevance_score: 0.92
 type: paper
 ---
 # A Lightweight Hybrid Convolutional Neural Network–Long Short-Term Memory (CNN–LSTM) and AdaBoost Framework for Edge-Based Internet of Things (IoT) Intrusion Detection
 
 ## Novelty
-The study proposes a TinyML-optimized 1D CNN-LSTM and AdaBoost intrusion detection framework for resource-constrained IoT edge gateways. Its novelty combines strict feature reduction using Correlation-Based Elimination and Mutual Information, native class-imbalance handling with Focal Loss, sigmoid calibration to control false positives, and TensorFlow Lite dynamic range quantization for lightweight real-time deployment.
+TinyML-optimized CNN-LSTM with AdaBoost, focal loss, feature reduction, sigmoid calibration, and TensorFlow Lite quantization for resource-constrained edge IoT intrusion detection.
 
 ## Methodology
-The method uses a merged UNSW-NB15 and RT-IoT2022 dataset with a 70/30 normal-to-attack split. Correlation-Based Elimination and Mutual Information select the top 30 network features. A 1D CNN-LSTM extracts spatiotemporal traffic features, which are passed to an AdaBoost ensemble. Focal Loss addresses class imbalance without synthetic data, sigmoid calibration restricts the False Positive Rate, and the pipeline is compressed with TensorFlow Lite dynamic range quantization. Evaluation is performed in a simulated Docker-based edge gateway processing three continuous CCTV video streams.
+Merged UNSW-NB15 and RT-IoT2022 with a 70/30 normal-to-attack split; Correlation-Based Elimination and Mutual Information selected the top 30 features; CNN-LSTM extracted spatiotemporal features; AdaBoost ensembled the outputs; focal loss addressed imbalance; sigmoid calibration controlled false positives; TensorFlow Lite dynamic range quantization compressed the model; deployment used a simulated Docker edge gateway with three CCTV streams.
 
 ## Explicit Limitations
-No explicit limitations are stated in the abstract.
+Author-stated: not stated  
+Inferred: evaluation relies on a simulated Docker-based edge gateway and merged public datasets, so real edge hardware behavior and live deployment effects are not fully validated.  
+Unknown: not stated
 
 ## Future Work
-Future work is not explicitly stated. Plausible extensions include deployment on physical edge hardware, evaluation on additional IoT traffic datasets, adversarial robustness testing, and transfer to other constrained network domains.
+not stated
 
 ## Concept Hubs
-[[Concept - IoT Intrusion Detection]]
-[[Concept - Lightweight Detection]]
-[[Concept - Feature Selection]]
-[[Concept - Class Imbalance]]
-[[Concept - Edge AI Inference]]
+[[Concept - Edge AI Inference]] [[Concept - IoT Intrusion Detection]] [[Concept - Lightweight Detection]] [[Concept - Feature Selection]] [[Concept - Class Imbalance]]
 
 ## Relevance Score
-0.95
+0.92
 
 ## Monitoring Transfer
-doi:
-not stated
-source_link:
-not stated
-text_kind:
-abstract
-monitoring_problem:
-detect IoT network intrusions in real time on a resource-constrained edge gateway
-signal:
-top 30 selected network features from merged UNSW-NB15 and RT-IoT2022 traffic
-uncertainty_method:
-sigmoid calibration of ensemble probabilities to restrict false positive rate
-action:
-raise an intrusion alert when the calibrated probability exceeds the calibrated threshold
-eval_setting:
-simulated Docker-based edge gateway processing three continuous CCTV video streams with a quantized TensorFlow Lite model using 24 KB memory, 23.8% host CPU, and about 60.16 ms inference latency
-limitation_author:
-not stated
-limitation_inference:
-simulated edge gateway and public datasets may not fully capture production IoT traffic diversity, adversarial attacks, or real hardware constraints
-limitation_unknown:
-not stated
-support_passage:
-Deployed inside a simulated Docker-based edge gateway processing three continuous CCTV video streams, the quantized model occupied just 24 KB of memory.
-transfer_ivn:
-transfer the quantized CNN-LSTM AdaBoost detector to in-vehicle network intrusion detection by selecting vehicle bus traffic features and deploying the model on an ECU gateway
-transfer_risk:
-vehicle networks have stricter latency, safety, and protocol-specific temporal constraints, so IoT traffic features and calibrated thresholds may not generalize
+doi: not stated
+source_link: not stated
+text_kind: abstract
+monitoring_problem: detect IoT network intrusions on a resource-constrained edge gateway
+signal: 30 selected network traffic features processed by a CNN-LSTM detector
+uncertainty_method: sigmoid calibration of classifier outputs to restrict false positive rate
+action: flag intrusion when calibrated probability exceeds threshold
+eval_setting: simulated Docker-based edge gateway processing three continuous CCTV video streams with 24 KB memory, 23.8% CPU, and ~60.16 ms latency
+limitation_author: not stated
+limitation_inference: simulated Docker-based edge gateway and merged public datasets may not capture real edge hardware constraints, live traffic dynamics, or IVN domain shift
+limitation_unknown: not stated
+support_passage: Deployed inside a simulated Docker-based edge gateway processing three continuous CCTV video streams
+transfer_ivn: adapt the quantized CNN-LSTM-AdaBoost detector to in-vehicle network intrusion detection by replacing IoT features with selected CAN or IVN message features and deploying it on a vehicle edge node
+transfer_risk: IVN traffic has stricter real-time, safety-critical, and protocol-specific constraints than the IoT datasets used, so calibrated false positive behavior and latency may not transfer reliably
 
 #needs-review
 
@@ -65,14 +49,14 @@ vehicle networks have stricter latency, safety, and protocol-specific temporal c
 doi: https://doi.org/10.7759/s44389-026-00170-3
 source_link: not stated
 text_kind: abstract
-monitoring_problem: detect IoT network intrusions in real time on a resource-constrained edge gateway
-signal: top 30 selected network features from merged UNSW-NB15 and RT-IoT2022 traffic
-uncertainty_method: sigmoid calibration of ensemble probabilities to restrict false positive rate
-action: raise an intrusion alert when the calibrated probability exceeds the calibrated threshold
-eval_setting: simulated Docker-based edge gateway processing three continuous CCTV video streams with a quantized TensorFlow Lite model using 24 KB memory, 23.8% host CPU, and about 60.16 ms inference latency
+monitoring_problem: detect IoT network intrusions on a resource-constrained edge gateway
+signal: 30 selected network traffic features processed by a CNN-LSTM detector
+uncertainty_method: sigmoid calibration of classifier outputs to restrict false positive rate
+action: flag intrusion when calibrated probability exceeds threshold
+eval_setting: simulated Docker-based edge gateway processing three continuous CCTV video streams with 24 KB memory, 23.8% CPU, and ~60.16 ms latency
 limitation_author: not stated
-limitation_inference: simulated edge gateway and public datasets may not fully capture production IoT traffic diversity, adversarial attacks, or real hardware constraints
+limitation_inference: simulated Docker-based edge gateway and merged public datasets may not capture real edge hardware constraints, live traffic dynamics, or IVN domain shift
 limitation_unknown: not stated
-support_passage: Deployed inside a simulated Docker-based edge gateway processing three continuous CCTV video streams, the quantized model occupied just 24 KB of memory.
-transfer_ivn: transfer the quantized CNN-LSTM AdaBoost detector to in-vehicle network intrusion detection by selecting vehicle bus traffic features and deploying the model on an ECU gateway
-transfer_risk: vehicle networks have stricter latency, safety, and protocol-specific temporal constraints, so IoT traffic features and calibrated thresholds may not generalize
+support_passage: Deployed inside a simulated Docker-based edge gateway processing three continuous CCTV video streams
+transfer_ivn: adapt the quantized CNN-LSTM-AdaBoost detector to in-vehicle network intrusion detection by replacing IoT features with selected CAN or IVN message features and deploying it on a vehicle edge node
+transfer_risk: IVN traffic has stricter real-time, safety-critical, and protocol-specific constraints than the IoT datasets used, so calibrated false positive behavior and latency may not transfer reliably

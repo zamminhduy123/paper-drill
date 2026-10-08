@@ -1,5 +1,5 @@
 # Dashboard
-_updated 2026-10-06 · 145 papers, 89 hubs, 30 ideas_
+_updated 2026-10-08 · 149 papers, 91 hubs, 30 ideas_
 
 ## New papers (by day, score desc)
 | date | title | year | score |
@@ -90,6 +90,7 @@ _updated 2026-10-06 · 145 papers, 89 hubs, 30 ideas_
 | 2026-09-30 | A SMOTE-Augmented Performance-Aware Exponential Weighted Ensemble Framework for False Alarm Reduction in Network Intrusion Detection Systems | 2026 | 3.0 |
 | 2026-10-06 | Evaluation of Hybrid CAN XL–Ethernet Architectures for Next-Generation Automotive Networks | 2026 | 3.0 |
 | 2026-10-04 | An Adaptive Risk-Aware Framework for Multi-Threat Detection and Mitigation in Trustworthy Artificial Intelligence Systems | 2026 | 3.0 |
+| 2026-10-07 | Computational Analysis of Fault Detection in Medical IoT Devices in Intensive Care Exposed to Cyberattacks | 2026 | 2.9499999999999997 |
 | 2026-10-01 | Edge AI for Real-Time Multimodal Quality Assessment | 2026 | 2.905 |
 | 2026-09-30 | Reservoir computing for network intrusion classification | 2026 | 2.887 |
 | 2026-10-01 | DCFNet-DS: exact polynomial-degree decomposition for network intrusion detection | 2026 | 2.0 |
@@ -98,6 +99,7 @@ _updated 2026-10-06 · 145 papers, 89 hubs, 30 ideas_
 | 2026-09-28 | A Study on TSC (Technical Safety Concept) Design and Verification in EMB (Brake by Wire) Systems | 2026 | 2.0 |
 | 2026-09-30 | CPAI: A Controlled-Point Discriminant Analysis for robust IoT network intrusion detection | 2026 | 1.0 |
 | 2026-10-04 | Validation controlled imbalance aware learning for fine grained IoT intrusion detection | 2026 | 0.95 |
+| 2026-10-07 | QIE-IDS: A Quantum-Inspired Ensemble Intrusion Detection Framework for Secure In-Vehicle CAN Networks | 2026 | 0.95 |
 | 2026-10-03 | MCES-CNN: A Hybrid Meta-classification Framework with Explainable AI for Enhanced IoT Intrusion Detection | 2026 | 0.95 |
 | 2026-10-05 | Opening the Black Box: Cross-Model Explainability Analysis of Deep Learning-Engineered Features in IoT Intrusion Detection | 2026 | 0.95 |
 | 2026-10-05 | RPPFL: Random Projection-Based Personalized Federated Learning for IoT Intrusion Detection | 2026 | 0.95 |
@@ -112,6 +114,7 @@ _updated 2026-10-06 · 145 papers, 89 hubs, 30 ideas_
 | 2026-10-05 | CarDS - Controller Area Network and Automotive Ethernet Realistic Data Set | 2026 | 0.95 |
 | 2026-10-03 | TinyML-Enabled Intelligent Edge Computing Framework for Energy-Efficient and Low-Power IoT Applications | 2026 | 0.95 |
 | 2026-10-02 | Activation-Level Privacy and Certified Robustness in Federated Split Learning for IoT Intrusion Detection | 2026 | 0.95 |
+| 2026-10-07 | Integration of Artificial Intelligence Algorithms into On-Board Vehicle Diagnostic and Control Systems | 2026 | 0.95 |
 | 2026-10-06 | Lightweight CNN-Based Intrusion Detection for CAN Bus Networks | 2026 | 0.95 |
 | 2026-10-06 | Lightweight Physical-based Intrusion Detection Systems for In-Vehicle Communication Networks | 2026 | 0.95 |
 | 2026-10-03 | A Hybrid Autoencoder Transformer Federated Learning Model for Secure IoT Intrusion Detection | 2026 | 0.93 |
@@ -139,6 +142,7 @@ _updated 2026-10-06 · 145 papers, 89 hubs, 30 ideas_
 | 2026-10-06 | Uncovering Invisible Delaminations: A MEMS Sensor Suite and Spectral-Subtraction Pipeline for Multilayer Diagnostics | 2026 | 0.75 |
 | 2026-10-05 | BERT4NID: An intra and inter packet representation with pre-training transformers for IoT network intrusion detection | 2026 | 0.75 |
 | 2026-10-06 | ROBUST FLOW-BASED IOT INTRUSION DETECTION FOR SUSTAINABLE SMART INFRASTRUCTURE: CROSS-CAPTURE EVALUATION AND INTERPRETABLE ATTACK FINGERPRINTS | 2026 | 0.72 |
+| 2026-10-07 | TS-FL: A Two-Stage Federated Learning Framework for Zero-Day Attack Detection in Autonomous Vehicle CAN-FD Networks | 2026 | 0.65 |
 | 2026-10-02 | Deep Learning for Big Data: A Survey of Architectures,Distributed Frameworks, and Emerging Challenges | 2026 | 0.65 |
 | 2026-10-06 | Green-ML-based IDS mechanisms | 2026 | 0.6 |
 | 2026-10-04 | Relational Modeling for Automotive Cybersecurity: Structural Transition and Graph Topology-Based CAN Intrusion Detection | 2026 | 0.6 |
@@ -155,36 +159,36 @@ _updated 2026-10-06 · 145 papers, 89 hubs, 30 ideas_
 | hub | papers | flag |
 |---|---|---|
 
-| Deep Learning Intrusion Detection | 61 |  |
-| IoT Intrusion Detection | 39 |  |
-| Edge AI Inference | 32 |  |
+| Deep Learning Intrusion Detection | 62 |  |
+| IoT Intrusion Detection | 40 |  |
+| Edge AI Inference | 33 |  |
 | Network Traffic Analysis | 31 |  |
-| In-Vehicle Network Security | 29 |  |
+| In-Vehicle Network Security | 30 |  |
+| Lightweight Detection | 28 |  |
 | Resource-Constrained Edge | 28 |  |
-| Lightweight Detection | 27 |  |
 | TinyML Systems | 26 |  |
-| CAN Intrusion Detection | 20 |  |
+| CAN Intrusion Detection | 23 |  |
 | Cross-Dataset Evaluation | 20 |  |
 | Energy-Aware Inference | 20 |  |
-| Anomaly Detection | 16 |  |
+| Anomaly Detection | 18 |  |
 | Feature Selection | 15 |  |
+| Privacy-Preserving Learning | 15 |  |
 | Edge Security | 14 |  |
 | Intrusion Detection | 14 |  |
-| Privacy-Preserving Learning | 14 |  |
 | Real-Time Attack Defense | 14 |  |
 | Benchmark Stress Testing | 12 |  |
 | Class Imbalance | 12 |  |
 | CAN Network Anomaly Detection | 11 |  |
 | Embedded Systems | 11 |  |
+| Explainable Intrusion Detection | 10 |  |
 | Data Leakage Prevention | 9 |  |
-| Explainable Intrusion Detection | 9 |  |
 | Multi-Sensor Fusion | 9 |  |
 | Network Traffic Dynamics | 8 |  |
+| Functional Safety Verification | 7 |  |
+| Heterogeneous Base Learners | 7 |  |
 | Real-Time Telemetry | 7 |  |
 | Stacking Ensemble | 7 |  |
 | Continual Learning | 6 |  |
-| Functional Safety Verification | 6 |  |
-| Heterogeneous Base Learners | 6 |  |
 | Threshold Control | 6 |  |
 | Cross-Vehicle Transfer Learning | 5 |  |
 | Generative Adaptive Detection | 5 |  |
@@ -199,6 +203,7 @@ _updated 2026-10-06 · 145 papers, 89 hubs, 30 ideas_
 | Catastrophic Forgetting | 3 |  |
 | Context-Specific Outliers | 3 |  |
 | Dataset Bias | 3 |  |
+| Federated Learning | 3 |  |
 | Graph Neural Networks | 3 |  |
 | IIoT Intrusion Detection | 3 |  |
 | Kolmogorov-Arnold Networks | 3 |  |
@@ -210,10 +215,10 @@ _updated 2026-10-06 · 145 papers, 89 hubs, 30 ideas_
 | Curriculum Learning | 2 |  |
 | Diffusion Model Detection | 2 |  |
 | EMI Robust Communication | 2 |  |
-| Federated Learning | 2 |  |
 | Fine-Grained Power Management | 2 |  |
 | Multi-Agent Security Evaluation | 2 |  |
 | Open Architecture | 2 |  |
+| Quantum-Classical Detection | 2 |  |
 | Self-Supervised Learning | 2 |  |
 | Shortcut Learning | 2 |  |
 | Thermal Signal Integrity | 2 |  |
@@ -232,11 +237,11 @@ _updated 2026-10-06 · 145 papers, 89 hubs, 30 ideas_
 | Graph Attention | 1 | single-use |
 | Instance Hardness | 1 | single-use |
 | Low-Rank Adaptation | 1 | single-use |
+| Medical IoT Fault Detection | 1 | single-use |
 | Multiple Instance Learning | 1 | single-use |
 | Mutual Information | 1 | single-use |
 | Optimal Transport | 1 | single-use |
 | Polynomial Decomposition | 1 | single-use |
-| Quantum-Classical Detection | 1 | single-use |
 | Reliability-Guided Learning | 1 | single-use |
 | Reservoir Computing | 1 | single-use |
 | Submodular Optimization | 1 | single-use |
@@ -244,6 +249,7 @@ _updated 2026-10-06 · 145 papers, 89 hubs, 30 ideas_
 | Tree Depth Pruning | 1 | single-use |
 | V2X Network Security | 1 | single-use |
 | Weibull Mixture Model | 1 | single-use |
+| Zero-Day Attack Detection | 1 | single-use |
 
 ## Ideas (date, scope, linked papers)
 | date | scope | file | linked papers |
@@ -312,6 +318,7 @@ _updated 2026-10-06 · 145 papers, 89 hubs, 30 ideas_
 - low score (<4): A SMOTE-Augmented Performance-Aware Exponential Weighted Ensemble Framework for False Alarm Reduction in Network Intrusion Detection Systems (3.0)
 - low score (<4): Evaluation of Hybrid CAN XL–Ethernet Architectures for Next-Generation Automotive Networks (3.0)
 - low score (<4): An Adaptive Risk-Aware Framework for Multi-Threat Detection and Mitigation in Trustworthy Artificial Intelligence Systems (3.0)
+- low score (<4): Computational Analysis of Fault Detection in Medical IoT Devices in Intensive Care Exposed to Cyberattacks (2.9499999999999997)
 - low score (<4): Edge AI for Real-Time Multimodal Quality Assessment (2.905)
 - low score (<4): Reservoir computing for network intrusion classification (2.887)
 - low score (<4): DCFNet-DS: exact polynomial-degree decomposition for network intrusion detection (2.0)
@@ -320,6 +327,7 @@ _updated 2026-10-06 · 145 papers, 89 hubs, 30 ideas_
 - low score (<4): A Study on TSC (Technical Safety Concept) Design and Verification in EMB (Brake by Wire) Systems (2.0)
 - low score (<4): CPAI: A Controlled-Point Discriminant Analysis for robust IoT network intrusion detection (1.0)
 - low score (<4): Validation controlled imbalance aware learning for fine grained IoT intrusion detection (0.95)
+- low score (<4): QIE-IDS: A Quantum-Inspired Ensemble Intrusion Detection Framework for Secure In-Vehicle CAN Networks (0.95)
 - low score (<4): MCES-CNN: A Hybrid Meta-classification Framework with Explainable AI for Enhanced IoT Intrusion Detection (0.95)
 - low score (<4): Opening the Black Box: Cross-Model Explainability Analysis of Deep Learning-Engineered Features in IoT Intrusion Detection (0.95)
 - low score (<4): RPPFL: Random Projection-Based Personalized Federated Learning for IoT Intrusion Detection (0.95)
@@ -334,6 +342,7 @@ _updated 2026-10-06 · 145 papers, 89 hubs, 30 ideas_
 - low score (<4): CarDS - Controller Area Network and Automotive Ethernet Realistic Data Set (0.95)
 - low score (<4): TinyML-Enabled Intelligent Edge Computing Framework for Energy-Efficient and Low-Power IoT Applications (0.95)
 - low score (<4): Activation-Level Privacy and Certified Robustness in Federated Split Learning for IoT Intrusion Detection (0.95)
+- low score (<4): Integration of Artificial Intelligence Algorithms into On-Board Vehicle Diagnostic and Control Systems (0.95)
 - low score (<4): Lightweight CNN-Based Intrusion Detection for CAN Bus Networks (0.95)
 - low score (<4): Lightweight Physical-based Intrusion Detection Systems for In-Vehicle Communication Networks (0.95)
 - low score (<4): A Hybrid Autoencoder Transformer Federated Learning Model for Secure IoT Intrusion Detection (0.93)
@@ -361,6 +370,7 @@ _updated 2026-10-06 · 145 papers, 89 hubs, 30 ideas_
 - low score (<4): Uncovering Invisible Delaminations: A MEMS Sensor Suite and Spectral-Subtraction Pipeline for Multilayer Diagnostics (0.75)
 - low score (<4): BERT4NID: An intra and inter packet representation with pre-training transformers for IoT network intrusion detection (0.75)
 - low score (<4): ROBUST FLOW-BASED IOT INTRUSION DETECTION FOR SUSTAINABLE SMART INFRASTRUCTURE: CROSS-CAPTURE EVALUATION AND INTERPRETABLE ATTACK FINGERPRINTS (0.72)
+- low score (<4): TS-FL: A Two-Stage Federated Learning Framework for Zero-Day Attack Detection in Autonomous Vehicle CAN-FD Networks (0.65)
 - low score (<4): Deep Learning for Big Data: A Survey of Architectures,Distributed Frameworks, and Emerging Challenges (0.65)
 - low score (<4): Green-ML-based IDS mechanisms (0.6)
 - low score (<4): Relational Modeling for Automotive Cybersecurity: Structural Transition and Graph Topology-Based CAN Intrusion Detection (0.6)
